@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Content;
 
-public class EnemyController : MonoBehaviour
+public class SlimeController : MonoBehaviour
 {
 	public Sprite sprite;
 	public Transform player;
 	public float speed;
 	public float moveLength = 240f;
-	public float stopLength = 240f;
-	float movePos = 0f;
+	public float stopTime = 240f;
+	float moveTime = 0f;
 	Vector3 playerPos;
 	Vector3 origPos;
 	bool attacking = false;
@@ -22,15 +22,17 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
 		if(!attacking){
-			movePos += 1f;
+			moveTime += 1f;
 			playerPos = player.position;
 			origPos = transform.position;
-			if(movePos >= moveLength) attacking = true;
+			if(moveTime >= stopTime){
+				attacking = true;
+			}
 		} else {
+			
 			transform.position = Vector3.MoveTowards(transform.position, playerPos, speed);
-			movePos -= 1;
-			if(movePos <= moveLength - stopLength){
-				movePos = 0f;
+			if(Vector3.Distance(origPos, transform.position) >= moveLength || Vector3.Distance(playerPos, transform.position) <= 3f){
+				moveTime = 0f;
 				attacking = false;
 			}
 		}
