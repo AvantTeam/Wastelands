@@ -5,21 +5,26 @@ using Content;
 
 public class SlimeController : MonoBehaviour
 {
+	public Sprite[] idle;
+	public Sprite[] jumping;
 	public Transform player;
 	public float speed;
 	public float moveLength = 240f;
 	public float stopTime = 240f;
 	SpriteRenderer sprr;
-	Rigidbody2D rb;
 	float moveTime = 0f;
 	Vector3 playerPos;
 	Vector3 origPos;
+	GameObject shadow;
+	SpriteRenderer shadowRenderer;
 	bool attacking = false;
 
     void Start()
     {
-		rb = GetComponent<Rigidbody2D>();
 		sprr = GetComponent<SpriteRenderer>();
+		sprr.sprite = idle[0];
+		shadow = transform.Find("Shadow").gameObject;
+		shadowRenderer = shadow.GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -27,16 +32,25 @@ public class SlimeController : MonoBehaviour
 		if(!attacking){
 			moveTime += 1f;
 			playerPos = player.position;
-			origPos = rb.position;
+			origPos = transform.position;
 			if(moveTime >= stopTime){
 				attacking = true;
 				sprr.flipX = origPos.x > playerPos.x;
+				transform.position += new Vector3(0f, 0.1f, 0f);
+				shadow.transform.position -= new Vector3(0.2f, 0.2f, 0f);
+				sprr.sprite = jumping[0];
+				shadowRenderer.sprite = jumping[1];
 			}
 		} else {
-			rb.position = Vector3.MoveTowards(rb.position, playerPos, speed);
-			if(Vector3.Distance(origPos, rb.position) >= moveLength || Vector3.Distance(playerPos, rb.position) <= 3f){
+			Vector3 pos = Vector3.MoveTowards(transform.position, playerPos, speed);
+			transform.position = new Vector3(pos.x, pos.y, 0f);
+			if(Vector3.Distance(origPos, transform.position) >= moveLength || Vector3.Distance(playerPos, transform.position) <= 5f){
 				moveTime = 0f;
 				attacking = false;
+				sprr.sprite = idle[0];
+				shadowRenderer.sprite = idle[1];
+				transform.position -= new Vector3(0f, 0.1f, 0f);
+				shadow.transform.position += new Vector3(0.2f, 0.2f, 0f);
 			}
 		}
 
