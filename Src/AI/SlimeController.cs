@@ -10,6 +10,7 @@ public class SlimeController : MonoBehaviour
 	public float speed;
 	public float moveLength = 240f;
 	public float stopTime = 240f;
+	Rigidbody2D rb;
 	float moveTime = 0f;
 	Vector3 playerPos;
 	Vector3 origPos;
@@ -17,6 +18,7 @@ public class SlimeController : MonoBehaviour
 
     void Start()
     {
+		rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -24,14 +26,15 @@ public class SlimeController : MonoBehaviour
 		if(!attacking){
 			moveTime += 1f;
 			playerPos = player.position;
-			origPos = transform.position;
+			origPos = rb.position;
 			if(moveTime >= stopTime){
 				attacking = true;
 			}
 		} else {
 			
-			transform.position = Vector3.MoveTowards(transform.position, playerPos, speed);
-			if(Vector3.Distance(origPos, transform.position) >= moveLength || Vector3.Distance(playerPos, transform.position) <= 3f){
+			rb.position = Vector3.MoveTowards(rb.position, playerPos, speed);
+			transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+			if(Vector3.Distance(origPos, rb.position) >= moveLength || Vector3.Distance(playerPos, rb.position) <= 3f){
 				moveTime = 0f;
 				attacking = false;
 			}
