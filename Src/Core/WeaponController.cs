@@ -5,6 +5,7 @@ using Content;
 
 public class WeaponController : MonoBehaviour
 {
+    public bool onPlayer = true;
     // The weapon associated with the parent, dont edit, edit the parent controller's weapon.
     Weapon weapon;
 
@@ -35,6 +36,7 @@ public class WeaponController : MonoBehaviour
 
     //An AudioSource, object inside the weapon object.
     AudioSource source;
+    List<GameObject> hits = new List<GameObject>();
 
     // Previous positions of each vector, used for calculations, dont edit.
     Vector3 prevPos;
@@ -52,9 +54,11 @@ public class WeaponController : MonoBehaviour
 
     void Update()
     {
-        weapon = transform.parent.gameObject.GetComponent<PlayerController>().weapon;
+        weapon = onPlayer ? transform.parent.gameObject.GetComponent<PlayerController>().weapon : /* When i make attacking ai, change this with the enemy controller*/null;
 
         if(!attacking){
+            if(hits.ToArray().Length > 0) hits = new List<GameObject>();
+
             particles.Stop();
 
             Vector3 mouse_pos = Input.mousePosition;
@@ -77,6 +81,18 @@ public class WeaponController : MonoBehaviour
 
             if(Input.GetMouseButtonDown(0) && Mathf.Abs(angleDist(desiredAngle, angle)) <= weapon.cone) attacking = true;
         } else {
+            Collider2D[] hitArr = Physics2D.OverlapBoxAll(transform.position, new Vector2(weapon.height, weapon.width), angle);
+            
+            foreach (Collider2D hit in hitArr)
+            {
+                DamageHandler outHandler;
+                if(hit.gameObject.TryGetComponent<DamageHandler>(out outHandler) && !hits.Contains(hit.gameObject))
+                {
+                    hits.Add(hit.gameObject);
+                    outHandler.Damage(weapon.damage);
+                }
+            }
+
             if(!particles.isPlaying){
                 particles.Play();
                 source.clip = weapon.sfx;

@@ -5,9 +5,9 @@ using UnityEngine;
 namespace Content{
 	public class Weapon{
 		public string name;
-		public float damage;
-		public float height;
-		public float width;
+		public int damage;
+		public int height;
+		public int width;
 		public float swift = 90f;
 		public float rotationSpeed = 2f;
 		public float speedMultiplier;
