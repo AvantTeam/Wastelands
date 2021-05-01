@@ -1,3 +1,5 @@
 Scenes/
-*.meta
 .git/
+*.meta
+*.asset
+*.prefab
