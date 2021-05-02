@@ -29,7 +29,8 @@ public class SlimeController : MonoBehaviour
 
     void Update()
     {
-		if(!attacking){
+		//Movement doesnt work, have to rework
+		/*if(!attacking){
 			moveTime += 1f;
 			playerPos = player.position;
 			origPos = transform.position;
@@ -52,7 +53,7 @@ public class SlimeController : MonoBehaviour
 				transform.position -= new Vector3(0f, 0.1f, 0f);
 				shadow.transform.position += new Vector3(0.2f, 0.2f, 0f);
 			}
-		}
+		}*/
 
 		transform.rotation = Quaternion.Euler(0f, 0f, 0f);
     }

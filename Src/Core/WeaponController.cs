@@ -6,50 +6,39 @@ using Content;
 public class WeaponController : MonoBehaviour
 {
     public bool onPlayer = true;
-    // The weapon associated with the parent, dont edit, edit the parent controller's weapon.
     Weapon weapon;
 
-    // The weapon renderer, used for flipping.
-    SpriteRenderer sprr;
+    SpriteRenderer weaponRenderer;
 
-    // Wether or not the weapon is attacking.
-    bool attacking;
+    bool attacking = false;
 
-    // Wether or not the weapon is returning after an attack, doesn't imply it goes to the left, i just suck at naming.
-    bool swiftLeft = false;
+    bool swiftBack = false;
 
-    // The angle add for attacking, and a calculation for the attack return, dont edit any of these manually
-    float atAng = 0f;
-    float prevAng = 0f;
+    float attackAngle = 0f;
+    float prevAttackAngle = 0f;
 
-    // The desired angle of the weapon, edit this to change the weapon's angle.
     float desiredAngle = 0f;
 
-    // The angle of the weapon, dont edit this manually.
     float angle = 0;
 
-    // A ParticleSystem GameObject. Has the same parent as the weapon object.
-    GameObject trail;
+    GameObject trailObject;
 
-    // The ParticleSystem associated with the trail.
-    ParticleSystem particles;
+    ParticleSystem trailParticles;
 
-    //An AudioSource, object inside the weapon object.
-    AudioSource source;
+    AudioSource swingAudioSource;
+
     List<GameObject> hits = new List<GameObject>();
 
-    // Previous positions of each vector, used for calculations, dont edit.
     Vector3 prevPos;
     Vector3 prevPartPos;
 
     void Start() {
-        // Setting up the variables.
-        trail = transform.parent.Find("Weapon Trail").gameObject;
+        trailObject = transform.parent.Find("Weapon Trail").gameObject;
         prevPos = transform.position;
-        prevPartPos = trail.transform.position;
-        particles = trail.GetComponent<ParticleSystem>();
-        sprr = GetComponent<SpriteRenderer>();
-        source = GetComponent<AudioSource>();
+        prevPartPos = trailObject.transform.position;
+        trailParticles = trailObject.GetComponent<ParticleSystem>();
+        weaponRenderer = GetComponent<SpriteRenderer>();
+        swingAudioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -59,7 +48,7 @@ public class WeaponController : MonoBehaviour
         if(!attacking){
             if(hits.ToArray().Length > 0) hits = new List<GameObject>();
 
-            particles.Stop();
+            trailParticles.Stop();
 
             Vector3 mouse_pos = Input.mousePosition;
             mouse_pos.z = 3f;
@@ -70,14 +59,14 @@ public class WeaponController : MonoBehaviour
             desiredAngle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
             angle = moveToward(angle, desiredAngle, weapon.rotationSpeed);
             
-            atAng = 0f;
-            prevAng = angle;
+            attackAngle = 0f;
+            prevAttackAngle = angle;
 
             float weapAngle = transform.rotation.eulerAngles.z;
             if(weapAngle < 0) weapAngle = Mathf.Abs(weapAngle) + 180f;
 
-            if(weapAngle >= 90 && weapAngle <= 270) sprr.flipY = true;
-            else sprr.flipY = false;
+            if(weapAngle >= 90 && weapAngle <= 270) weaponRenderer.flipY = true;
+            else weaponRenderer.flipY = false;
 
             if(Input.GetMouseButtonDown(0) && Mathf.Abs(angleDist(desiredAngle, angle)) <= weapon.cone) attacking = true;
         } else {
@@ -93,29 +82,29 @@ public class WeaponController : MonoBehaviour
                 }
             }
 
-            if(!particles.isPlaying){
-                particles.Play();
-                source.clip = weapon.sfx;
-                source.Play();
+            if(!trailParticles.isPlaying){
+                trailParticles.Play();
+                swingAudioSource.clip = weapon.sfx;
+                swingAudioSource.Play();
             }
 
-            if(!swiftLeft) atAng = 3f * (sprr.flipY ? -1 : 1);
-            else atAng = -3f * (sprr.flipY ? -1 : 1);
+            if(!swiftBack) attackAngle = 3f * (weaponRenderer.flipY ? -1 : 1);
+            else attackAngle = -3f * (weaponRenderer.flipY ? -1 : 1);
 
-            angle -= atAng;
+            angle -= attackAngle;
 
-            if(sprr.flipY){
-                if(angle >= prevAng + weapon.swift) swiftLeft = true;
+            if(weaponRenderer.flipY){
+                if(angle >= prevAttackAngle + weapon.swift) swiftBack = true;
 
-                if(angle <= prevAng){
-                    swiftLeft = false;
+                if(angle <= prevAttackAngle){
+                    swiftBack = false;
                     attacking = false;
                 }
             } else {
-                if(angle <= prevAng - weapon.swift) swiftLeft = true;
+                if(angle <= prevAttackAngle - weapon.swift) swiftBack = true;
 
-                if(angle >= prevAng){
-                    swiftLeft = false;
+                if(angle >= prevAttackAngle){
+                    swiftBack = false;
                     attacking = false;
                 }
             }
@@ -132,10 +121,10 @@ public class WeaponController : MonoBehaviour
         Vector3 parentAdd = new Vector3(parentPos.x, parentPos.y, 0f);
 
         transform.position = prevPos + add + parentAdd;
-        trail.transform.position = prevPartPos + partAdd + parentAdd;
+        trailObject.transform.position = prevPartPos + partAdd + parentAdd;
 
         prevPos = transform.position - add - parentAdd;
-        prevPartPos = trail.transform.position - partAdd - parentAdd;
+        prevPartPos = trailObject.transform.position - partAdd - parentAdd;
     }
 
     // Edits slowly an angle towards a position.
@@ -153,7 +142,6 @@ public class WeaponController : MonoBehaviour
         return angle;
     }
 
-    //Methods used for moveToward.
     public static float angleDist(float a, float b){
         return Mathf.Min((a - b) < 0 ? a - b + 360 : a - b, (b - a) < 0 ? b - a + 360 : b - a);
     }
