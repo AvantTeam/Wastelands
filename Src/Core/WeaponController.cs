@@ -12,7 +12,7 @@ public class WeaponController : MonoBehaviour
 
     bool attacking = false;
 
-    bool swiftBack = false;
+    bool swingBack = false;
 
     float attackAngle = 0f;
     float prevAttackAngle = 0f;
@@ -76,7 +76,7 @@ public class WeaponController : MonoBehaviour
             {
                 DamageHandler outHandler;
                 PlayerController outController;
-                if(!hit.gameObject.TryGetComponent<PlayerController>(out outController) && hit.gameObject.TryGetComponent<DamageHandler>(out outHandler) && !hits.Contains(hit.gameObject))
+                if(!swingBack && !hit.gameObject.TryGetComponent<PlayerController>(out outController) && hit.gameObject.TryGetComponent<DamageHandler>(out outHandler) && !hits.Contains(hit.gameObject))
                 {
                     hits.Add(hit.gameObject);
                     outHandler.Damage(weapon.damage);
@@ -89,23 +89,23 @@ public class WeaponController : MonoBehaviour
                 swingAudioSource.Play();
             }
 
-            if(!swiftBack) attackAngle = 3f * (weaponRenderer.flipY ? -1 : 1);
+            if(!swingBack) attackAngle = 3f * (weaponRenderer.flipY ? -1 : 1);
             else attackAngle = -3f * (weaponRenderer.flipY ? -1 : 1);
 
             angle -= attackAngle;
 
             if(weaponRenderer.flipY){
-                if(angle >= prevAttackAngle + weapon.swift) swiftBack = true;
+                if(angle >= prevAttackAngle + weapon.swift) swingBack = true;
 
                 if(angle <= prevAttackAngle){
-                    swiftBack = false;
+                    swingBack = false;
                     attacking = false;
                 }
             } else {
-                if(angle <= prevAttackAngle - weapon.swift) swiftBack = true;
+                if(angle <= prevAttackAngle - weapon.swift) swingBack = true;
 
                 if(angle >= prevAttackAngle){
-                    swiftBack = false;
+                    swingBack = false;
                     attacking = false;
                 }
             }
@@ -119,7 +119,7 @@ public class WeaponController : MonoBehaviour
         add = add * (weapon.height / 2);
 
         Vector3 parentPos = transform.parent.position;
-        Vector3 parentAdd = new Vector3(parentPos.x, parentPos.y, 0f);
+        Vector3 parentAdd = new Vector3(parentPos.x, parentPos.y - 0.3f, 0f);
 
         transform.position = prevPos + add + parentAdd;
         trailObject.transform.position = prevPartPos + partAdd + parentAdd;
