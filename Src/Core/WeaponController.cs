@@ -75,7 +75,8 @@ public class WeaponController : MonoBehaviour
             foreach (Collider2D hit in hitArr)
             {
                 DamageHandler outHandler;
-                if(hit.gameObject.TryGetComponent<DamageHandler>(out outHandler) && !hits.Contains(hit.gameObject))
+                PlayerController outController;
+                if(!hit.gameObject.TryGetComponent<PlayerController>(out outController) && hit.gameObject.TryGetComponent<DamageHandler>(out outHandler) && !hits.Contains(hit.gameObject))
                 {
                     hits.Add(hit.gameObject);
                     outHandler.Damage(weapon.damage);

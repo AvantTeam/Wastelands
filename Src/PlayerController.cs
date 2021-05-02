@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
         sprr = GetComponent<SpriteRenderer>();
         weaponObject = transform.Find("Weapon").gameObject;
         weaponRenderer = weaponObject.GetComponent<SpriteRenderer>();
-        weapon = Weapons.hammer;
+        weapon = Weapons.axe;
         BoxCollider2D wBox = weaponObject.GetComponent<BoxCollider2D>();
         wBox.size = new Vector2(weapon.height, weapon.width);
         sprites = Resources.LoadAll<Sprite>("Sprites/Player/player");
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if(weapon == null){
-            weapon = Weapons.hammer;
+            weapon = Weapons.axe;
         } else {
             weaponRenderer.sprite = weapon.sprite;
         }
