@@ -57,18 +57,15 @@ public class WeaponController : MonoBehaviour
             mouse_pos.y = mouse_pos.y - object_pos.y;
             
             desiredAngle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
-            angle = moveToward(angle, desiredAngle, weapon.rotationSpeed);
+            prevAttackAngle = angle = moveToward(angle, desiredAngle, weapon.rotationSpeed);
             
             attackAngle = 0f;
-            prevAttackAngle = angle;
 
             float weapAngle = transform.rotation.eulerAngles.z;
             if(weapAngle < 0) weapAngle = Mathf.Abs(weapAngle) + 180f;
 
-            if(weapAngle >= 90 && weapAngle <= 270) weaponRenderer.flipY = true;
-            else weaponRenderer.flipY = false;
-
-            if(Input.GetMouseButtonDown(0) && Mathf.Abs(angleDist(desiredAngle, angle)) <= weapon.cone) attacking = true;
+            weaponRenderer.flipY = (weapAngle >= 90 && weapAngle <= 270);
+            attacking = (Input.GetMouseButtonDown(0) && Mathf.Abs(angleDist(desiredAngle, angle)) <= weapon.cone);
         } else {
             Collider2D[] hitArr = Physics2D.OverlapBoxAll(transform.position, new Vector2(weapon.height, weapon.width), angle);
             
@@ -89,25 +86,17 @@ public class WeaponController : MonoBehaviour
                 swingAudioSource.Play();
             }
 
-            if(!swingBack) attackAngle = 3f * (weaponRenderer.flipY ? -1 : 1);
-            else attackAngle = -3f * (weaponRenderer.flipY ? -1 : 1);
+            attackAngle = if(swingBack){-3f * (weaponRenderer.flipY ? -1 : 1)};
+                                   else{3f * (weaponRenderer.flipY ? -1 : 1)};
 
             angle -= attackAngle;
 
             if(weaponRenderer.flipY){
-                if(angle >= prevAttackAngle + weapon.swift) swingBack = true;
-
-                if(angle <= prevAttackAngle){
-                    swingBack = false;
-                    attacking = false;
-                }
+                swingBack = (angle >= prevAttackAngle + weapon.swift);
+               swingBack = attacking = !(angle <= prevAttackAngle)
             } else {
-                if(angle <= prevAttackAngle - weapon.swift) swingBack = true;
-
-                if(angle >= prevAttackAngle){
-                    swingBack = false;
-                    attacking = false;
-                }
+                swingBack = (angle <= prevAttackAngle - weapon.swift);
+                swingBack = attacking = !(angle >= prevAttackAngle)
             }
         }
 
