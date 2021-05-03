@@ -51,8 +51,7 @@ public class WeaponController : MonoBehaviour
                 swingAudioSource.Play();
             }
 
-            attackAngle = if(swingBack) -3f * (weaponRenderer.flipY ? -1 : 1);
-            else 3f * (weaponRenderer.flipY ? -1 : 1);
+            attackAngle = swingBack ? -3f * (weaponRenderer.flipY ? -1 : 1) : 3f * (weaponRenderer.flipY ? -1 : 1);
 
             angle -= attackAngle;
 
@@ -74,7 +73,7 @@ public class WeaponController : MonoBehaviour
             attackAngle = 0f;
 
             float weapAngle = transform.rotation.eulerAngles.z;
-            if(weapAngle < 0) weapAngle = Mathf.Abs(weapAngle) + 180f;
+            weapAngle = weapAngle < 0 ? Mathf.Abs(weapAngle) + 180f : weapAngle;
 
             weaponRenderer.flipY = (weapAngle >= 90 && weapAngle <= 270);
             attacking = (Input.GetMouseButtonDown(0) && Mathf.Abs(angleDist(desiredAngle, angle)) <= weapon.cone);
