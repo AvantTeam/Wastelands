@@ -43,33 +43,16 @@ public class PlayerController : MonoBehaviour
         x = Input.GetAxis("Horizontal");
         y = Input.GetAxis("Vertical");
 
-        if(x > 0)
-        {
-            int pos = (frame % frames[0]) * 4;
+        // Thanks NiChrosia
+        int num = getSprite(x, y, dir);
+
+        if(num != -1){
+            int pos = num + (frame % frames[num]) * 4;
             sprr.sprite = sprites[pos];
-            dir = 0;
-            stepp = true;
-        } else if(x < 0)
-        {
-            int pos = 1 + (frame % frames[1]) * 4;
-            sprr.sprite = sprites[pos];
-            dir = 1;
-            stepp = true;
-        } else if(y > 0)
-        {
-            int pos = 2 + (frame % frames[2]) * 4;
-            sprr.sprite = sprites[pos];
-            dir = 2;
-            stepp = true;
-        } else if(y < 0)
-        {
-            int pos = 3 + (frame % frames[3]) * 4;
-            sprr.sprite = sprites[pos];
-            dir = 3;
-            stepp = true;
-        } else {
-            sprr.sprite = sprites[dir];
-        }
+            dir = num;
+        } else sprr.sprite = sprites[dir];
+
+        stepp = x != 0 && y != 0;
 
         rb.position += new Vector2(x, y) * 0.03f * weapon.speedMultiplier;
         tempFrame += 0.05f;
@@ -83,5 +66,21 @@ public class PlayerController : MonoBehaviour
         }
 
         stepp = false;
+    }
+
+    public int getSprite(float x, float y, int dir){
+        if(x > 0) {
+            return 0;
+        } else if(x < 0)
+        {
+            return 1;
+        } else if(y > 0)
+        {
+            return 2;
+        } else if(y < 0)
+        {
+            return 3;
+        }
+        return -1;
     }
 }
