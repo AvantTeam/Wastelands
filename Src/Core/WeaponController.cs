@@ -45,28 +45,7 @@ public class WeaponController : MonoBehaviour
     {
         weapon = onPlayer ? transform.parent.gameObject.GetComponent<PlayerController>().weapon : /* When i make attacking ai, change this with the enemy controller*/null;
 
-        if(!attacking){
-            if(hits.ToArray().Length > 0) hits = new List<GameObject>();
-
-            trailParticles.Stop();
-
-            Vector3 mouse_pos = Input.mousePosition;
-            mouse_pos.z = 3f;
-            Vector3 object_pos = Camera.main.WorldToScreenPoint(transform.parent.position);
-            mouse_pos.x = mouse_pos.x - object_pos.x;
-            mouse_pos.y = mouse_pos.y - object_pos.y;
-            
-            desiredAngle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
-            prevAttackAngle = angle = moveToward(angle, desiredAngle, weapon.rotationSpeed);
-            
-            attackAngle = 0f;
-
-            float weapAngle = transform.rotation.eulerAngles.z;
-            if(weapAngle < 0) weapAngle = Mathf.Abs(weapAngle) + 180f;
-
-            weaponRenderer.flipY = (weapAngle >= 90 && weapAngle <= 270);
-            attacking = (Input.GetMouseButtonDown(0) && Mathf.Abs(angleDist(desiredAngle, angle)) <= weapon.cone);
-        } else {
+        if(attacking){
             Collider2D[] hitArr = Physics2D.OverlapBoxAll(transform.position, new Vector2(weapon.height, weapon.width), angle);
             
             foreach (Collider2D hit in hitArr)
@@ -98,6 +77,27 @@ public class WeaponController : MonoBehaviour
                 swingBack = (angle <= prevAttackAngle - weapon.swift);
                 swingBack = attacking = !(angle >= prevAttackAngle)
             }
+        } else {
+            if(hits.ToArray().Length > 0) hits = new List<GameObject>();
+
+            trailParticles.Stop();
+
+            Vector3 mouse_pos = Input.mousePosition;
+            mouse_pos.z = 3f;
+            Vector3 object_pos = Camera.main.WorldToScreenPoint(transform.parent.position);
+            mouse_pos.x = mouse_pos.x - object_pos.x;
+            mouse_pos.y = mouse_pos.y - object_pos.y;
+            
+            desiredAngle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
+            prevAttackAngle = angle = moveToward(angle, desiredAngle, weapon.rotationSpeed);
+            
+            attackAngle = 0f;
+
+            float weapAngle = transform.rotation.eulerAngles.z;
+            if(weapAngle < 0) weapAngle = Mathf.Abs(weapAngle) + 180f;
+
+            weaponRenderer.flipY = (weapAngle >= 90 && weapAngle <= 270);
+            attacking = (Input.GetMouseButtonDown(0) && Mathf.Abs(angleDist(desiredAngle, angle)) <= weapon.cone);
         }
 
         // Rotate the weapon. Quaternions are pretty damn weird, so its (y, x, z)
