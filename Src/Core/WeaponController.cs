@@ -78,7 +78,7 @@ public class WeaponController : MonoBehaviour
                 swingBack = attacking = !(angle >= prevAttackAngle)
             }
         } else {
-            if(hits.ToArray().Length > 0) hits = new List<GameObject>();
+            if(hits.Count > 0) hits = new List<GameObject>();
 
             trailParticles.Stop();
 
