@@ -12,8 +12,7 @@ public class PlayerController : MonoBehaviour
     GameObject weaponObject;
     SpriteRenderer weaponRenderer;
     public Weapon weapon;
-    int dir = 0;
-    int frame = 0;
+    int dir, frame = 0;
     float tempFrame = 0;
     Rigidbody2D rb;
     SpriteRenderer sprr;

@@ -7,29 +7,29 @@ public class DamageHandler : MonoBehaviour
 {
     public int maxHealth;
     int health;
-    public AudioClip hit;
-    public AudioClip death;
+    public AudioClip hit, death;
     ParticleSystem deathParticles;
     new AudioSource audio;
-    SpriteRenderer objectRenderer;
-    SpriteRenderer mask;
-    SpriteRenderer healthBar;
+    SpriteRenderer objectRenderer, mask, healthBar;
     bool receivingDamage = true;
 
     void Start() {
         health = maxHealth;
+
         deathParticles = transform.Find("Death System").gameObject.GetComponent<ParticleSystem>();
         audio = transform.Find("Source").gameObject.GetComponent<AudioSource>();
+
         objectRenderer = GetComponent<SpriteRenderer>();
         mask = transform.Find("Sprite Mask").gameObject.GetComponent<SpriteRenderer>();
+
         PlayerController playerController;
         if(!TryGetComponent<PlayerController>(out playerController)) healthBar = transform.Find("Health Bar").Find("Bar Overlay").gameObject.GetComponent<SpriteRenderer>();
     }
 
     public void Damage(int amount){
         if(health <= 0) return;
-        
         health -= amount;
+
         if(audio != null)
         {
             audio.clip = hit;

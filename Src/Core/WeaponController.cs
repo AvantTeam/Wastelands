@@ -9,31 +9,30 @@ public class WeaponController : MonoBehaviour
     public bool onPlayer = true;
     Weapon weapon;
     SpriteRenderer weaponRenderer;
-    bool attacking = false;
-    bool swingBack = false;
-    float attackAngle = 0f;
-    float prevAttackAngle = 0f;
-    float desiredAngle = 0f;
-    float angle = 0;
+    bool attacking, swingBack = false;
+    float attackAngle, prevAttackAngle, desiredAngle, angle = 0f;
     GameObject trailObject;
     ParticleSystem trailParticles;
     AudioSource swingAudioSource;
     List<GameObject> hits = new List<GameObject>();
-    Vector3 prevPos;
-    Vector3 prevPartPos;
+    Vector3 prevPos, prevPartPos;
 
     void Start() {
         trailObject = transform.parent.Find("Weapon Trail").gameObject;
+
         prevPos = transform.position;
         prevPartPos = trailObject.transform.position;
+
         trailParticles = trailObject.GetComponent<ParticleSystem>();
+
         weaponRenderer = GetComponent<SpriteRenderer>();
+
         swingAudioSource = GetComponent<AudioSource>();
     }
 
     void Update()
     {
-        weapon = onPlayer ? transform.parent.gameObject.GetComponent<PlayerController>().weapon : /* When i make attacking ai, change this with the enemy controller*/null;
+        weapon = onPlayer ? transform.parent.gameObject.GetComponent<PlayerController>().weapon : /* When I make the attacking AI, I will change this with the enemy controller*/null;
 
         if(attacking){
             Collider2D[] hitArr = Physics2D.OverlapBoxAll(transform.position, new Vector2(weapon.height, weapon.width), angle);
@@ -55,8 +54,7 @@ public class WeaponController : MonoBehaviour
                 swingAudioSource.Play();
             }
 
-            if(!swingBack) attackAngle = 3f * (weaponRenderer.flipY ? -1 : 1);
-            else attackAngle = -3f * (weaponRenderer.flipY ? -1 : 1);
+            attackAngle = (swingBack ? -3f : 3f) * (weaponRenderer.flipY ? -1 : 1);
 
             angle -= attackAngle;
 
@@ -81,18 +79,16 @@ public class WeaponController : MonoBehaviour
             trailParticles.Stop();
 
             desiredAngle = angleToMouse(transform.parent);
-            angle = moveToward(angle, desiredAngle, weapon.rotationSpeed);
+            prevAttackAngle = angle = moveToward(angle, desiredAngle, weapon.rotationSpeed);
             
             attackAngle = 0f;
-            prevAttackAngle = angle;
 
             float weapAngle = transform.rotation.eulerAngles.z;
             if(weapAngle < 0) weapAngle = Mathf.Abs(weapAngle) + 180f;
 
-            if(weapAngle >= 90 && weapAngle <= 270) weaponRenderer.flipY = true;
-            else weaponRenderer.flipY = false;
+            weaponRenderer.flipY = (weapAngle >= 90 && weapAngle <= 270);
 
-            if(Input.GetMouseButtonDown(0) && Mathf.Abs(angleDist(desiredAngle, angle)) <= weapon.cone) attacking = true;
+            attacking = (Input.GetMouseButtonDown(0) && Mathf.Abs(angleDist(desiredAngle, angle)) <= weapon.cone);
         }
 
         // Rotate the weapon. Quaternions are pretty damn weird, so its (y, x, z)

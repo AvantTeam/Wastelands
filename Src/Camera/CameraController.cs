@@ -7,8 +7,8 @@ public class CameraController : MonoBehaviour {
 		Gizmos.DrawWireCube(transform.position, rectSize / 8f);
 	}
 
-	//LAG
-	/*void Update() {
+	/*LAG
+	void Update() {
 		transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
 	}*/
 }

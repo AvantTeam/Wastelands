@@ -5,16 +5,13 @@ using Content;
 
 public class SlimeController : MonoBehaviour
 {
-	public Sprite[] idle;
-	public Sprite[] jumping;
+	public Sprite[] idle, jumping;
 	public Transform player;
 	public float speed;
-	public float moveLength = 240f;
-	public float stopTime = 240f;
+	public float moveLength, stopTime = 240f;
 	SpriteRenderer sprr;
 	float moveTime = 0f;
-	Vector3 playerPos;
-	Vector3 origPos;
+	Vector3 playerPos, origPos;
 	GameObject shadow;
 	SpriteRenderer shadowRenderer;
 	bool attacking = false;
@@ -29,8 +26,8 @@ public class SlimeController : MonoBehaviour
 
     void Update()
     {
-		//Movement doesnt work, have to rework
-		/*if(!attacking){
+		/*Movement doesnt work, have to rework
+		if(!attacking){
 			moveTime += 1f;
 			playerPos = player.position;
 			origPos = transform.position;

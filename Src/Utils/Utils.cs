@@ -2,8 +2,8 @@ using UnityEngine;
 public static class Utils {
 	public static float moveToward(float angle, float to, float speed){
 		if(Mathf.Abs(angleDist(angle, to)) < speed) return to;
-		angle = angle % 360f;
-		to = to % 360f;
+		angle %= 360f;
+		to %= 360f;
 
 		if(angle > to == backwardDistance(angle, to) > forwardDistance(angle, to)){
 			angle -= speed;
