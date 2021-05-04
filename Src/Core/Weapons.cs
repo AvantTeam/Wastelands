@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Content{
-	public class Weapons{
+namespace Content
+{
+	public class Weapons
+	{
 		public static Weapon
 
 		// Melee
@@ -15,8 +17,10 @@ namespace Content{
 		// Magic
 		fireWand, iceWand, acidWand, electricWand, fireBomb, iceBomb, acidBomb, electricBomb;
 
-		public void Load(){
-			sword = new Weapon(){
+		public void Load()
+		{
+			sword = new Weapon()
+			{
 				name = "Sword",
 				damage = 5,
 				height = 3,
@@ -25,8 +29,9 @@ namespace Content{
 				speedMultiplier = 1f,
 				sprite = LoadWeapon("Melee/sword")
 			};
-			
-			spear = new Weapon(){
+
+			spear = new Weapon()
+			{
 				name = "Spear",
 				damage = 6,
 				height = 3,
@@ -36,7 +41,8 @@ namespace Content{
 				sprite = LoadWeapon("Melee/spear")
 			};
 
-			axe = new Weapon(){
+			axe = new Weapon()
+			{
 				name = "Axe",
 				damage = 6,
 				width = 1,
@@ -46,7 +52,8 @@ namespace Content{
 				sprite = LoadWeapon("Melee/axe")
 			};
 
-			rapier = new Weapon(){
+			rapier = new Weapon()
+			{
 				name = "Rapier",
 				damage = 3,
 				width = 1,
@@ -56,7 +63,8 @@ namespace Content{
 				sprite = LoadWeapon("Melee/rapier")
 			};
 
-			hammer = new Weapon(){
+			hammer = new Weapon()
+			{
 				name = "Hammer",
 				damage = 15,
 				width = 1,
@@ -67,13 +75,15 @@ namespace Content{
 				type = WeaponType.melee,
 				sprite = LoadWeapon("Melee/hammer")
 			};
-			
-			scythe = new Weapon(){
+
+			scythe = new Weapon()
+			{
 
 			};
 		}
 
-		public Sprite LoadWeapon(string name){
+		public Sprite LoadWeapon(string name)
+		{
 			return Resources.Load<Sprite>("Sprites/Weapons/" + name);
 		}
 	}

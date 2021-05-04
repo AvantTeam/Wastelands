@@ -16,16 +16,16 @@ public class SlimeController : MonoBehaviour
 	SpriteRenderer shadowRenderer;
 	bool attacking = false;
 
-    void Start()
-    {
+	void Start()
+	{
 		sprr = GetComponent<SpriteRenderer>();
 		sprr.sprite = idle[0];
 		shadow = transform.Find("Shadow").gameObject;
 		shadowRenderer = shadow.GetComponent<SpriteRenderer>();
-    }
+	}
 
-    void Update()
-    {
+	void Update()
+	{
 		/*Movement doesnt work, have to rework
 		if(!attacking){
 			moveTime += 1f;
@@ -53,5 +53,5 @@ public class SlimeController : MonoBehaviour
 		}*/
 
 		transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-    }
+	}
 }

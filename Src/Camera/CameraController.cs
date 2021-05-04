@@ -1,9 +1,11 @@
 using UnityEngine;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour
+{
 	public GameObject player;
 	public Vector3 rectSize;
-	void OnDrawGizmos() {
+	void OnDrawGizmos()
+	{
 		Gizmos.DrawWireCube(transform.position, rectSize / 8f);
 	}
 

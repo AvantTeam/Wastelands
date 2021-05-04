@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Content{
-	public class Weapon{
+namespace Content
+{
+	public class Weapon
+	{
 		public string name;
 		public int damage, height, width;
 		public float swift = 90f;
