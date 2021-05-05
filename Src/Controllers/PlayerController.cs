@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Content;
+using static Utils;
 
 public class PlayerController : MonoBehaviour
 {
@@ -46,17 +45,21 @@ public class PlayerController : MonoBehaviour
 		y = Input.GetAxis("Vertical");
 
 		// Thanks NiChrosia
-		int num = getSprite(x, y, dir);
+		int num = getDir(x, y);
+
+		if (num >= 2)
+		{
+			num = dir;
+		}
 
 		if (num != -1)
 		{
-			int pos = num + (frame % frames[num]) * 4;
-			sprr.sprite = sprites[pos];
+			sprr.sprite = sprites[getSprite(frames, frame, dir, 4)];
 			dir = num;
 		}
 		else sprr.sprite = sprites[dir];
 
-		stepp = x != 0 && y != 0;
+		stepp = x != 0 || y != 0;
 
 		rb.position += new Vector2(x, y) * 0.03f * weapon.speedMultiplier;
 		tempFrame += 0.05f;
@@ -73,7 +76,7 @@ public class PlayerController : MonoBehaviour
 		stepp = false;
 	}
 
-	public int getSprite(float x, float y, int dir)
+	/*public int getSprite(float x, float y)
 	{
 		if (x > 0)
 		{
@@ -92,5 +95,5 @@ public class PlayerController : MonoBehaviour
 			return 3;
 		}
 		return -1;
-	}
+	}*/
 }

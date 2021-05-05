@@ -45,4 +45,31 @@ public static class Utils
 
 		return Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
 	}
+
+	public static int getDir(float x, float y)
+	{
+		if (x > 0)
+		{
+			return 0;
+		}
+		else if (x < 0)
+		{
+			return 1;
+		}
+		else if (y > 0)
+		{
+			return 2;
+		}
+		else if (y < 0)
+		{
+			return 3;
+		}
+		return -1;
+	}
+
+	public static int getSprite(int[] frames, int frame, int id, int maxFrame)
+	{
+		int pos = id + (frame % frames[id]) * maxFrame;
+		return pos;
+	}
 }

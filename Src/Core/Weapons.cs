@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Content
@@ -78,7 +76,14 @@ namespace Content
 
 			scythe = new Weapon()
 			{
-
+				name = "Scythe",
+				damage = 2,
+				width = 1,
+				height = 3,
+				swift = 360,
+				rotationSpeed = 0.6f,
+				type = WeaponType.melee,
+				sprite = LoadWeapon("Melee/scythe")
 			};
 		}
 
