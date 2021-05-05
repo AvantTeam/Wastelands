@@ -8,6 +8,9 @@ To see any updates or previews on the game, head over to our [Discord server](ht
 
  ---
 Main developer/artist: [@ThePythonGuy3](https://github.com/ThePythonGuy3)
+
 Artist: [@ThirstyBoi](https://github.com/ThirstyBoi)
+
 Music: [@Txar](https://github.com/Txar), [@Meltdown-Altair](https://github.com/Meltdown-Altair)
+
 Huge thanks to the rest of the people that contributed ideas/sprites and stuff.
