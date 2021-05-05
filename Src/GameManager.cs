@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviour
 		instance.state = state;
 	}
 
-    public static GameState GetState(){
+	public static GameState GetState()
+	{
 		return instance.state;
 	}
 

@@ -75,25 +75,4 @@ public class PlayerController : MonoBehaviour
 
 		stepp = false;
 	}
-
-	/*public int getSprite(float x, float y)
-	{
-		if (x > 0)
-		{
-			return 0;
-		}
-		else if (x < 0)
-		{
-			return 1;
-		}
-		else if (y > 0)
-		{
-			return 2;
-		}
-		else if (y < 0)
-		{
-			return 3;
-		}
-		return -1;
-	}*/
 }
