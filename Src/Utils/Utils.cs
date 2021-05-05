@@ -72,4 +72,14 @@ public static class Utils
 		int pos = id + (frame % frames[id]) * maxFrame;
 		return pos;
 	}
+
+	public static Vector3 moveTangent(Vector3 position, float angle, float radius, float amount)
+	{
+		/*float hypothenuse = Mathf.Sqrt(radius * radius + amount * amount);
+		float totalAngle = angle + Mathf.Atan((amount / radius) * Mathf.Deg2Rad);
+
+		Vector3 relativePosition = new Vector3(Mathf.Cos(totalAngle * Mathf.Deg2Rad) * hypothenuse, Mathf.Sin(totalAngle * Mathf.Deg2Rad) * hypothenuse, 0f);*/
+		Vector3 relativePosition = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad) * radius + Mathf.Cos(angle * Mathf.Deg2Rad) * amount, Mathf.Cos(angle * Mathf.Deg2Rad) * radius - Mathf.Sin(angle * Mathf.Deg2Rad) * amount, 0f);
+		return position + relativePosition;
+	}
 }

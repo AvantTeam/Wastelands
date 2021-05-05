@@ -36,7 +36,7 @@ public class WeaponController : MonoBehaviour
 
 		if (attacking)
 		{
-			Collider2D[] hitArr = Physics2D.OverlapBoxAll(transform.position, new Vector2(weapon.height, weapon.width), angle);
+			Collider2D[] hitArr = Physics2D.OverlapBoxAll(transform.position, new Vector2(weapon.height / 2f, weapon.width / 2f), angle);
 
 			foreach (Collider2D hit in hitArr)
 			{
@@ -95,19 +95,27 @@ public class WeaponController : MonoBehaviour
 			float weapAngle = transform.rotation.eulerAngles.z;
 			if (weapAngle < 0) weapAngle = Mathf.Abs(weapAngle) + 180f;
 
-			weaponRenderer.flipY = (weapAngle >= 90 && weapAngle <= 270);
+			weaponRenderer.flipY = (weapAngle >= 180 && weapAngle <= 360);//(weapAngle >= 90 && weapAngle <= 270);
+			weaponRenderer.flipX = !weaponRenderer.flipY;
 
 			attacking = (Input.GetMouseButtonDown(0) && Mathf.Abs(angleDist(desiredAngle, angle)) <= weapon.cone);
 		}
 
-		// Rotate the weapon. Quaternions are pretty damn weird, so its (y, x, z)
-		transform.rotation = Quaternion.Euler(0, 0, angle);
+		float newAngle = angle;
 
-		Vector3 add = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0f);
+		// Rotate the weapon. Quaternions are pretty damn weird, so its (y, x, z)
+		transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+
+		Vector3 add = /*moveTangent(new Vector3(0f, 0f, -2f), 360f - newAngle, 0.3f, weapon.height / 2f * 5f);*/new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0f);
 		Vector3 partAdd = add * (weapon.height - 0.5f);
 		add *= weapon.height / 2;
 
 		transform.localPosition = add;
-		trailObject.transform.localPosition = partAdd;
+		trailObject.transform.localPosition = Vector3.Scale(partAdd, new Vector3(1f, 1f, 0f));
+	}
+
+	void OnDrawGizmos()
+	{
+		Gizmos.DrawWireSphere(transform.localPosition, 1f);
 	}
 }
