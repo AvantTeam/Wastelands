@@ -82,4 +82,29 @@ public static class Utils
 		Vector3 relativePosition = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad) * radius + Mathf.Cos(angle * Mathf.Deg2Rad) * amount, Mathf.Cos(angle * Mathf.Deg2Rad) * radius - Mathf.Sin(angle * Mathf.Deg2Rad) * amount, 0f);
 		return position + relativePosition;
 	}
+
+	public static Vector3 tryGetCircle(Vector3 position, float radius, float colliderRadius)
+	{
+		float angle = Random.Range(1f, 360f);
+		while (angle <= 360)
+		{
+			Vector3 newPos = position + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0f);
+
+			if (Physics2D.OverlapCircleAll(newPos, colliderRadius).Length != 0)
+			{
+				angle += 1;
+			}
+			else
+			{
+				return newPos;
+			}
+
+			if (angle > 360)
+			{
+				return position;
+			}
+		}
+
+		return position;
+	}
 }
