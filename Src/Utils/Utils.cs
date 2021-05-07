@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public static class Utils
 {
@@ -83,28 +84,35 @@ public static class Utils
 		return position + relativePosition;
 	}
 
-	public static Vector3 tryGetCircle(Vector3 position, float radius, float colliderRadius)
+	public static Vector3 tryGetCircle(Vector3 position, float radius, float colliderRadius, Collider2D ignoreCollider)
 	{
-		float angle = Random.Range(1f, 360f);
-		while (angle <= 360)
+		float angle = UnityEngine.Random.Range(1f, 360f);
+		while (angle <= 400f)
 		{
 			Vector3 newPos = position + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0f);
 
-			if (Physics2D.OverlapCircleAll(newPos, colliderRadius).Length != 0)
+			Collider2D[] colliders = Physics2D.OverlapCircleAll(newPos, colliderRadius);
+
+			if (colliders.Length > (InArray(colliders, ignoreCollider) ? 1 : 0))
 			{
-				angle += 1;
+				angle += 1f;
 			}
 			else
 			{
 				return newPos;
 			}
 
-			if (angle > 360)
+			if (angle > 360f)
 			{
 				return position;
 			}
 		}
 
 		return position;
+	}
+
+	public static bool InArray(UnityEngine.Object[] array, UnityEngine.Object element)
+	{
+		return Array.IndexOf(array, element) > -1;
 	}
 }

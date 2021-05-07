@@ -16,6 +16,8 @@ public class SlimeController : MonoBehaviour
 	GameObject shadow;
 	SpriteRenderer shadowRenderer;
 	bool moving = false;
+	BoxCollider2D boxCollider;
+	float frame = 0f;
 
 	void Start()
 	{
@@ -24,24 +26,31 @@ public class SlimeController : MonoBehaviour
 		spriteRenderer.sprite = idle[0];
 		shadow = transform.Find("Shadow").gameObject;
 		shadowRenderer = shadow.GetComponent<SpriteRenderer>();
+		boxCollider = GetComponent<BoxCollider2D>();
 	}
 
 	void Update()
 	{
 		if (moving)
 		{
-			prevPos = Vector3.MoveTowards(prevPos, newPos, speed);
-
-			transform.position = prevPos;
-
-			if (prevPos == newPos)
+			if (transform.position == newPos)
 			{
-				StartCoroutine("Sleep");
+				prevPos = transform.position;
+				if (frame >= stopTime)
+				{
+					moving = false;
+				}
+				frame++;
+			}
+			else
+			{
+				transform.position = Vector3.MoveTowards(transform.position, newPos, speed);
 			}
 		}
 		else
 		{
-			newPos = tryGetCircle(prevPos, moveRadius, colliderRadius);
+			frame = 0f;
+			newPos = tryGetCircle(prevPos, moveRadius, colliderRadius, (Collider2D)boxCollider);
 
 			//Destroy trapped Slimes to avoid unbeatable levels
 			if (newPos == prevPos)
@@ -58,11 +67,7 @@ public class SlimeController : MonoBehaviour
 	void OnDrawGizmos()
 	{
 		Gizmos.DrawWireSphere(transform.position, colliderRadius);
-	}
-
-	IEnumerator Sleep()
-	{
-		yield return new WaitForSeconds(stopTime);
-		moving = false;
+		Gizmos.DrawWireSphere(prevPos, moveRadius);
+		Gizmos.DrawLine(prevPos, newPos);
 	}
 }

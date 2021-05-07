@@ -104,7 +104,7 @@ public class WeaponController : MonoBehaviour
 		float newAngle = angle;
 
 		// Rotate the weapon. Quaternions are pretty damn weird, so its (y, x, z)
-		transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+		transform.rotation = Quaternion.Euler(0, 0, angle/* - 90f*/);
 
 		Vector3 add = /*moveTangent(new Vector3(0f, 0f, -2f), 360f - newAngle, 0.3f, weapon.height / 2f * 5f);*/new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0f);
 		Vector3 partAdd = add * (weapon.height - 0.5f);
