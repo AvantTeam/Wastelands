@@ -25,6 +25,7 @@ public class SlimeController : MonoBehaviour
 		spriteRenderer.sprite = idle[0];
 		shadow = transform.Find("Shadow").gameObject;
 		shadowRenderer = shadow.GetComponent<SpriteRenderer>();
+		shadow.transform.localPosition = (new Vector3(0f, 0f, -0.5f));
 		boxCollider = GetComponent<BoxCollider2D>();
 	}
 
@@ -48,7 +49,7 @@ public class SlimeController : MonoBehaviour
 			{
 				if (spriteRenderer.sprite != jumping[0]) spriteRenderer.sprite = jumping[0];
 				transform.position = Vector3.MoveTowards(transform.position, newPos, speed);
-				spriteRenderer.transform.localPosition = healthBar.transform.localPosition = (new Vector3(0f, JumpY(Vector3.Distance(transform.position, newPos) / moveRadius, 1f), 0f));
+				spriteRenderer.transform.localPosition = healthBar.transform.localPosition = (new Vector3(0f, JumpY(Vector3.Distance(transform.position, newPos) / moveRadius, 1f), -1f));
 			}
 		}
 		else
