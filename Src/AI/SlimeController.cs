@@ -12,9 +12,10 @@ public class SlimeController : MonoBehaviour
 	public float colliderRadius = 0.5f;
 	SpriteRenderer spriteRenderer;
 	float moveTime = 0f;
-	Vector3 newPos, prevPos;
+	Vector3 newPos, prevPos, prevJumpPos;
 	GameObject shadow;
 	SpriteRenderer shadowRenderer;
+	GameObject healthBar;
 	bool moving = false;
 	BoxCollider2D boxCollider;
 	float frame = 0f;
@@ -22,7 +23,9 @@ public class SlimeController : MonoBehaviour
 	void Start()
 	{
 		prevPos = transform.position;
-		spriteRenderer = GetComponent<SpriteRenderer>();
+		prevJumpPos = prevPos;
+		spriteRenderer = transform.Find("Sprite").gameObject.GetComponent<SpriteRenderer>();
+		healthBar = transform.Find("Health Bar").gameObject;
 		spriteRenderer.sprite = idle[0];
 		shadow = transform.Find("Shadow").gameObject;
 		shadowRenderer = shadow.GetComponent<SpriteRenderer>();
@@ -35,6 +38,7 @@ public class SlimeController : MonoBehaviour
 		{
 			if (transform.position == newPos)
 			{
+				if (spriteRenderer.sprite != idle[0]) spriteRenderer.sprite = idle[0];
 				prevPos = transform.position;
 				if (frame >= stopTime)
 				{
@@ -44,13 +48,18 @@ public class SlimeController : MonoBehaviour
 			}
 			else
 			{
+				if (spriteRenderer.sprite != jumping[0]) spriteRenderer.sprite = jumping[0];
 				transform.position = Vector3.MoveTowards(transform.position, newPos, speed);
+				spriteRenderer.transform.localPosition = healthBar.transform.localPosition = (new Vector3(0f, JumpY(Vector3.Distance(transform.position, newPos) / moveRadius, 1f), 0f));
 			}
 		}
 		else
 		{
 			frame = 0f;
 			newPos = tryGetCircle(prevPos, moveRadius, colliderRadius, (Collider2D)boxCollider);
+
+			if (newPos.x > prevPos.x) spriteRenderer.flipX = false;
+			else if (newPos.x < prevPos.x) spriteRenderer.flipX = true;
 
 			//Destroy trapped Slimes to avoid unbeatable levels
 			if (newPos == prevPos)

@@ -115,4 +115,9 @@ public static class Utils
 	{
 		return Array.IndexOf(array, element) > -1;
 	}
+
+	public static float JumpY(float portion, float maxHeight)
+	{
+		return Mathf.Pow(Mathf.Clamp(Mathf.Sin(portion * 180f * Mathf.Deg2Rad), 0.0001f, 1f), 0.5f) * maxHeight;
+	}
 }
