@@ -10,20 +10,16 @@ public class SlimeController : MonoBehaviour
 	public float moveRadius = 2f;
 	public float stopTime = 1f;
 	public float colliderRadius = 0.5f;
-	SpriteRenderer spriteRenderer;
 	float moveTime = 0f;
-	Vector3 newPos, prevPos, prevJumpPos;
-	GameObject shadow;
-	SpriteRenderer shadowRenderer;
-	GameObject healthBar;
+	int frame = 0;
 	bool moving = false;
+	SpriteRenderer spriteRenderer, shadowRenderer;
+	Vector3 newPos, prevPos;
+	GameObject shadow, healthBar;
 	BoxCollider2D boxCollider;
-	float frame = 0f;
 
 	void Start()
 	{
-		prevPos = transform.position;
-		prevJumpPos = prevPos;
 		spriteRenderer = transform.Find("Sprite").gameObject.GetComponent<SpriteRenderer>();
 		healthBar = transform.Find("Health Bar").gameObject;
 		spriteRenderer.sprite = idle[0];
@@ -39,7 +35,9 @@ public class SlimeController : MonoBehaviour
 			if (transform.position == newPos)
 			{
 				if (spriteRenderer.sprite != idle[0]) spriteRenderer.sprite = idle[0];
+
 				prevPos = transform.position;
+
 				if (frame >= stopTime)
 				{
 					moving = false;
@@ -55,7 +53,7 @@ public class SlimeController : MonoBehaviour
 		}
 		else
 		{
-			frame = 0f;
+			frame = 0;
 			newPos = tryGetCircle(prevPos, moveRadius, colliderRadius, (Collider2D)boxCollider);
 
 			if (newPos.x > prevPos.x) spriteRenderer.flipX = false;
