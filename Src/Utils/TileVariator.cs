@@ -13,7 +13,8 @@ public class TileVariator : MonoBehaviour
 	public float shadeWidth = 3f;
 	public float shadeHeight = 3f;
 	public float shades = 4f;
-	[Range(0f, 1f)] public float variationRarity = 1f;
+	[Range(0.2f, 1f)] public float variationRarity = 1f;
+	[Range(0.2f, 1f)] public float shadeRarity = 1f;
 	Tilemap tilemap;
 	List<Tile> tileList = new List<Tile>();
 	Tile[] tileArray;
@@ -29,7 +30,6 @@ public class TileVariator : MonoBehaviour
 		{
 			Tile tileFound = Resources.Load<Tile>(path + tileName + "_" + (i + 1).ToString());
 			tileList.Add(tileFound);
-			Debug.Log(tileFound);
 		}
 
 		tileArray = tileList.ToArray();
@@ -50,17 +50,31 @@ public class TileVariator : MonoBehaviour
 				position.z = layer;
 
 				Tile tile = tilemap.GetTile<Tile>(position);
-				Debug.Log(tile);
-				Debug.Log(originalTile);
+				int index = 0;
 				if (tile != null && tile == originalTile)
 				{
-					if (Random.Range(0f, variationRarity) <= 0.5f)
+					if (Random.Range(0f, variationRarity) <= 0.2f)
 					{
-						tilemap.SetTile(position, tileArray[Random.Range(0, tileArray.Length)]);
+						index = 0;
+						while (index <= 0)
+						{
+							index =
+								Random.Range(0, ((int)shadeWidth)) +
+								Random.Range(0, ((int)shadeHeight)) * ((int)(shadeWidth * shades)) - 1;
+						}
+
+						if (Random.Range(0, shadeRarity) <= 0.2f) index += Random.Range(0, (int)shades) * ((int)shadeWidth);
+
+						Debug.Log(index);
+
+						tilemap.SetTile(position, tileArray[index]);
 					}
 					else
 					{
-						tilemap.SetTile(position, defaultTileShades[Random.Range(0, defaultTileShades.Length)]);
+						if (Random.Range(0, shadeRarity) <= 0.2f) index = Random.Range(1, defaultTileShades.Length);
+						else index = 0;
+
+						tilemap.SetTile(position, defaultTileShades[index]);
 					}
 				}
 
