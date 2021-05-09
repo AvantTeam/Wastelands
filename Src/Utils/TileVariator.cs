@@ -13,8 +13,8 @@ public class TileVariator : MonoBehaviour
 	public float shadeWidth = 3f;
 	public float shadeHeight = 3f;
 	public float shades = 4f;
-	[Range(0.2f, 1f)] public float variationRarity = 1f;
-	[Range(0.2f, 1f)] public float shadeRarity = 1f;
+	[Range(0.2f, 5f)] public float variationRarity = 1f;
+	[Range(0.2f, 5f)] public float shadeRarity = 1f;
 	Tilemap tilemap;
 	List<Tile> tileList = new List<Tile>();
 	Tile[] tileArray;
@@ -38,8 +38,6 @@ public class TileVariator : MonoBehaviour
 		TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
 		float tileAmount = allTiles.Length;
 
-		float tileId = 0f;
-		float tilePercentage = 0f;
 		Vector3Int position = new Vector3Int();
 		for (int x = tilemap.origin.x; x < (tilemap.origin.x + tilemap.size.x); x++)
 		{
@@ -65,8 +63,6 @@ public class TileVariator : MonoBehaviour
 
 						if (Random.Range(0, shadeRarity) <= 0.2f) index += Random.Range(0, (int)shades) * ((int)shadeWidth);
 
-						Debug.Log(index);
-
 						tilemap.SetTile(position, tileArray[index]);
 					}
 					else
@@ -77,9 +73,6 @@ public class TileVariator : MonoBehaviour
 						tilemap.SetTile(position, defaultTileShades[index]);
 					}
 				}
-
-				tileId++;
-				tilePercentage = (tileId / tileAmount) * 100f;
 			}
 		}
 	}

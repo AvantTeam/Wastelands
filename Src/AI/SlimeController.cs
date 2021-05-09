@@ -4,28 +4,30 @@ using static Utils;
 
 public class SlimeController : MonoBehaviour
 {
-	public Sprite[] idle, jumping;
+	public Sprite[] sprites;
 	public Transform player;
 	public float speed;
 	public float moveRadius = 2f;
 	public float stopTime = 1f;
 	public float colliderRadius = 0.5f;
-	float moveTime = 0f;
 	int frame = 0;
-	bool moving = false;
+	bool moving = true;
 	SpriteRenderer spriteRenderer, shadowRenderer;
+	SpriteMask maskRenderer;
 	Vector3 newPos, prevPos;
 	GameObject shadow, healthBar;
 	BoxCollider2D boxCollider;
 
 	void Start()
 	{
+		newPos = transform.position;
 		spriteRenderer = transform.Find("Sprite").gameObject.GetComponent<SpriteRenderer>();
 		healthBar = transform.Find("Health Bar").gameObject;
-		spriteRenderer.sprite = idle[0];
+		spriteRenderer.sprite = sprites[0];
 		shadow = transform.Find("Shadow").gameObject;
+		maskRenderer = transform.Find("Sprite Mask").gameObject.GetComponent<SpriteMask>();
 		shadowRenderer = shadow.GetComponent<SpriteRenderer>();
-		shadow.transform.localPosition = (new Vector3(0f, 0f, -0.5f));
+		shadow.transform.localPosition = (new Vector3(0f, 0f, 1f));
 		boxCollider = GetComponent<BoxCollider2D>();
 	}
 
@@ -35,7 +37,11 @@ public class SlimeController : MonoBehaviour
 		{
 			if (transform.position == newPos)
 			{
-				if (spriteRenderer.sprite != idle[0]) spriteRenderer.sprite = idle[0];
+				if (spriteRenderer.sprite != sprites[0])
+				{
+					spriteRenderer.sprite = sprites[0];
+					maskRenderer.sprite = sprites[0];
+				}
 
 				prevPos = transform.position;
 
@@ -47,9 +53,21 @@ public class SlimeController : MonoBehaviour
 			}
 			else
 			{
-				if (spriteRenderer.sprite != jumping[0]) spriteRenderer.sprite = jumping[0];
 				transform.position = Vector3.MoveTowards(transform.position, newPos, speed);
-				spriteRenderer.transform.localPosition = healthBar.transform.localPosition = (new Vector3(0f, JumpY(Vector3.Distance(transform.position, newPos) / moveRadius, 1f), -1f));
+
+				float height = JumpY(Vector3.Distance(transform.position, newPos) / moveRadius, 1.5f);
+				float spriteHeight = Vector3.Distance(transform.position, newPos) / moveRadius;
+
+				int index = Mathf.Clamp((int)Mathf.Round(spriteHeight * (sprites.Length - 1)), 0, (int)sprites.Length - 1);
+
+				if (spriteRenderer.sprite != sprites[index])
+				{
+					spriteRenderer.sprite = sprites[index];
+					maskRenderer.sprite = sprites[index];
+				}
+
+				spriteRenderer.transform.localPosition = healthBar.transform.localPosition = maskRenderer.transform.localPosition = (new Vector3(0f, height, -1f));
+				maskRenderer.gameObject.transform.localPosition -= new Vector3(0f, 0f, 0.5f);
 			}
 		}
 		else

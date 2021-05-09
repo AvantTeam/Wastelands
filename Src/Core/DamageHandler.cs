@@ -9,7 +9,6 @@ public class DamageHandler : MonoBehaviour
 	ParticleSystem deathParticles;
 	new AudioSource audio;
 	SpriteRenderer objectRenderer, mask, healthBar;
-	bool receivingDamage = true;
 
 	void Start()
 	{
@@ -18,7 +17,7 @@ public class DamageHandler : MonoBehaviour
 		deathParticles = transform.Find("Death System").gameObject.GetComponent<ParticleSystem>();
 		audio = transform.Find("Source").gameObject.GetComponent<AudioSource>();
 
-		objectRenderer = GetComponent<SpriteRenderer>();
+		objectRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
 		mask = transform.Find("Sprite Mask").gameObject.GetComponent<SpriteRenderer>();
 
 		PlayerController playerController;
@@ -39,8 +38,9 @@ public class DamageHandler : MonoBehaviour
 		if (healthBar != null)
 		{
 			float healthFraction = ((float)health) / ((float)maxHealth);
+			Debug.Log(healthFraction);
 			healthBar.size = new Vector2(healthFraction, healthBar.size.y);
-			healthBar.transform.localPosition = new Vector3(-((1f - healthFraction) / 2f), 0.5f, 0f);
+			healthBar.transform.localPosition = new Vector3(-((1f - healthFraction) / 2f), 0.5f, -1f);
 		}
 
 		StartCoroutine("DrawDamage");
