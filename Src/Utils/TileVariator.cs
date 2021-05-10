@@ -61,13 +61,13 @@ public class TileVariator : MonoBehaviour
 								Random.Range(0, ((int)shadeHeight)) * ((int)(shadeWidth * shades)) - 1;
 						}
 
-						if (Random.Range(0, shadeRarity) <= 0.2f) index += Random.Range(0, (int)shades) * ((int)shadeWidth);
+						if (Random.Range(0, shadeRarity) <= 0.2f) index += ((int)Mathf.Round(Mathf.PerlinNoise(x / 10f + 3000f, y / 10f + 3000f) * shades)) * ((int)shadeWidth);
 
 						tilemap.SetTile(position, tileArray[index]);
 					}
 					else
 					{
-						if (Random.Range(0, shadeRarity) <= 0.2f) index = Random.Range(1, defaultTileShades.Length);
+						if (Random.Range(0, shadeRarity) <= 0.2f) index = ((int)Mathf.Round(Mathf.PerlinNoise(x / 10f + 3000f, y / 10f + 3000f) * shades));
 						else index = 0;
 
 						tilemap.SetTile(position, defaultTileShades[index]);

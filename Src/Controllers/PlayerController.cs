@@ -25,14 +25,13 @@ public class PlayerController : MonoBehaviour
 		weaponObject = transform.Find("Weapon").gameObject;
 		weaponRenderer = weaponObject.GetComponent<SpriteRenderer>();
 		weapon = Weapons.axe;
-		BoxCollider2D wBox = weaponObject.GetComponent<BoxCollider2D>();
-		wBox.size = new Vector2(weapon.height, weapon.width);
 		sprites = Resources.LoadAll<Sprite>("Sprites/Player/player");
 		source = GetComponent<AudioSource>();
 	}
 
 	void Update()
 	{
+		transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 		if (weapon == null)
 		{
 			weapon = Weapons.axe;
