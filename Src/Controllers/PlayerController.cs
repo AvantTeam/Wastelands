@@ -14,14 +14,14 @@ public class PlayerController : MonoBehaviour
 	int dir, frame = 0;
 	float tempFrame = 0;
 	Rigidbody2D rb;
-	SpriteRenderer sprr;
+	SpriteRenderer spriteRenderer;
 	float x, y;
 	bool stepp = false;
 
 	void Start()
 	{
 		rb = GetComponent<Rigidbody2D>();
-		sprr = GetComponent<SpriteRenderer>();
+		spriteRenderer = GetComponent<SpriteRenderer>();
 		weaponObject = transform.Find("Weapon").gameObject;
 		weaponRenderer = weaponObject.GetComponent<SpriteRenderer>();
 		weapon = Weapons.axe;
@@ -43,20 +43,16 @@ public class PlayerController : MonoBehaviour
 		x = Input.GetAxis("Horizontal");
 		y = Input.GetAxis("Vertical");
 
+		if (x != 0) spriteRenderer.flipX = x < 0;
+
 		// Thanks NiChrosia
 		int num = getDir(x, y);
 
-		if (num >= 2)
-		{
-			num = dir;
-		}
-
 		if (num != -1)
 		{
-			sprr.sprite = sprites[getSprite(frames, frame, dir, 4)];
-			dir = num;
+			spriteRenderer.sprite = sprites[getSprite(frames, frame, 0, 2)];
 		}
-		else sprr.sprite = sprites[dir];
+		else spriteRenderer.sprite = sprites[getSprite(frames, frame, 1, 2)];
 
 		stepp = x != 0 || y != 0;
 

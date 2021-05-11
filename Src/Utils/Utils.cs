@@ -68,9 +68,9 @@ public static class Utils
 		return -1;
 	}
 
-	public static int getSprite(int[] frames, int frame, int id, int maxFrame)
+	public static int getSprite(int[] frames, int frame, int id, int width)
 	{
-		int pos = id + (frame % frames[id]) * maxFrame;
+		int pos = id + (frame % frames[id]) * width;
 		return pos;
 	}
 

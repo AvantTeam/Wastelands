@@ -21,6 +21,7 @@ public class TileVariator : MonoBehaviour
 
 	void Start()
 	{
+		int offset = Random.Range(3000, 5000);
 		float tiles = shadeHeight * shadeWidth * shades - 1;
 
 		tilemap = GetComponent<Tilemap>();
@@ -61,13 +62,13 @@ public class TileVariator : MonoBehaviour
 								Random.Range(0, ((int)shadeHeight)) * ((int)(shadeWidth * shades)) - 1;
 						}
 
-						if (Random.Range(0, shadeRarity) <= 0.2f) index += ((int)Mathf.Round(Mathf.PerlinNoise(x / 10f + 3000f, y / 10f + 3000f) * shades)) * ((int)shadeWidth);
+						if (Random.Range(0, shadeRarity) <= 0.2f) index += ((int)Mathf.Round(Mathf.PerlinNoise(x / 10f + offset, y / 10f + offset) * shades)) * ((int)shadeWidth);
 
 						tilemap.SetTile(position, tileArray[index]);
 					}
 					else
 					{
-						if (Random.Range(0, shadeRarity) <= 0.2f) index = ((int)Mathf.Round(Mathf.PerlinNoise(x / 10f + 3000f, y / 10f + 3000f) * shades));
+						if (Random.Range(0, shadeRarity) <= 0.2f) index = ((int)Mathf.Round(Mathf.PerlinNoise(x / 10f + offset, y / 10f + offset) * shades));
 						else index = 0;
 
 						tilemap.SetTile(position, defaultTileShades[index]);

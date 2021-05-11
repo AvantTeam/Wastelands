@@ -11,6 +11,7 @@ public class SlimeController : MonoBehaviour
 	public float stopTime = 1f;
 	public float colliderRadius = 0.5f;
 	int frame = 0;
+	int offset = 0;
 	bool moving = true;
 	SpriteRenderer spriteRenderer, shadowRenderer;
 	SpriteMask maskRenderer;
@@ -20,6 +21,7 @@ public class SlimeController : MonoBehaviour
 
 	void Start()
 	{
+		offset = Random.Range(0, 30);
 		newPos = transform.position;
 		spriteRenderer = transform.Find("Sprite").gameObject.GetComponent<SpriteRenderer>();
 		healthBar = transform.Find("Health Bar").gameObject;
@@ -45,7 +47,7 @@ public class SlimeController : MonoBehaviour
 
 				prevPos = transform.position;
 
-				if (frame >= stopTime)
+				if (frame >= stopTime + offset)
 				{
 					moving = false;
 				}
@@ -53,6 +55,7 @@ public class SlimeController : MonoBehaviour
 			}
 			else
 			{
+				offset = Random.Range(0, 30);
 				transform.position = Vector3.MoveTowards(transform.position, newPos, speed);
 
 				float height = JumpY(Vector3.Distance(transform.position, newPos) / moveRadius, 1.5f);
@@ -81,7 +84,8 @@ public class SlimeController : MonoBehaviour
 			//Destroy trapped Slimes to avoid unbeatable levels
 			if (newPos == prevPos)
 			{
-				Destroy(gameObject);
+				DamageHandler damageHandler = GetComponent<DamageHandler>();
+				damageHandler.Damage(damageHandler.maxHealth + 1);
 			}
 
 			moving = true;
