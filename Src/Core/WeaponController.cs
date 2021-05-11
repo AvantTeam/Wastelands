@@ -58,7 +58,7 @@ public class WeaponController : MonoBehaviour
 
 			attackAngle = (swingBack ? -3f : 3f) * (weaponRenderer.flipY ? -1 : 1);
 
-			angle -= attackAngle;
+			angle -= attackAngle * Time.deltaTime;
 
 			if (weaponRenderer.flipY)
 			{
