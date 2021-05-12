@@ -4,6 +4,7 @@ using static Utils;
 
 public class PlayerController : MonoBehaviour
 {
+	public float speed;
 	public int[] frames;
 	public AudioClip step;
 	AudioSource source;
@@ -56,7 +57,7 @@ public class PlayerController : MonoBehaviour
 
 		stepp = x != 0 || y != 0;
 
-		rb.position += (new Vector2(x, y) * 0.03f * weapon.speedMultiplier * Time.deltaTime);
+		rb.position += (new Vector2(x, y) * speed * weapon.speedMultiplier * Time.deltaTime);
 		tempFrame += 0.05f;
 		frame = (int)Mathf.Round(tempFrame);
 

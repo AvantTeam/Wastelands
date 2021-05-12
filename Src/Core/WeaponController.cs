@@ -6,6 +6,7 @@ using static Utils;
 public class WeaponController : MonoBehaviour
 {
 	public bool onPlayer = true;
+	public float speed;
 	Weapon weapon;
 	SpriteRenderer weaponRenderer;
 	bool attacking, swingBack = false;
@@ -58,7 +59,7 @@ public class WeaponController : MonoBehaviour
 
 			attackAngle = (swingBack ? -3f : 3f) * (weaponRenderer.flipY ? -1 : 1);
 
-			angle -= attackAngle * Time.deltaTime;
+			angle -= attackAngle;
 
 			if (weaponRenderer.flipY)
 			{
@@ -101,7 +102,7 @@ public class WeaponController : MonoBehaviour
 			attacking = (Input.GetMouseButtonDown(0) && Mathf.Abs(angleDist(desiredAngle, angle)) <= weapon.cone);
 		}
 
-		float newAngle = angle;
+		float newAngle = angle * Time.deltaTime * speed;
 
 		// Rotate the weapon. Quaternions are pretty damn weird, so its (y, x, z)
 		transform.rotation = Quaternion.Euler(0, 0, angle/* - 90f*/);
