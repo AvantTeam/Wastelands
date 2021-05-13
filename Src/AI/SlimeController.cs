@@ -10,7 +10,7 @@ public class SlimeController : MonoBehaviour
 	public float moveRadius = 2f;
 	public float stopTime = 1f;
 	public float colliderRadius = 0.5f;
-	int frame = 0;
+	float frame = 0f;
 	int offset = 0;
 	bool moving = true;
 	SpriteRenderer spriteRenderer, shadowRenderer;
@@ -51,7 +51,7 @@ public class SlimeController : MonoBehaviour
 				{
 					moving = false;
 				}
-				frame++;
+				frame += Time.deltaTime;
 			}
 			else
 			{

@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
 		stepp = x != 0 || y != 0;
 
 		rb.position += (new Vector2(x, y) * speed * weapon.speedMultiplier * Time.deltaTime);
-		tempFrame += 0.05f;
+		tempFrame += Time.deltaTime;
 		frame = (int)Mathf.Round(tempFrame);
 
 		if (!stepp) source.Stop();
