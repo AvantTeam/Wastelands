@@ -1,8 +1,14 @@
 @echo off
 set /p id=Commit Name: 
-git --git-dir=.gitpublic add .
-echo Added
-git --git-dir=.gitpublic commit -m "%id%"
-echo Commiting
-git --git-dir=.gitpublic push
-echo Pushed
+set repos=.gitpublic .gitprivate
+(for %%a in (%repos%) do ( 
+	echo Adding %%a
+	git --git-dir=%%a add .
+	echo Added %%a
+	echo Commiting %%a
+	git --git-dir=%%a commit -m "%id%"
+	echo Commited %%a
+	echo Pushing %%a
+	git --git-dir=%%a push
+	echo Pushed %%a
+))
