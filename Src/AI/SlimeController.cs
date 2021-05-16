@@ -37,6 +37,7 @@ public class SlimeController : MonoBehaviour
 	{
 		if (moving)
 		{
+			Debug.Log("OOOOOO");
 			if (transform.position == newPos)
 			{
 				if (spriteRenderer.sprite != sprites[0])
@@ -51,7 +52,7 @@ public class SlimeController : MonoBehaviour
 				{
 					moving = false;
 				}
-				frame += Time.deltaTime;
+				frame += Time.deltaTime * speed;
 			}
 			else
 			{

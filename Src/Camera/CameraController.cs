@@ -8,9 +8,8 @@ public class CameraController : MonoBehaviour
 	{
 		Gizmos.DrawWireCube(transform.position, rectSize / 8f);
 	}
-
-	/* Not laggy anymore, but i will implement this later
-	void Update() {
+	void Update()
+	{
 		transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
-	}*/
+	}
 }
