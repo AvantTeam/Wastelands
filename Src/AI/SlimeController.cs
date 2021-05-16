@@ -37,7 +37,6 @@ public class SlimeController : MonoBehaviour
 	{
 		if (moving)
 		{
-			Debug.Log("OOOOOO");
 			if (transform.position == newPos)
 			{
 				if (spriteRenderer.sprite != sprites[0])
@@ -53,10 +52,11 @@ public class SlimeController : MonoBehaviour
 					moving = false;
 				}
 				frame += Time.deltaTime * speed;
+				Debug.Log(stopTime + offset);
 			}
 			else
 			{
-				offset = Random.Range(0, 30);
+				offset = Random.Range(0, 10);
 				transform.position = Vector3.MoveTowards(transform.position, newPos, speed * Time.deltaTime);
 
 				float height = JumpY(Vector3.Distance(transform.position, newPos) / moveRadius, 1.5f);
