@@ -1,6 +1,7 @@
 using UnityEngine;
 using Content;
 
+// Game state public access
 public class GameManager : MonoBehaviour
 {
 	private static GameManager instance = null;
