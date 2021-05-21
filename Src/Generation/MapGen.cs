@@ -141,7 +141,7 @@ public class MapGen : MonoBehaviour
 
 		for (int x = bounds.min.x; x < bounds.max.x; x++)
 		{
-			for (int y = bounds.min.x; y < bounds.max.y; y++)
+			for (int y = bounds.min.y; y < bounds.max.y; y++)
 			{
 				pos = new Vector3Int(x, y, 0);
 

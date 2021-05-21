@@ -84,9 +84,8 @@ public static class Utils
 		return position + relativePosition;
 	}
 
-	public static Vector3 tryGetCircle(Vector3 position, float radius, float colliderRadius, Collider2D ignoreCollider)
+	public static Vector3 tryGetCircle(float angle, Vector3 position, float radius, float colliderRadius, Collider2D ignoreCollider)
 	{
-		float angle = UnityEngine.Random.Range(1f, 360f);
 		while (angle <= 400f)
 		{
 			Vector3 newPos = position + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0f);

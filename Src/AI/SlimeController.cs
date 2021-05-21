@@ -77,7 +77,7 @@ public class SlimeController : MonoBehaviour
 		else
 		{
 			frame = 0;
-			newPos = tryGetCircle(prevPos, moveRadius, colliderRadius, (Collider2D)boxCollider);
+			newPos = tryGetCircle(UnityEngine.Random.Range(1f, 360f), prevPos, moveRadius, colliderRadius, (Collider2D)boxCollider);
 
 			if (newPos.x > prevPos.x) spriteRenderer.flipX = false;
 			else if (newPos.x < prevPos.x) spriteRenderer.flipX = true;
