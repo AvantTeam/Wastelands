@@ -13,6 +13,7 @@ public class SlimeController : MonoBehaviour
 	float frame = 0f;
 	int offset = 0;
 	bool moving = true;
+	bool triggered = false;
 	SpriteRenderer spriteRenderer, shadowRenderer;
 	SpriteMask maskRenderer;
 	Vector3 newPos, prevPos;
