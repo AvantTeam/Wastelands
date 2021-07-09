@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 public static class Utils
 {
@@ -118,5 +119,43 @@ public static class Utils
 	public static float JumpY(float portion, float maxHeight)
 	{
 		return Mathf.Pow(Mathf.Clamp(Mathf.Sin(portion * 180f * Mathf.Deg2Rad), 0.0001f, 1f), 0.5f) * maxHeight;
+	}
+
+	public static string DebugList<T>(List<T> input)
+	{
+		string o = "";
+
+		foreach (T i in input)
+		{
+			o += i.ToString() + ", ";
+		}
+
+		return o;
+	}
+
+	public static List<String> SplitByChar(string input, char split)
+	{
+		List<string> output = new List<string>();
+		string chunk = "";
+
+		foreach (char i in input)
+		{
+			if (i == split)
+			{
+				output.Add(chunk);
+				chunk = "";
+			}
+			else
+			{
+				chunk += i.ToString();
+			}
+		}
+
+		if (!input.EndsWith(split.ToString()))
+		{
+			output.Add(chunk);
+		}
+
+		return output;
 	}
 }

@@ -9,11 +9,11 @@ public class MapGen : MonoBehaviour
 	//only works with single tiles, AS OF NOW
 	public Tile[] rooms;
 	public int maxIterations = 16;
-	public Vector2Int size = new Vector2Int(30, 30);
-	public Tilemap tilemap;
+	public int minRooms = 10;
+	Tilemap tilemap;
 	int iteration = 0;
-	List<List<string>> roomsString = new List<List<string>>();
-	Vector2Int center;
+
+	int count = 0;
 
 	IDictionary<string, string> directions = new Dictionary<string, string>(){
 		{"U", "D"},
@@ -22,15 +22,15 @@ public class MapGen : MonoBehaviour
 		{"R", "L"}
 	};
 
-	public string PickNewTile(string direction)
+	public Tile PickNewTile(string direction)
 	{
 		string newDirection = directions[direction];
 
-		string tile = rooms[Random.Range(0, rooms.Length)].name;
+		Tile tile = rooms[Random.Range(0, rooms.Length)];
 
-		while (!tile.Contains(newDirection))
+		while (!tile.name.Contains(newDirection))
 		{
-			tile = rooms[Random.Range(0, rooms.Length)].name;
+			tile = rooms[Random.Range(0, rooms.Length)];
 		}
 
 		return tile;
@@ -38,76 +38,102 @@ public class MapGen : MonoBehaviour
 
 	public void WalkTile(int x, int y)
 	{
-		string tile = roomsString[y][x];
+		iteration += 1;
 
-		foreach (char direction in tile)
+		if (iteration > maxIterations) return;
+
+		Tile tile = tilemap.GetTile<Tile>(new Vector3Int(x, y, 0));
+
+		foreach (char direction in tile.name)
 		{
 			string dirString = direction.ToString();
-			Vector2Int newPos;
-			string newTile;
+			Vector3Int newPos;
+			Tile newTile;
 
 			switch (dirString)
 			{
 				case "U":
-					newPos = new Vector2Int(x, y + 1);
+					newPos = new Vector3Int(x, y + 1, 0);
 					break;
 				case "D":
-					newPos = new Vector2Int(x, y - 1);
+					newPos = new Vector3Int(x, y - 1, 0);
 					break;
 				case "R":
-					newPos = new Vector2Int(x + 1, y);
+					newPos = new Vector3Int(x + 1, y, 0);
 					break;
 				case "L":
-					newPos = new Vector2Int(x - 1, y);
+					newPos = new Vector3Int(x - 1, y, 0);
 					break;
 				default:
-					newPos = new Vector2Int(x, y);
+					newPos = new Vector3Int(x, y, 0);
 					break;
 			}
 
-			if (newPos.x < 0 || newPos.x >= size.x || newPos.y < 0 || newPos.y >= size.y)
+			if (tilemap.GetTile<Tile>(newPos) != null)
 			{
 				continue;
 			}
 
 			newTile = PickNewTile(dirString);
-			Debug.Log(newTile.Contains(directions[dirString]));
-			roomsString[newPos.y][newPos.x] = newTile;
 
-			iteration += 1;
-			if (iteration > maxIterations) return;
+			tilemap.SetTile(newPos, newTile);
 
 			WalkTile(newPos.x, newPos.y);
 		}
 
 		return;
 	}
-	public string GetRequiredTile(int x, int y)
+
+	public Tile GetTileFromString(string id)
+	{
+		string realTileName = "";
+
+		if (id.Contains("R"))
+		{
+			realTileName += "R";
+		}
+		if (id.Contains("D"))
+		{
+			realTileName += "D";
+		}
+		if (id.Contains("L"))
+		{
+			realTileName += "L";
+		}
+		if (id.Contains("U"))
+		{
+			realTileName += "U";
+		}
+
+		return Resources.Load<Tile>("Sprites/Tiles/Palettes/Tests/" + realTileName);
+	}
+
+	public Tile GetRequiredTile(int x, int y)
 	{
 		string tileName = "";
 
-		string tile = roomsString[y][x + 1];
-		if (tile != null && tile.Contains("L"))
+		Tile tile = tilemap.GetTile<Tile>(new Vector3Int(x + 1, y, 0));
+		if (tile != null && tile.name.Contains("L"))
 		{
 			tileName += "R";
 		}
-		tile = roomsString[y][x - 1];
-		if (tile != null && tile.Contains("R"))
+		tile = tilemap.GetTile<Tile>(new Vector3Int(x - 1, y, 0));
+		if (tile != null && tile.name.Contains("R"))
 		{
 			tileName += "L";
 		}
-		tile = tile = roomsString[y - 1][x];
-		if (tile != null && tile.Contains("D"))
+		tile = tilemap.GetTile<Tile>(new Vector3Int(x, y + 1, 0));
+		if (tile != null && tile.name.Contains("D"))
 		{
 			tileName += "U";
 		}
-		tile = roomsString[y + 1][x];
-		if (tile != null && tile.Contains("U"))
+		tile = tilemap.GetTile<Tile>(new Vector3Int(x, y - 1, 0));
+		if (tile != null && tile.name.Contains("U"))
 		{
 			tileName += "D";
 		}
 
-		return tileName;
+		return GetTileFromString(tileName);
 	}
 
 	public void FinishMap()
@@ -125,51 +151,44 @@ public class MapGen : MonoBehaviour
 
 				if (tile != null)
 				{
-					Debug.Log("d");
-					//tilemap.SetTile(pos, GetRequiredTile(x, y));
+					tilemap.SetTile(pos, GetRequiredTile(x, y));
 				}
 			}
 		}
 	}
 
+	public int CountTiles()
+	{
+		int amount = 0;
+     
+		BoundsInt bounds = tilemap.cellBounds;
+		foreach (Vector3Int pos in bounds.allPositionsWithin)
+		{
+			Tile tile = tilemap.GetTile<Tile>(pos);
+			if (tile != null)
+			{
+				amount += 1;
+			}
+		}
+
+		return amount;
+	}
+
 	public void Start()
 	{
-		for (int i = 0; i < size.x; i++)
+		tilemap = GetComponent<Tilemap>();
+
+		while (count < minRooms)
 		{
-			roomsString.Add(new List<string>());
-			for (int j = 0; j < size.y; j++)
-			{
-				roomsString[i].Add("");
-			}
+			tilemap.ClearAllTiles();
+
+			tilemap.SetTile(Vector3Int.zero, rooms[Random.Range(0, rooms.Length)]);
+
+			WalkTile(0, 0);
+
+			FinishMap();
+
+			count = CountTiles();
 		}
-
-		center = new Vector2Int((int)Mathf.Floor(size.x / 2) - 1, (int)Mathf.Floor(size.y / 2) - 1);
-
-		roomsString[center.y][center.x] = rooms[Random.Range(0, rooms.Length)].name;
-
-		WalkTile(center.x, center.y);
-
-		int xx = -1;
-		int yy = -1;
-		Vector3Int pos = new Vector3Int(0, 0, 0);
-		string o = "";
-		foreach (List<string> item in roomsString)
-		{
-			o += "\n";
-			yy++;
-			xx = -1;
-			foreach (string i in item)
-			{
-				o += i + ".";
-				xx++;
-				if (i == "") continue;
-				pos = new Vector3Int(yy, xx, 0);
-				tilemap.SetTile(pos, Resources.Load<Tile>("Sprites/Tiles/Palettes/Tests/" + i));
-			}
-		}
-		Debug.Log(o);
-
-
-		//FinishMap();
 	}
 }
