@@ -4,8 +4,8 @@ namespace Content
 {
 	public class ContentLoader : MonoBehaviour
 	{
-		Weapons weapons = new Weapons();
-		Rooms rooms = new Rooms();
+		public static Weapons weapons = new Weapons();
+		public static Rooms rooms = new Rooms();
 
 		void Start()
 		{

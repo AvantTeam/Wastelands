@@ -1,4 +1,6 @@
-using System.Collections;
+using Content;
+using Utilities;
+using static Utils;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -105,6 +107,10 @@ public class MapGen : MonoBehaviour
 			realTileName += "U";
 		}
 
+		if(id == "B" || id == "F" || id.StartsWith("s")){
+			return null;
+		}
+
 		return Resources.Load<Tile>("Sprites/Tiles/Palettes/Tests/" + realTileName);
 	}
 
@@ -160,7 +166,7 @@ public class MapGen : MonoBehaviour
 	public int CountTiles()
 	{
 		int amount = 0;
-     
+
 		BoundsInt bounds = tilemap.cellBounds;
 		foreach (Vector3Int pos in bounds.allPositionsWithin)
 		{
@@ -172,6 +178,70 @@ public class MapGen : MonoBehaviour
 		}
 
 		return amount;
+	}
+
+	public string RoomString(){
+		Vector3Int prevPos = default;
+		string output = "";
+
+		List<Vector3Int> invert = new List<Vector3Int>();
+		BoundsInt bounds = tilemap.cellBounds;
+		foreach (Vector3Int pos in bounds.allPositionsWithin)
+		{
+			invert.Add(pos);
+		}
+
+		invert.Reverse();
+
+		foreach (Vector3Int pos in invert)
+		{
+			Tile tile = tilemap.GetTile<Tile>(pos);
+
+			print(pos);
+
+			if (tile != null) output += tile.name;
+			else output += "B";
+
+			if (prevPos == default) prevPos = pos;
+			if (prevPos.y < pos.y) output += ";";
+			else output += ".";
+
+			prevPos = pos;
+		}
+
+		return output;
+	}
+
+	public List<List<string>> ListRoomFromString(string room){
+		List<string> rows = SplitByChar(room, ';');
+		List<List<string>> output = new List<List<string>>();
+
+		foreach(string i in rows){
+			List<string> columns = SplitByChar(i, '.');
+
+			output.Add(columns);
+		}
+
+		return output;
+	}
+
+	public void LoadRoom(Vector3Int pos, List<List<string>> room){
+		Vector3Int newPos = pos;
+
+		int x = 0, y = 0;
+
+		foreach(List<string> i in room){
+			foreach(string j in i){
+				tilemap.SetTile(newPos, GetTileFromString(j));
+
+				newPos = new Vector3Int(x + pos.x, y + pos.y, 0);
+
+				x++;
+			}
+
+			x = 0;
+			y++;
+		}
 	}
 
 	public void Start()
@@ -190,5 +260,28 @@ public class MapGen : MonoBehaviour
 
 			count = CountTiles();
 		}
+
+		string roomString = RoomString();
+
+		List<List<string>> roomList = ListRoomFromString(roomString);
+
+		RandomDictionary<List<List<string>>> roomDict = ContentLoader.rooms.roomDict;
+
+		Vector3Int pos = Vector3Int.zero;
+		foreach(List<string> i in roomList){
+			foreach(string j in i){
+				if(j == "B") continue;
+
+				List<List<string>> room = roomDict.Get(j);
+
+				LoadRoom(pos, room);
+
+				pos.x += 25;
+			}
+			pos.x = 0;
+			pos.y += 18;
+		}
+
+		tilemap.ClearAllTiles();
 	}
 }

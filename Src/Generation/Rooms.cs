@@ -2,16 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using Utilities;
 using static Utils;
 
 namespace Content
 {
 	public class Rooms
 	{
-		List<List<List<string>>> R = new List<List<List<string>>>();
-		List<List<List<string>>> D = new List<List<List<string>>>();
-		List<List<List<string>>> L = new List<List<List<string>>>();
-		List<List<List<string>>> U = new List<List<List<string>>>();
+		public RandomDictionary<List<List<string>>> roomDict = new RandomDictionary<List<List<string>>>();
 		string directory = "./Assets/Resources/Rooms";
 		FileInfo[] fileInfo;
 		string[] fileNames;
@@ -54,25 +52,7 @@ namespace Content
 					{
 						connectionData = data[2];
 
-						if (connectionData.Contains("R"))
-						{
-							R.Add(roomData);
-						}
-
-						if (connectionData.Contains("D"))
-						{
-							D.Add(roomData);
-						}
-
-						if (connectionData.Contains("L"))
-						{
-							L.Add(roomData);
-						}
-
-						if (connectionData.Contains("U"))
-						{
-							U.Add(roomData);
-						}
+						roomDict.Add(connectionData, roomData);
 					}
 				}
 			}
