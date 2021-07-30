@@ -107,7 +107,8 @@ public class MapGen : MonoBehaviour
 			realTileName += "U";
 		}
 
-		if(id == "B" || id == "F" || id.StartsWith("s")){
+		if (id == "B" || id == "F" || id.StartsWith("s"))
+		{
 			return null;
 		}
 
@@ -180,13 +181,28 @@ public class MapGen : MonoBehaviour
 		return amount;
 	}
 
-	public string RoomString(){
-		Vector3Int prevPos = default;
+	public List<Vector3Int> range(int x, int y, int x1, int y1, int z)
+	{
+		List<Vector3Int> output = new List<Vector3Int>();
+
+		for (int i = y; i <= y1; i++)
+		{
+			for (int j = x; j <= x1; j++)
+			{
+				output.Add(new Vector3Int(j, i, z));
+			}
+		}
+
+		return output;
+	}
+	public string RoomString()
+	{
+		Vector3Int prevPos = new Vector3Int(9999, 9999, 9999);
 		string output = "";
 
 		List<Vector3Int> invert = new List<Vector3Int>();
 		BoundsInt bounds = tilemap.cellBounds;
-		foreach (Vector3Int pos in bounds.allPositionsWithin)
+		foreach (Vector3Int pos in range(bounds.min.x, bounds.min.y, bounds.max.x, bounds.max.y, 0))
 		{
 			invert.Add(pos);
 		}
@@ -197,42 +213,59 @@ public class MapGen : MonoBehaviour
 		{
 			Tile tile = tilemap.GetTile<Tile>(pos);
 
-			print(pos);
-
 			if (tile != null) output += tile.name;
 			else output += "B";
 
-			if (prevPos == default) prevPos = pos;
-			if (prevPos.y < pos.y) output += ";";
+			if (prevPos == new Vector3Int(9999, 9999, 9999)) prevPos = pos;
+
+			if (prevPos.y > pos.y) output += ";";
 			else output += ".";
 
 			prevPos = pos;
 		}
 
+		List<string> outOut = SplitByChar(output, ';');
+		List<string> outOutOut = new List<string>();
+
+		foreach(string i in outOut){
+			List<string> uuu = SplitByChar(i, '.');
+			uuu.Reverse();
+			outOutOut.Add(JoinByString(uuu, "."));
+		}
+
+		outOutOut.Reverse();
+		output = JoinByString(outOutOut, ";");
+
 		return output;
 	}
 
-	public List<List<string>> ListRoomFromString(string room){
+	public List<List<string>> ListRoomFromString(string room)
+	{
 		List<string> rows = SplitByChar(room, ';');
 		List<List<string>> output = new List<List<string>>();
 
-		foreach(string i in rows){
+		foreach (string i in rows)
+		{
 			List<string> columns = SplitByChar(i, '.');
 
-			output.Add(columns);
+			output.Add(new List<string>(columns));
 		}
 
 		return output;
 	}
 
-	public void LoadRoom(Vector3Int pos, List<List<string>> room){
+	public void LoadRoom(Vector3Int pos, List<List<string>> room)
+	{
 		Vector3Int newPos = pos;
 
 		int x = 0, y = 0;
 
-		foreach(List<string> i in room){
-			foreach(string j in i){
-				tilemap.SetTile(newPos, GetTileFromString(j));
+		foreach (List<string> i in room)
+		{
+			foreach (string j in i)
+			{
+				print(j);
+				if (j != "F" && j != "B") tilemap.SetTile(newPos, Resources.Load<Tile>("Sprites/Tiles/Palettes/Dungeon/dungeon_test_5"));
 
 				newPos = new Vector3Int(x + pos.x, y + pos.y, 0);
 
@@ -262,26 +295,31 @@ public class MapGen : MonoBehaviour
 		}
 
 		string roomString = RoomString();
-
+		print(roomString);
 		List<List<string>> roomList = ListRoomFromString(roomString);
 
 		RandomDictionary<List<List<string>>> roomDict = ContentLoader.rooms.roomDict;
 
+		//tilemap.ClearAllTiles();
+
 		Vector3Int pos = Vector3Int.zero;
-		foreach(List<string> i in roomList){
-			foreach(string j in i){
-				if(j == "B") continue;
+		foreach (List<string> i in roomList)
+		{
+			foreach (string j in i)
+			{
+				if (j == "B")
+				{
+					pos.x += 25;
+					continue;
+				}
 
 				List<List<string>> room = roomDict.Get(j);
 
 				LoadRoom(pos, room);
-
-				pos.x += 25;
+				pos.x += 26;
 			}
 			pos.x = 0;
 			pos.y += 18;
 		}
-
-		tilemap.ClearAllTiles();
 	}
 }

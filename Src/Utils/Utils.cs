@@ -158,4 +158,18 @@ public static class Utils
 
 		return output;
 	}
+
+	public static string JoinByString(List<string> input, string join)
+	{
+		string output = "";
+
+		int id = 0;
+		foreach (string i in input)
+		{
+			output += i;
+			if (id < input.Count) output += join;
+		}
+
+		return output;
+	}
 }
