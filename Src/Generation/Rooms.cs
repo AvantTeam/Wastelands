@@ -43,6 +43,8 @@ namespace Content
 						}
 						else roomData.Add(rowList);
 					}
+
+					roomData.Reverse();
 				}
 				else Debug.Log("Row Error: " + data.Length);
 

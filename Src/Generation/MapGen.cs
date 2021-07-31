@@ -8,7 +8,7 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(Tilemap))]
 public class MapGen : MonoBehaviour
 {
-	//only works with single tiles, AS OF NOW
+	//TODO fix tile rendering
 	public Tile[] rooms;
 	public int maxIterations = 16;
 	public int minRooms = 10;
@@ -181,20 +181,6 @@ public class MapGen : MonoBehaviour
 		return amount;
 	}
 
-	public List<Vector3Int> range(int x, int y, int x1, int y1, int z)
-	{
-		List<Vector3Int> output = new List<Vector3Int>();
-
-		for (int i = y; i <= y1; i++)
-		{
-			for (int j = x; j <= x1; j++)
-			{
-				output.Add(new Vector3Int(j, i, z));
-			}
-		}
-
-		return output;
-	}
 	public string RoomString()
 	{
 		Vector3Int prevPos = new Vector3Int(9999, 9999, 9999);
@@ -202,7 +188,7 @@ public class MapGen : MonoBehaviour
 
 		List<Vector3Int> invert = new List<Vector3Int>();
 		BoundsInt bounds = tilemap.cellBounds;
-		foreach (Vector3Int pos in range(bounds.min.x, bounds.min.y, bounds.max.x, bounds.max.y, 0))
+		foreach (Vector3Int pos in Range(bounds.min.x, bounds.min.y, bounds.max.x, bounds.max.y, 0))
 		{
 			invert.Add(pos);
 		}
@@ -227,7 +213,8 @@ public class MapGen : MonoBehaviour
 		List<string> outOut = SplitByChar(output, ';');
 		List<string> outOutOut = new List<string>();
 
-		foreach(string i in outOut){
+		foreach (string i in outOut)
+		{
 			List<string> uuu = SplitByChar(i, '.');
 			uuu.Reverse();
 			outOutOut.Add(JoinByString(uuu, "."));
@@ -264,16 +251,53 @@ public class MapGen : MonoBehaviour
 		{
 			foreach (string j in i)
 			{
-				print(j);
-				if (j != "F" && j != "B") tilemap.SetTile(newPos, Resources.Load<Tile>("Sprites/Tiles/Palettes/Dungeon/dungeon_test_5"));
-
 				newPos = new Vector3Int(x + pos.x, y + pos.y, 0);
-
+				//if (j.StartsWith("s")) tilemap.SetTile(newPos, Resources.Load<Tile>("Sprites/Tiles/Palettes/Dungeon/dungeon_test_5"));
+				if (j == "F") tilemap.SetTile(newPos, Resources.Load<Tile>("Sprites/Tiles/Palettes/Brick/Ground/brick_ground_0"));
+				else if (j != "B") tilemap.SetTile(newPos, Resources.Load<Tile>("Sprites/Tiles/Palettes/Dungeon/dungeon_test_6"));
 				x++;
 			}
 
 			x = 0;
 			y++;
+		}
+	}
+
+	public void FinishTileMap()
+	{
+		List<Vector3Int> invert = new List<Vector3Int>();
+		BoundsInt bounds = tilemap.cellBounds;
+
+		Tile floor = Resources.Load<Tile>("Sprites/Tiles/Palettes/Brick/Ground/brick_ground_0");
+		Tile block = Resources.Load<Tile>("Sprites/Tiles/Palettes/Dungeon/dungeon_test_6");
+		Tile shadow = Resources.Load<Tile>("Sprites/Tiles/Palettes/Dungeon/dungeon_test_5");
+		foreach (Vector3Int pos in Range(bounds.min.x, bounds.min.y, bounds.max.x, bounds.max.y, 0))
+		{
+			Tile under = tilemap.GetTile<Tile>(pos + new Vector3Int(0, -1, 0));
+			Tile over = tilemap.GetTile<Tile>(pos + new Vector3Int(0, 1, 0));
+			if ((under == floor || under == null) && over == block)
+			{
+				tilemap.SetTile(pos, shadow);
+			}
+
+			if (under == block && over == null)
+			{
+				tilemap.SetTile(pos, null);
+			}
+		}
+	}
+
+	//FIXME last tile row is stupid
+	public void LastRow(){
+		BoundsInt bounds = tilemap.cellBounds;
+
+		foreach (Vector3Int pos in Range(bounds.min.x, bounds.min.y, bounds.max.x, bounds.max.y, 0))
+		{
+			if(pos.y >= bounds.max.y - 17){
+				Tile tileTile = tilemap.GetTile<Tile>(pos);
+				tilemap.SetTile(pos + new Vector3Int(24, 0, 0), tileTile);
+				tilemap.SetTile(pos, null);
+			}
 		}
 	}
 
@@ -295,7 +319,6 @@ public class MapGen : MonoBehaviour
 		}
 
 		string roomString = RoomString();
-		print(roomString);
 		List<List<string>> roomList = ListRoomFromString(roomString);
 
 		RandomDictionary<List<List<string>>> roomDict = ContentLoader.rooms.roomDict;
@@ -303,23 +326,29 @@ public class MapGen : MonoBehaviour
 		//tilemap.ClearAllTiles();
 
 		Vector3Int pos = Vector3Int.zero;
+		int iii = 1;
 		foreach (List<string> i in roomList)
 		{
 			foreach (string j in i)
 			{
 				if (j == "B")
 				{
-					pos.x += 25;
+					pos.x += 24;
 					continue;
 				}
 
 				List<List<string>> room = roomDict.Get(j);
 
 				LoadRoom(pos, room);
-				pos.x += 26;
+				pos.x += 24;
 			}
 			pos.x = 0;
-			pos.y += 18;
+			print(pos.x);
+			pos.y += 16;
+			iii++;
 		}
+
+		LastRow();
+		FinishTileMap();
 	}
 }

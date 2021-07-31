@@ -172,4 +172,32 @@ public static class Utils
 
 		return output;
 	}
+
+	public static List<Vector3Int> Range(int x, int y, int x1, int y1, int z)
+	{
+		List<Vector3Int> output = new List<Vector3Int>();
+
+		for (int i = y; i <= y1; i++)
+		{
+			for (int j = x; j <= x1; j++)
+			{
+				output.Add(new Vector3Int(j, i, z));
+			}
+		}
+
+		return output;
+	}
+
+	public static string ListRoomToString(List<List<string>> room){
+		string o = "";
+
+		foreach(List<string> row in room){
+			foreach(string str in row){
+				o += str + ".";
+			}
+			o += ";";
+		}
+
+		return o;
+	}
 }
