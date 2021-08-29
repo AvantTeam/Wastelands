@@ -14,7 +14,7 @@ Main Developer: [@ThePythonGuy3](https://github.com/ThePythonGuy3)
 
 Main Artist: [@ThirstyBoi](https://github.com/ThirstyBoi)
 
-Music: [@FarmerThanos](https://github.com/FarmerThanos), [@Txar](https://github.com/Txar), [@Meltdown-Altair](https://github.com/Meltdown-Altair)
+Music: [@FarmerThanos](https://github.com/FarmerThanos)
 
 Sound effects made with [bfxr](https://www.bfxr.net/).
 
