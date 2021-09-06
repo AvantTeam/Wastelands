@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using wastelands.src.entities;
 using System.Collections.Generic;
+using wastelands.src;
 
 namespace wastelands
 {
@@ -17,6 +18,8 @@ namespace wastelands
         public Wastelands()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.ToggleFullScreen();
+
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -60,13 +63,17 @@ namespace wastelands
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            base.Draw(gameTime);
 
             for (int i = 0; i < entityArray.Length; i++)
             {
-                entityArray[i].Draw(spriteBatch);
-            }
+                Vector2 relPos = entityArray[i].position - Vars.camera.position + (Vars.screenSize / 2f) * (2f - Vars.camera.zoom);
 
-            base.Draw(gameTime);
+                if(relPos.X >= 0 && relPos.Y >= 0 && relPos.X <= Vars.screenSize.X && relPos.Y <= Vars.screenSize.Y)
+                {
+                    entityArray[i].Draw(spriteBatch);
+                }
+            }
         }
     }
 }
