@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace wastelands.src.entities
 {
@@ -14,9 +15,9 @@ namespace wastelands.src.entities
             Wastelands.entities.Add(this);
         }
 
-        public void Init() { }
-        public void Load() { }
-        public void Update() { }
-        public void Draw(SpriteBatch batch) { }
+        public virtual void Init() { }
+        public virtual void Load(ContentManager content) { }
+        public virtual void Update(float time) { }
+        public virtual void Draw(SpriteBatch batch, Vector2 relativePosition) { }
     }
 }

@@ -21,3 +21,4 @@ C:\Users\gnmar\Documents\Códigos\Juegos\WastelandsMonoGame\obj\Debug\netcoreapp
 C:\Users\gnmar\Documents\Códigos\Juegos\WastelandsMonoGame\obj\Debug\netcoreapp3.1\WastelandsMonoGame.dll
 C:\Users\gnmar\Documents\Códigos\Juegos\WastelandsMonoGame\obj\Debug\netcoreapp3.1\WastelandsMonoGame.pdb
 C:\Users\gnmar\Documents\Códigos\Juegos\WastelandsMonoGame\obj\Debug\netcoreapp3.1\WastelandsMonoGame.genruntimeconfig.cache
+C:\Users\gnmar\Documents\Códigos\Juegos\WastelandsMonoGame\bin\Debug\netcoreapp3.1\Content\sprites\error.xnb

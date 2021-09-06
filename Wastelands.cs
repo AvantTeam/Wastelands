@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using wastelands.src.entities;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using wastelands.src;
+using wastelands.src.entities;
 
 namespace wastelands
 {
@@ -13,12 +15,11 @@ namespace wastelands
         private SpriteBatch spriteBatch;
 
         public static List<Entity> entities = new List<Entity>();
-        private Entity[] entityArray; 
 
         public Wastelands()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.ToggleFullScreen();
+            //graphics.ToggleFullScreen();
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -26,12 +27,13 @@ namespace wastelands
 
         protected override void Initialize()
         {
-            entityArray = entities.ToArray(); //Lists are much slower
-            entities.Clear();
+            new EntityTest();
+            Console.WriteLine(entities.Count);
+            entities.OrderBy(e => e.z);
             
-            for(int i = 0; i < entityArray.Length; i++)
+            foreach(Entity entity in entities)
             {
-                entityArray[i].Init();
+                entity.Init();
             }
 
             base.Initialize();
@@ -41,9 +43,9 @@ namespace wastelands
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            for (int i = 0; i < entityArray.Length; i++)
+            foreach (Entity entity in entities)
             {
-                entityArray[i].Load();
+                entity.Load(Content);
             }
         }
 
@@ -52,9 +54,9 @@ namespace wastelands
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            for (int i = 0; i < entityArray.Length; i++)
+            foreach (Entity entity in entities)
             {
-                entityArray[i].Update();
+                entity.Update((float)gameTime.TotalGameTime.Ticks / 60f);
             }
 
             base.Update(gameTime);
@@ -62,18 +64,21 @@ namespace wastelands
 
         protected override void Draw(GameTime gameTime)
         {
+            spriteBatch.Begin();
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            base.Draw(gameTime);
 
-            for (int i = 0; i < entityArray.Length; i++)
+            foreach (Entity entity in entities)
             {
-                Vector2 relPos = entityArray[i].position - Vars.camera.position + (Vars.screenSize / 2f) * (2f - Vars.camera.zoom);
+                Vector2 relPos = entity.position - Vars.camera.position + (Vars.screenSize / 2f) * (2f - Vars.camera.zoom);
 
-                if(relPos.X >= 0 && relPos.Y >= 0 && relPos.X <= Vars.screenSize.X && relPos.Y <= Vars.screenSize.Y)
+                if (relPos.X + entity.size.X >= 0 && relPos.Y + entity.size.Y >= 0 && relPos.X <= Vars.screenSize.X && relPos.Y + entity.size.Y <= Vars.screenSize.Y)
                 {
-                    entityArray[i].Draw(spriteBatch);
+                    entity.Draw(spriteBatch, relPos);
                 }
             }
+
+            base.Draw(gameTime);
+            spriteBatch.End();
         }
     }
 }

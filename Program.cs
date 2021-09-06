@@ -7,8 +7,8 @@ namespace wastelands
         [STAThread]
         static void Main()
         {
-            using (var game = new Wastelands())
-                game.Run();
+            using var game = new Wastelands();
+            game.Run();
         }
     }
 }
