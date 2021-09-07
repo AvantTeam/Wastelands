@@ -34,7 +34,7 @@ namespace wastelands
         {
             new EntityTest(new Vector2(300f, 100f));
 
-            new EntityTest(new Vector2(500f, 100f));
+            new PlayerEntity(new Vector2(500f, 100f));
 
             Console.WriteLine(entities.Count);
             entities.OrderBy(e => e.z);
