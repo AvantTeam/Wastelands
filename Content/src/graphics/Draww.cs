@@ -7,6 +7,7 @@ namespace wastelands.src.graphics
     {
         public static void DrawSprite(SpriteBatch batch, Texture2D sprite, Vector2 position, Color color, float zoom)
         {
+            if (sprite == null) return;
             batch.Draw(sprite, new Rectangle((int)(position.X - (sprite.Width / 2) * zoom), (int)(position.Y - (sprite.Width / 2) * zoom), (int)(sprite.Width * zoom), (int)(sprite.Height * zoom)), color);
         }
 

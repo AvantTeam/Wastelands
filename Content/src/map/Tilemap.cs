@@ -10,12 +10,6 @@ namespace wastelands.src.map
     public class Tilemap
     {
         private Dictionary<Vector2, Tile> tiles = new Dictionary<Vector2, Tile>();
-        public Tile def;
-
-        public Tilemap(Tile def)
-        {
-            this.def = def;
-        }
 
         public void AddTile(bool solid, Vector2 position, Texture2D texture)
         {
@@ -31,6 +25,11 @@ namespace wastelands.src.map
         public void RemoveTile(Vector2 position)
         {
             tiles.Remove(position);
+        }
+
+        public Tile GetTile(Vector2 position)
+        {
+            return tiles[position];
         }
 
         public void Sort()

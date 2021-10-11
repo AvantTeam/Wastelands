@@ -8,6 +8,12 @@ namespace wastelands.src.map
         public bool solid = false;
         public Texture2D texture;
 
+        public Tile(bool solid)
+        {
+            this.solid = solid;
+            texture = null;
+        }
+
         public Tile(bool solid, Texture2D texture)
         {
             this.solid = solid;

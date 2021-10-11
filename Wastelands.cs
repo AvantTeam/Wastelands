@@ -15,7 +15,6 @@ namespace wastelands
     {
         public static GraphicsDeviceManager graphics;
         public static SpriteBatch spriteBatch;
-        public Tilemap testMap;
 
         public static List<Entity> entities = new List<Entity>();
 
@@ -47,14 +46,10 @@ namespace wastelands
                 entity.Init();
             }
 
-            Texture2D testSprite = Content.Load<Texture2D>("sprites/error");
-            testMap = new Tilemap(new Tile(true, testSprite));
+            MapGen generator = new MapGen(20);
 
-            testMap.AddTile(false, new Vector2(0, 0), testSprite);
-            testMap.AddTile(false, new Vector2(0, 1), testSprite);
-            testMap.AddTile(false, new Vector2(0, 2), testSprite);
-            testMap.AddTile(false, new Vector2(1, 0), testSprite);
-            testMap.AddTile(false, new Vector2(1, 1), testSprite);
+            generator.InitData();
+            generator.Generate();
 
             base.Initialize();
         }
@@ -90,8 +85,6 @@ namespace wastelands
         {
             spriteBatch.Begin();
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            testMap.Draw();
 
             foreach (Entity entity in entities)
             {

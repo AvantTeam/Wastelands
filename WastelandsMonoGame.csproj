@@ -8,6 +8,7 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <RootNamespace>wastelands</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Icon.ico" />
