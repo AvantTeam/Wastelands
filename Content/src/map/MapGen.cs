@@ -25,19 +25,22 @@ namespace wastelands.src.map
 
             int c = 0;
 
-            if (mapData[x + 1][y] == null) // Yandere
+            if (x + 1 >= 0 && x + 1 < mapData.Count && mapData[x + 1][y] == null)
             {
                 c++;
             }
-            if (mapData[x - 1][y] == null)
+
+            if (x - 1 >= 0 && x - 1 < mapData.Count && mapData[x - 1][y] == null)
             {
                 c++;
             }
-            if (mapData[x][y + 1] == null)
+
+            if (y + 1 >= 0 && y + 1 < mapData.Count && mapData[x][y + 1] == null)
             {
                 c++;
             }
-            if (mapData[x][y + 1] == null)
+
+            if (y - 1 >= 0 && y - 1 < mapData.Count && mapData[x][y + 1] == null)
             {
                 c++;
             }
@@ -75,25 +78,34 @@ namespace wastelands.src.map
 
                 if (available < roomN) roomN = available;
 
-                int j = 0;
-                /*for (int j = 0; j < roomN; j++)*/
-                while(j < roomN)
-                {
-                    Vector2 newPos = table[random.Next(0, 3)];
+                int j = 0, c = 0;
 
-                    if(mapData[(int)newPos.X][(int)newPos.Y] == null)
+                while (j < roomN && c < 600) // Failsafe
+                {
+                    Vector2 newPos = point + table[random.Next(0, 3)];
+
+                    if (newPos.X >= 0 && newPos.Y >= 0 && newPos.X < mapData.Count && newPos.Y < mapData.Count && mapData[(int)newPos.X][(int)newPos.Y] == null)
                     {
                         mapData[(int)newPos.X][(int)newPos.Y] = "-1";
+                        point = newPos;
                         j++;
                     }
+
+                    c++;
                 }
 
                 pogress = i / rooms;
             }
 
+            string a = "";
             foreach(List<string> strList in mapData)
             {
-                Debug.WriteLine(strList);
+                a = "";
+                foreach (string str in strList)
+                {
+                    a += str;
+                }
+                Console.WriteLine(a);
             }
         }
     }
