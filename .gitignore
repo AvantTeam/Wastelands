@@ -1,0 +1,12 @@
+*.csproj
+*.sln
+*.manifest
+
+.git/
+.vs/
+obj/
+bin/
+
+content/bin/
+content/obj/
+*.mgcb
