@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using wastelands.src;
 using wastelands.src.entities;
 using wastelands.src.map;
+using wastelands.src.local;
 
 namespace wastelands
 {
@@ -37,6 +38,9 @@ namespace wastelands
             new EntityTest(new Vector2(300f, 100f));
 
             new PlayerEntity(new Vector2(500f, 100f));
+
+            new TileLoader().LoadAll(Content);
+            new Localizer().LoadLocals(Content);
 
             Console.WriteLine(entities.Count);
             entities.OrderBy(e => e.z);

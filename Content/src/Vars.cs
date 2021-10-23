@@ -11,5 +11,6 @@ namespace wastelands.src
         public static Vector2 mousePosition = Vector2.Zero;
         public static Vector2 screenSize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
         public static Vector2 relativeMousePosition = screenSize;
+        public static Vector2 mapTileSize = new Vector2(25, 18);
     }
 }

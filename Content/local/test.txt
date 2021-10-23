@@ -1,0 +1,10 @@
+-test.maybe
+[ES]Es posible
+[CA]És possible
+[EN]Mayhaps
+[FR]Peut être
+-test.deny
+[ES]Denegar
+[CA]Denegar
+[EN]Deny
+[FR]Nier
