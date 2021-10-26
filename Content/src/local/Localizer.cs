@@ -31,7 +31,7 @@ namespace wastelands.src.local
                                 try { temp.Add(b.Substring(0, 4), b.Substring(4)); } catch(Exception) { }
                             } else
                             {
-                                temp.Clear();
+                                Console.WriteLine(b);
                             }
                         }
                     }
