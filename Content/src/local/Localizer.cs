@@ -8,11 +8,12 @@ namespace wastelands.src.local
 {
     public class Localizer
     {
-        public Dictionary<string, Dictionary<string, string>> LoadLocals(ContentManager manager)
+        private Dictionary<string, Dictionary<string, string>> values;
+
+        public void LoadLocals(ContentManager manager)
         {
             string[] files = Directory.GetFiles(manager.RootDirectory + "/local");
             string[] content;
-            Dictionary<string, Dictionary<string, string>> o = new Dictionary<string, Dictionary<string, string>>();
 
             foreach (string a in files)
             {
@@ -21,24 +22,43 @@ namespace wastelands.src.local
                     using (StreamReader reader = new StreamReader(stream))
                     {
                         content = reader.ReadToEnd().Split("\n");
-                        Dictionary<string, string> temp = new Dictionary<string, string>();
 
-                        foreach(string b in content)
+                        string p = "";
+                        foreach (string b in content)
                         {
-                            if (!b.StartsWith("-"))
+                            if (b.StartsWith("-"))
                             {
-                                Console.WriteLine(b.Substring(0, 4) + " " + b.Substring(4));
-                                try { temp.Add(b.Substring(0, 4), b.Substring(4)); } catch(Exception) { }
-                            } else
+                                p = b.Substring(1).Replace("\n", "").Replace(" ", "").TrimEnd();
+                                Console.WriteLine(p);
+                                values.Add(p, new Dictionary<string, string>());
+                            }
+                            else
                             {
-                                Console.WriteLine(b);
+                                values[p].Add(b.Substring(1, 2), b.Substring(4));
                             }
                         }
                     }
                 }
             }
+        }
 
-            return null;
+        public string Get(string key, string langCode)
+        {
+            try
+            {
+                return values[key][langCode];
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    return values[key]["EN"];
+                }
+                catch (Exception)
+                {
+                    return key;
+                }
+            }
         }
     }
 }

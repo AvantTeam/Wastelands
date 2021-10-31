@@ -18,6 +18,7 @@ namespace wastelands
         public static SpriteBatch spriteBatch;
 
         public static List<Entity> entities = new List<Entity>();
+        public static Localizer locals = new Localizer();
 
         public Wastelands()
         {
@@ -40,7 +41,9 @@ namespace wastelands
             new PlayerEntity(new Vector2(500f, 100f));
 
             new TileLoader().LoadAll(Content);
-            new Localizer().LoadLocals(Content);
+            locals.LoadLocals(Content);
+
+            Console.WriteLine(locals.Get("test.maybe", "ES"));
 
             Console.WriteLine(entities.Count);
             entities.OrderBy(e => e.z);
