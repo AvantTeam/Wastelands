@@ -45,6 +45,7 @@ namespace wastelands
                 entity.Init();
             }
 
+            new MapGen().Generate(20);
             base.Initialize();
         }
 

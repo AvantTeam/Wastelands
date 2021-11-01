@@ -6,105 +6,120 @@ namespace wastelands.src.map
 {
     public class MapGen
     {
-        private Tilemap map = new Tilemap();
-        private List<List<string>> mapData = new List<List<string>>();
-        private Vector2[] table = new Vector2[] { new Vector2(-1, 0), new Vector2(1, 0), new Vector2(0, -1), new Vector2(0, 1) };
-        private int rooms = 20;
-        public float pogress = 0f; // Pog
+        public List<Vector2> vecMap = new List<Vector2>();
+        public List<string> conMap = new List<string>();
+        private Random random = new Random();
+        private List<string> dirs = new List<string>(new string[]{"D", "L", "U", "R"});
 
-        public MapGen(int rooms)
+        public class Vec2Comparer : IComparer<Vector2>
         {
-            this.rooms = rooms;
-        }
-
-        public int GetAvailable(Vector2 pos)
-        {
-            int x = (int)pos.X; // C# weak
-            int y = (int)pos.Y;
-
-            int c = 0;
-
-            if (x + 1 >= 0 && x + 1 < mapData.Count && mapData[x + 1][y] == null)
+            public int Compare(Vector2 x, Vector2 y)
             {
-                c++;
-            }
-
-            if (x - 1 >= 0 && x - 1 < mapData.Count && mapData[x - 1][y] == null)
-            {
-                c++;
-            }
-
-            if (y + 1 >= 0 && y + 1 < mapData.Count && mapData[x][y + 1] == null)
-            {
-                c++;
-            }
-
-            if (y - 1 >= 0 && y - 1 < mapData.Count && mapData[x][y + 1] == null)
-            {
-                c++;
-            }
-
-            return c;
-        }
-
-        public void InitData()
-        {
-            for(int i = 0; i < rooms * 2; i++)
-            {
-                mapData.Add(new List<string>());
-
-                for (int j = 0; j < rooms * 2; j++)
+                if(x.Y > y.Y)
                 {
-                    mapData[i].Add(null);
+                    return 1;
                 }
-            }
-        }
-
-        public void Generate()
-        {
-            Random random = new Random();
-            Vector2 initPos = new Vector2(0, 0);
-
-
-            mapData[rooms][rooms] = "-1";
-
-            for(int i = 0; i < rooms; i++)
-            {
-                Vector2 point = Vector2.Zero;
-                int roomN = random.Next(0, 4);
-
-                int available = GetAvailable(point);
-
-                if (available < roomN) roomN = available;
-
-                int j = 0, c = 0;
-
-                while (j < roomN && c < 600) // Failsafe
+                else if (x.Y < y.Y)
                 {
-                    Vector2 newPos = point + table[random.Next(0, 3)];
-
-                    if (newPos.X >= 0 && newPos.Y >= 0 && newPos.X < mapData.Count && newPos.Y < mapData.Count && mapData[(int)newPos.X][(int)newPos.Y] == null)
+                    return -1;
+                }
+                else
+                {
+                    if (x.X > y.X)
                     {
-                        mapData[(int)newPos.X][(int)newPos.Y] = "-1";
-                        point = newPos;
-                        j++;
+                        return 1;
                     }
-
-                    c++;
+                    else if (x.X < y.X)
+                    {
+                        return -1;
+                    }
                 }
 
-                pogress = i / rooms;
+                return 0;
+            }
+        }
+
+        public string SortDir(string sort)
+        {
+            string o = "";
+
+            if (sort.Contains("D"))
+            {
+                o += "D";
+            }
+            if (sort.Contains("L"))
+            {
+                o += "L";
+            }
+            if (sort.Contains("U"))
+            {
+                o += "U";
+            }
+            if (sort.Contains("R"))
+            {
+                o += "R";
             }
 
-            string a = "";
-            foreach(List<string> strList in mapData)
+            return o;
+        }
+
+        public int ChangeBy(int randID, string dir, int x, int y)
+        {
+            Vector2 newPos = new Vector2(vecMap[randID].X + x, vecMap[randID].Y + y);
+
+            if (vecMap.Contains(newPos))
             {
-                a = "";
-                foreach (string str in strList)
+                conMap[randID] = SortDir(conMap[randID] + dirs[3 - dirs.IndexOf(dir)]);
+                conMap[vecMap.IndexOf(newPos)] = SortDir(vecMap.IndexOf(newPos) + dir);
+            }
+            else
+            {
+                vecMap.Add(newPos);
+                conMap.Add(dir);
+
+                conMap[randID] = SortDir(conMap[randID] + dirs[3 - dirs.IndexOf(dir)]);
+                return 1;
+            }
+
+            return 0;
+        }
+
+        public void Generate(int rooms)
+        {
+            vecMap.Add(Vector2.Zero);
+            conMap.Add("");
+
+            int i = 1;
+            while(i < rooms)
+            {
+                int randID = random.Next(0, vecMap.Count);
+
+                int nextPos = random.Next(0, 4);
+                if(nextPos == 0)
                 {
-                    a += str;
+                    i += ChangeBy(randID, "L", 1, 0);
                 }
-                Console.WriteLine(a);
+                if (nextPos == 1)
+                {
+                    i += ChangeBy(randID, "U", 0, 1);
+                }
+                if (nextPos == 2)
+                {
+                    i += ChangeBy(randID, "R", -1, 0);
+                }
+                if (nextPos == 3)
+                {
+                    i += ChangeBy(randID, "D", 0, -1);
+                }
+            }
+
+            vecMap.Sort(new Vec2Comparer());
+
+            i = 0;
+            foreach(Vector2 pos in vecMap){
+                Console.WriteLine(pos.X.ToString() + ", " + pos.Y.ToString());
+                Console.WriteLine(conMap[i]);
+                i += 1;
             }
         }
     }
