@@ -43,7 +43,7 @@ namespace wastelands
             new TileLoader().LoadAll(Content);
             locals.LoadLocals(Content);
 
-            Console.WriteLine(locals.Get("test.maybe", "ES"));
+            Console.WriteLine(locals.Get("test.maybe"));
 
             Console.WriteLine(entities.Count);
             entities.OrderBy(e => e.z);

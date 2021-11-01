@@ -42,11 +42,11 @@ namespace wastelands.src.local
             }
         }
 
-        public string Get(string key, string langCode)
+        public string Get(string key)
         {
             try
             {
-                return values[key][langCode];
+                return values[key][Vars.settings.Get("language")];
             }
             catch (Exception)
             {
