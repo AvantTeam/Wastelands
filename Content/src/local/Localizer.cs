@@ -8,7 +8,7 @@ namespace wastelands.src.local
 {
     public class Localizer
     {
-        private Dictionary<string, Dictionary<string, string>> values;
+        private Dictionary<string, Dictionary<string, string>> values = new Dictionary<string, Dictionary<string, string>>();
 
         public void LoadLocals(ContentManager manager)
         {
@@ -46,7 +46,7 @@ namespace wastelands.src.local
         {
             try
             {
-                return values[key][Vars.settings.Get("language")];
+                return values[key][Vars.settings.langCode];
             }
             catch (Exception)
             {

@@ -38,7 +38,8 @@ namespace wastelands
         {
             new TileLoader().LoadAll(Content);
             locals.LoadLocals(Content);
-            
+
+            Vars.saveManager.Save();
             foreach(Entity entity in entities)
             {
                 entity.Init();

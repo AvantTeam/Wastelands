@@ -21,7 +21,13 @@ namespace wastelands.src
 
         public void Save()
         {
-            if (!File.Exists(savePath)) File.Create(savePath);
+            if (!File.Exists(savePath))
+            {
+                if (!Directory.Exists(Vars.aPath)) Directory.CreateDirectory(Vars.aPath);
+                if (!Directory.Exists(Vars.path)) Directory.CreateDirectory(Vars.path);
+
+                File.Create(savePath);
+            }
 
             JsonSerializer serializer = JsonSerializer.Create();
 
