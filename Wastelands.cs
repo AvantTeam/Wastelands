@@ -24,8 +24,8 @@ namespace wastelands
         {
             graphics = new GraphicsDeviceManager(this);
 
-            this.Window.Position = new Point(0, 0);
-            this.Window.IsBorderless = true;
+            Window.Position = new Point(0, 0);
+            Window.IsBorderless = true;
             graphics.PreferredBackBufferWidth = (int)Vars.screenSize.X;
             graphics.PreferredBackBufferHeight = (int)Vars.screenSize.Y;
             graphics.ApplyChanges();
@@ -36,27 +36,13 @@ namespace wastelands
 
         protected override void Initialize()
         {
-            new EntityTest(new Vector2(300f, 100f));
-
-            new PlayerEntity(new Vector2(500f, 100f));
-
             new TileLoader().LoadAll(Content);
             locals.LoadLocals(Content);
-
-            Console.WriteLine(locals.Get("test.maybe"));
-
-            Console.WriteLine(entities.Count);
-            entities.OrderBy(e => e.z);
             
             foreach(Entity entity in entities)
             {
                 entity.Init();
             }
-
-            MapGen generator = new MapGen(20);
-
-            generator.InitData();
-            generator.Generate();
 
             base.Initialize();
         }
@@ -83,7 +69,6 @@ namespace wastelands
             {
                 entity.Update(gameTime.TotalGameTime.Ticks / 60f);
             }
-
 
             base.Update(gameTime);
         }
