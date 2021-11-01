@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using wastelands.src.graphics;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using wastelands.src.map;
 
 namespace wastelands.src
 {
@@ -17,5 +18,6 @@ namespace wastelands.src
         public static Vector2 mapTileSize = new Vector2(25, 18);
         public static Settings settings = new Settings();
         public static SaveManager saveManager = new SaveManager();
+        public static Dictionary<string, Tile> tilePool = new Dictionary<string, Tile>();
     }
 }

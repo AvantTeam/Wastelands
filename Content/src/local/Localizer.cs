@@ -29,7 +29,6 @@ namespace wastelands.src.local
                             if (b.StartsWith("-"))
                             {
                                 p = b.Substring(1).Replace("\n", "").Replace(" ", "").TrimEnd();
-                                Console.WriteLine(p);
                                 values.Add(p, new Dictionary<string, string>());
                             }
                             else

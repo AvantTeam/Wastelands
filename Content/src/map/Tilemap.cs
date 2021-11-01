@@ -15,10 +15,21 @@ namespace wastelands.src.map
             tiles.Add(position, new Tile(solid, texture));
         }
 
+        public void AddTile(Vector2 position, Tile tile)
+        {
+            tiles.Add(position, tile);
+        }
+
         public void SetTile(bool solid, Vector2 position, Texture2D texture)
         {
             tiles.Remove(position);
             AddTile(solid, position, texture);
+        }
+
+        public void SetTile(Vector2 position, Tile tile)
+        {
+            tiles.Remove(position);
+            AddTile(position, tile);
         }
 
         public void RemoveTile(Vector2 position)

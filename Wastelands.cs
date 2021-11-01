@@ -19,6 +19,9 @@ namespace wastelands
 
         public static List<Entity> entities = new List<Entity>();
         public static Localizer locals = new Localizer();
+        public TileLoader tileLoader = new TileLoader();
+        public MapTileLoader mapTileLoader = new MapTileLoader();
+        public MapGen mapGen = new MapGen();
 
         public Wastelands()
         {
@@ -36,7 +39,8 @@ namespace wastelands
 
         protected override void Initialize()
         {
-            new TileLoader().LoadAll(Content);
+            tileLoader.LoadAll(Content);
+            mapTileLoader.LoadAll(Content);
             locals.LoadLocals(Content);
 
             Vars.saveManager.Save();
@@ -45,7 +49,7 @@ namespace wastelands
                 entity.Init();
             }
 
-            new MapGen().Generate(20);
+            mapGen.Generate(40);
             base.Initialize();
         }
 
@@ -89,6 +93,8 @@ namespace wastelands
                     entity.Draw(spriteBatch, relPos);
                 }
             }
+
+            mapGen.tilemap.Draw();
 
             base.Draw(gameTime);
             spriteBatch.End();

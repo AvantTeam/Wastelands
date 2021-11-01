@@ -8,6 +8,7 @@ namespace wastelands.src.map
     {
         public List<Vector2> vecMap = new List<Vector2>();
         public List<string> conMap = new List<string>();
+        public Tilemap tilemap = new Tilemap();
         private Random random = new Random();
         private List<string> dirs = new List<string>(new string[]{"D", "L", "U", "R"});
 
@@ -117,9 +118,8 @@ namespace wastelands.src.map
 
             i = 0;
             foreach(Vector2 pos in vecMap){
-                Console.WriteLine(pos.X.ToString() + ", " + pos.Y.ToString());
-                Console.WriteLine(conMap[i]);
-                i += 1;
+                tilemap.AddTile(pos, Vars.tilePool[conMap[i]]);
+                i++;
             }
         }
     }
