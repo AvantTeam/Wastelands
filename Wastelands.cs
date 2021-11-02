@@ -34,6 +34,7 @@ namespace wastelands
         {
             Window.Position = new Point(0, 0);
             Window.IsBorderless = true;
+            graphics.IsFullScreen = true;
             graphics.PreferredBackBufferWidth = (int)Vars.screenSize.X;
             graphics.PreferredBackBufferHeight = (int)Vars.screenSize.Y;
             graphics.ApplyChanges();
