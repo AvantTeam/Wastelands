@@ -26,19 +26,18 @@ namespace wastelands
         public Wastelands()
         {
             graphics = new GraphicsDeviceManager(this);
-
-            Window.Position = new Point(0, 0);
-            Window.IsBorderless = true;
-            graphics.PreferredBackBufferWidth = (int)Vars.screenSize.X;
-            graphics.PreferredBackBufferHeight = (int)Vars.screenSize.Y;
-            graphics.ApplyChanges();
-
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
+            Window.Position = new Point(0, 0);
+            Window.IsBorderless = true;
+            graphics.PreferredBackBufferWidth = (int)Vars.screenSize.X;
+            graphics.PreferredBackBufferHeight = (int)Vars.screenSize.Y;
+            graphics.ApplyChanges();
+
             tileLoader.LoadAll(Content);
             mapTileLoader.LoadAll(Content);
             locals.LoadLocals(Content);
@@ -49,7 +48,7 @@ namespace wastelands
                 entity.Init();
             }
 
-            mapGen.Generate(40);
+            mapGen.Generate(150);
             base.Initialize();
         }
 

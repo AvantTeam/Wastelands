@@ -10,7 +10,7 @@ namespace wastelands.src.map
         public List<string> conMap = new List<string>();
         public Tilemap tilemap = new Tilemap();
         private Random random = new Random();
-        private List<string> dirs = new List<string>(new string[]{"D", "L", "U", "R"});
+        private List<string> dirs = new List<string>(new string[]{"D", "L", "R", "U"});
 
         public class Vec2Comparer : IComparer<Vector2>
         {
@@ -68,12 +68,7 @@ namespace wastelands.src.map
         {
             Vector2 newPos = new Vector2(vecMap[randID].X + x, vecMap[randID].Y + y);
 
-            if (vecMap.Contains(newPos))
-            {
-                conMap[randID] = SortDir(conMap[randID] + dirs[3 - dirs.IndexOf(dir)]);
-                conMap[vecMap.IndexOf(newPos)] = SortDir(vecMap.IndexOf(newPos) + dir);
-            }
-            else
+            if (!vecMap.Contains(newPos))
             {
                 vecMap.Add(newPos);
                 conMap.Add(dir);
@@ -114,11 +109,13 @@ namespace wastelands.src.map
                 }
             }
 
-            vecMap.Sort(new Vec2Comparer());
+            //List<Vector2> temp = new List<Vector2>(vecMap);
+            //vecMap.Sort(new Vec2Comparer());
 
+            Vector2 adder = new Vector2(12, 8);
             i = 0;
             foreach(Vector2 pos in vecMap){
-                tilemap.AddTile(pos, Vars.tilePool[conMap[i]]);
+                tilemap.AddTile(pos + adder, Vars.tilePool[conMap[i]]);
                 i++;
             }
         }
