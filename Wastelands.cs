@@ -38,11 +38,13 @@ namespace wastelands
             graphics.PreferredBackBufferHeight = (int)Vars.screenSize.Y;
             graphics.ApplyChanges();
 
+            Vars.camera.position = new Vector2(-(Vars.screenSize.X / 2), -(Vars.screenSize.Y / 2));
+
             tileLoader.LoadAll(Content);
             mapTileLoader.LoadAll(Content);
             locals.LoadLocals(Content);
 
-            Vars.saveManager.Save();
+            Vars.saveManager.Load();
             foreach(Entity entity in entities)
             {
                 entity.Init();
@@ -87,7 +89,7 @@ namespace wastelands
             {
                 Vector2 relPos = entity.position - Vars.camera.position;
 
-                if (relPos.X + entity.size.X >= 0 && relPos.Y + entity.size.Y >= 0 && relPos.X <= Vars.screenSize.X && relPos.Y + entity.size.Y <= Vars.screenSize.Y)
+                if (relPos.X + entity.size.X >= 0 && relPos.Y + entity.size.Y >= 0 && relPos.X - entity.size.X <= Vars.screenSize.X && relPos.Y - entity.size.Y <= Vars.screenSize.Y)
                 {
                     entity.Draw(spriteBatch, relPos);
                 }

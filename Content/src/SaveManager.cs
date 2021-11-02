@@ -11,7 +11,7 @@ namespace wastelands.src
         {
             if (!File.Exists(savePath)) return;
 
-            using (StreamReader r = new StreamReader(savePath + "/save.json"))
+            using (StreamReader r = new StreamReader(savePath))
             {
                 string json = r.ReadToEnd();
                 JSONData items = JsonConvert.DeserializeObject<JSONData>(json);

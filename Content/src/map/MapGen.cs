@@ -109,13 +109,9 @@ namespace wastelands.src.map
                 }
             }
 
-            //List<Vector2> temp = new List<Vector2>(vecMap);
-            //vecMap.Sort(new Vec2Comparer());
-
-            Vector2 adder = new Vector2(12, 8);
             i = 0;
             foreach(Vector2 pos in vecMap){
-                tilemap.AddTile(pos + adder, Vars.tilePool[conMap[i]]);
+                tilemap.AddTile(pos, Vars.tilePool[conMap[i]]);
                 i++;
             }
         }
