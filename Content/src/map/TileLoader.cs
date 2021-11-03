@@ -8,9 +8,7 @@ namespace wastelands.src.map
 {
     public class TileLoader
     {
-        public List<MapTile> loadedTiles = new List<MapTile>();
-
-        public MapTile LoadAll(ContentManager manager)
+        public void LoadAll(ContentManager manager)
         {
             string[] files = Directory.GetFiles(manager.RootDirectory + "/tiles");
             string contents = "";
@@ -22,8 +20,6 @@ namespace wastelands.src.map
                 Console.WriteLine(name);
                 Vars.tilePool.Add(name, new Tile(name != "F", manager.Load<Texture2D>("tiles/" + name)));
             }
-
-            return null;
         }
     }
 }

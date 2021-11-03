@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using wastelands.src.graphics;
 
@@ -6,11 +7,25 @@ namespace wastelands.src.map
 {
     public class Tilemap
     {
-        private Dictionary<Vector2, Tile> tiles = new Dictionary<Vector2, Tile>();
+        public Dictionary<Vector2, Tile> tiles = new Dictionary<Vector2, Tile>();
 
         public void AddTile(Tile tile)
         {
             tiles.Add(tile.position, tile);
+        }
+
+        public void AddChunk(List<Tile> ts, int x, int y)
+        {
+            foreach(Tile tile in ts)
+            {
+                try
+                {
+                    Tile t = tile;
+                    t.Set(new Vector2(tile.position.X + x * Vars.mapTileSize.X, tile.position.Y + y * Vars.mapTileSize.Y));
+                    AddTile(t);
+                }
+                catch (Exception) { }
+            }
         }
 
         public void SetTile(Tile tile)
@@ -31,9 +46,9 @@ namespace wastelands.src.map
                 Tile tile = tiles[pos];
                 if (tile != null)
                 {
-                    Vector2 relPos = pos * 16 - Vars.camera.position;
+                    Vector2 relPos = pos * 32 - Vars.camera.position;
 
-                    if (relPos.X + 16 >= 0 && relPos.Y + 16 >= 0 && relPos.X - 16 <= Vars.screenSize.X && relPos.Y - 16 <= Vars.screenSize.Y)
+                    if (relPos.X + 32 >= 0 && relPos.Y + 32 >= 0 && relPos.X - 32 <= Vars.screenSize.X && relPos.Y - 32 <= Vars.screenSize.Y)
                     {
                         Draww.DrawSprite(Wastelands.spriteBatch, tile.texture, relPos);
                     }

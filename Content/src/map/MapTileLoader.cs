@@ -7,7 +7,7 @@ namespace wastelands.src.map
 {
     public class MapTileLoader
     {
-        public MapTile LoadAll(ContentManager manager)
+        public void LoadAll(ContentManager manager)
         {
             string[] files = Directory.GetFiles(manager.RootDirectory + "/rooms");
             string contents = "";
@@ -18,11 +18,27 @@ namespace wastelands.src.map
                     using (StreamReader reader = new StreamReader(stream))
                     {
                         contents = reader.ReadToEnd();
+                        string[] roomContent = contents.Split(";");
+
+                        string connections = roomContent[2];
+                        int x = 0, y = 0;
+                        List<Tile> tiles = new List<Tile>();
+                        for(int i = 3; i < roomContent.Length; i++)
+                        {
+                            foreach (string str in roomContent[i].Split(".")) {
+                                if (str == "") continue;
+                                Tile tile = Vars.tilePool[str];
+                                tile.Set(new Vector2(x, y));
+                                tiles.Add(tile);
+                                x += 1;
+                            }
+                            y += 1;
+                            x = 0;
+                        }
+                        Vars.mapTilePool.Add(connections, tiles);
                     }
                 }
             }
-
-            return null;
         }
     }
 }

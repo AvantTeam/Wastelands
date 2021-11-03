@@ -4,7 +4,7 @@ namespace wastelands.src.utils
 {
     public class RandomDictionary<A, B>
     {
-        public Dictionary<A, List<B>> values;
+        public Dictionary<A, List<B>> values = new Dictionary<A, List<B>>();
 
         public void Add(A key, B value)
         {

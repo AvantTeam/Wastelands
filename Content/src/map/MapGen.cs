@@ -44,6 +44,10 @@ namespace wastelands.src.map
         {
             string o = "";
 
+            if (sort.Contains("R"))
+            {
+                o += "R";
+            }
             if (sort.Contains("D"))
             {
                 o += "D";
@@ -55,10 +59,6 @@ namespace wastelands.src.map
             if (sort.Contains("U"))
             {
                 o += "U";
-            }
-            if (sort.Contains("R"))
-            {
-                o += "R";
             }
 
             return o;
@@ -111,11 +111,11 @@ namespace wastelands.src.map
 
             i = 0;
             foreach(Vector2 pos in vecMap){
-                Tile tile = Vars.tilePool[conMap[i]];
-                tile.Set(pos);
-                tilemap.AddTile(tile);
+                tilemap.AddChunk(Vars.mapTilePool[conMap[i]], (int)pos.X, (int)pos.Y);
                 i++;
             }
+
+            Console.WriteLine(tilemap.tiles.Count);
         }
     }
 }
