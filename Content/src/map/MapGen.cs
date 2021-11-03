@@ -111,7 +111,9 @@ namespace wastelands.src.map
 
             i = 0;
             foreach(Vector2 pos in vecMap){
-                tilemap.AddTile(pos, Vars.tilePool[conMap[i]]);
+                Tile tile = Vars.tilePool[conMap[i]];
+                tile.Set(pos);
+                tilemap.AddTile(tile);
                 i++;
             }
         }

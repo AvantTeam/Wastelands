@@ -7,8 +7,6 @@ namespace wastelands.src.map
 {
     public class MapTileLoader
     {
-        public List<MapTile> loadedTiles = new List<MapTile>();
-
         public MapTile LoadAll(ContentManager manager)
         {
             string[] files = Directory.GetFiles(manager.RootDirectory + "/rooms");

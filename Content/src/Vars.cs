@@ -4,11 +4,13 @@ using wastelands.src.graphics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using wastelands.src.map;
+using wastelands.src.utils;
 
 namespace wastelands.src
 {
     public static class Vars
     {
+        public static Random random = new Random();
         public static string aPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AvantGames");
         public static string path = System.IO.Path.Combine(aPath, "Wastelands");
         public static Camera camera = new Camera();
@@ -19,5 +21,6 @@ namespace wastelands.src
         public static Settings settings = new Settings();
         public static SaveManager saveManager = new SaveManager();
         public static Dictionary<string, Tile> tilePool = new Dictionary<string, Tile>();
+        public static RandomDictionary<string, List<Tile>> mapTilePool = new RandomDictionary<string, List<Tile>>();
     }
 }
