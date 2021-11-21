@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Linq;
 using System.Collections.Generic;
 using wastelands.src;
 using wastelands.src.entities;
@@ -33,8 +30,8 @@ namespace wastelands
         protected override void Initialize()
         {
             Window.Position = new Point(0, 0);
-            Window.IsBorderless = true;
-            graphics.IsFullScreen = true;
+            Window.IsBorderless = false;
+            graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth = (int)Vars.screenSize.X;
             graphics.PreferredBackBufferHeight = (int)Vars.screenSize.Y;
             graphics.ApplyChanges();
@@ -78,6 +75,7 @@ namespace wastelands
                 entity.Update(gameTime.TotalGameTime.Ticks / 60f);
             }
 
+            Vars.camera.Update();
             base.Update(gameTime);
         }
 

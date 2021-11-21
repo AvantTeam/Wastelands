@@ -18,13 +18,8 @@ namespace wastelands.src.map
         {
             foreach(Tile tile in ts)
             {
-                try
-                {
-                    Tile t = tile;
-                    t.Set(new Vector2(tile.position.X + x * Vars.mapTileSize.X, tile.position.Y + y * Vars.mapTileSize.Y));
-                    AddTile(t);
-                }
-                catch (Exception) { }
+                Tile t = new Tile(tile.solid, new Vector2(tile.position.X + x * Vars.mapTileSize.X, tile.position.Y + y * Vars.mapTileSize.Y), tile.texture);
+                AddTile(t);
             }
         }
 

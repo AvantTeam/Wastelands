@@ -28,8 +28,8 @@ namespace wastelands.src.map
                             foreach (string str in roomContent[i].Split(".")) {
                                 if (str == "") continue;
                                 Tile tile = Vars.tilePool[str];
-                                tile.Set(new Vector2(x, y));
-                                tiles.Add(tile);
+                                Tile tile2 = new Tile(tile.solid, new Vector2(x, y), tile.texture);
+                                tiles.Add(tile2);
                                 x += 1;
                             }
                             y += 1;
