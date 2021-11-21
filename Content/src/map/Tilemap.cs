@@ -11,16 +11,28 @@ namespace wastelands.src.map
 
         public void AddTile(Tile tile)
         {
-            tiles.Add(tile.position, tile);
+            if (tiles.ContainsKey(tile.position))
+            {
+                tiles[tile.position] = tile;
+            }
+            else
+            {
+                tiles.Add(tile.position, tile);
+            }
         }
 
         public void AddChunk(List<Tile> ts, int x, int y)
         {
             foreach(Tile tile in ts)
             {
-                Tile t = new Tile(tile.solid, new Vector2(tile.position.X + x * Vars.mapTileSize.X, tile.position.Y + y * Vars.mapTileSize.Y), tile.texture);
+                Tile t = new Tile(tile.solid, new Vector2(tile.position.X + x * Vars.mapTileSize.X, tile.position.Y + y * (Vars.mapTileSize.Y - 1)), tile.texture);
                 AddTile(t);
             }
+        }
+
+        public void AddChunk(List<Tile> ts, Vector2 pos)
+        {
+            AddChunk(ts, (int)pos.X, (int)pos.Y);
         }
 
         public void SetTile(Tile tile)

@@ -12,10 +12,19 @@ namespace wastelands.src.map
         private Random random = new Random();
         private List<string> dirs = new List<string>(new string[]{"D", "L", "R", "U"});
 
-        public class Vec2Comparer : IComparer<Vector2>
+        public class VecAndCon
         {
-            public int Compare(Vector2 x, Vector2 y)
+            public Vector2 pos { get; set; }
+            public string con { get; set; }
+        }
+
+        public class Vec2Comparer : IComparer<VecAndCon>
+        {
+            public int Compare(VecAndCon a, VecAndCon b)
             {
+                Vector2 x = a.pos;
+                Vector2 y = b.pos;
+
                 if(x.Y > y.Y)
                 {
                     return 1;
@@ -109,10 +118,17 @@ namespace wastelands.src.map
                 }
             }
 
-            i = 0;
-            foreach(Vector2 pos in vecMap){
-                tilemap.AddChunk(Vars.mapTilePool[conMap[i]], (int)pos.X, (int)pos.Y);
-                i++;
+            List<VecAndCon> allMap = new List<VecAndCon>();
+
+            for(int k = 0; k < vecMap.Count; k++)
+            {
+                allMap.Add(new VecAndCon{pos=vecMap[k],con=conMap[k]});
+            }
+
+            allMap.Sort(new Vec2Comparer());
+
+            foreach(VecAndCon vc in allMap){
+                tilemap.AddChunk(Vars.mapTilePool[vc.con], vc.pos);
             }
 
             Console.WriteLine(tilemap.tiles.Count);
