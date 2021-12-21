@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using wastelands.src.graphics;
 
@@ -23,7 +22,7 @@ namespace wastelands.src.map
 
         public void AddChunk(List<Tile> ts, int x, int y)
         {
-            foreach(Tile tile in ts)
+            foreach (Tile tile in ts)
             {
                 Tile t = new Tile(tile.solid, new Vector2(tile.position.X + x * Vars.mapTileSize.X, tile.position.Y + y * (Vars.mapTileSize.Y - 1)), tile.texture);
                 AddTile(t);
@@ -48,7 +47,7 @@ namespace wastelands.src.map
 
         public void Draw()
         {
-            foreach(Vector2 pos in tiles.Keys)
+            foreach (Vector2 pos in tiles.Keys)
             {
                 Tile tile = tiles[pos];
                 if (tile != null)

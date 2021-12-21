@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace wastelands.src
+﻿namespace wastelands.src
 {
     public class Settings
     {

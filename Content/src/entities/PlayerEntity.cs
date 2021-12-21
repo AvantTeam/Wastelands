@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using wastelands.src.graphics;
 
@@ -27,7 +27,8 @@ namespace wastelands.src.entities
 
         public override void Update(float time)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
                 position.X += 1f;
             }
 

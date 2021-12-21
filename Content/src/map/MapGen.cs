@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 
 namespace wastelands.src.map
 {
@@ -10,7 +10,7 @@ namespace wastelands.src.map
         public List<string> conMap = new List<string>();
         public Tilemap tilemap = new Tilemap();
         private Random random = new Random();
-        private List<string> dirs = new List<string>(new string[]{"D", "L", "R", "U"});
+        private List<string> dirs = new List<string>(new string[] { "D", "L", "R", "U" });
 
         public class VecAndCon
         {
@@ -25,7 +25,7 @@ namespace wastelands.src.map
                 Vector2 x = a.pos;
                 Vector2 y = b.pos;
 
-                if(x.Y > y.Y)
+                if (x.Y > y.Y)
                 {
                     return 1;
                 }
@@ -95,12 +95,12 @@ namespace wastelands.src.map
             conMap.Add("");
 
             int i = 1;
-            while(i < rooms)
+            while (i < rooms)
             {
                 int randID = random.Next(0, vecMap.Count);
 
                 int nextPos = random.Next(0, 4);
-                if(nextPos == 0)
+                if (nextPos == 0)
                 {
                     i += ChangeBy(randID, "L", 1, 0);
                 }
@@ -120,14 +120,15 @@ namespace wastelands.src.map
 
             List<VecAndCon> allMap = new List<VecAndCon>();
 
-            for(int k = 0; k < vecMap.Count; k++)
+            for (int k = 0; k < vecMap.Count; k++)
             {
-                allMap.Add(new VecAndCon{pos=vecMap[k],con=conMap[k]});
+                allMap.Add(new VecAndCon { pos = vecMap[k], con = conMap[k] });
             }
 
             allMap.Sort(new Vec2Comparer());
 
-            foreach(VecAndCon vc in allMap){
+            foreach (VecAndCon vc in allMap)
+            {
                 tilemap.AddChunk(Vars.mapTilePool[vc.con], vc.pos);
             }
 

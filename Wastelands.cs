@@ -4,8 +4,8 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using wastelands.src;
 using wastelands.src.entities;
-using wastelands.src.map;
 using wastelands.src.local;
+using wastelands.src.map;
 
 namespace wastelands
 {
@@ -43,7 +43,7 @@ namespace wastelands
             locals.LoadLocals(Content);
 
             Vars.saveManager.Load();
-            foreach(Entity entity in entities)
+            foreach (Entity entity in entities)
             {
                 entity.Init();
             }
