@@ -15,5 +15,5 @@ Music and SFX: [@FarmerThanos](https://github.com/FarmerThanos)
 Huge thanks to the rest of the people that contributed ideas, sprites and every other bits of help!
 
 ---
-**Disclaimer: This repository doesn't contain all the required files and data to compile/play the game.**\
-**Copyright and Wastelands: The name of the game is not final, regarding copyright issues involving EA's game Wasteland, "Wastelands" will probably not be the publishing name, so if you are interested in the final product keep in mind you might not be able to find it by the name "Wastelands" nor anything similar to that.**
+**Disclaimer:** This repository doesn't contain all the required files and data to compile/play the game.\
+**Copyright and Wastelands:** The name of the game is not final, regarding copyright issues involving EA's game Wasteland, "Wastelands" will probably not be the publishing name, so if you are interested in the final product keep in mind you might not be able to find it by the name "Wastelands" nor anything similar to that.
