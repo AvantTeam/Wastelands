@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace wastelands.src.ui
 {
@@ -12,26 +11,12 @@ namespace wastelands.src.ui
 
         public void removeChild(Element child)
         {
-            try
-            {
-                children.Remove(child);
-            }
-            catch (Exception e)
-            {
-                // TODO Later add logger error
-            }
+            if(children.Contains(child)) children.Remove(child);
         }
 
         public void removeChild(int id)
         {
-            try
-            {
-                children.RemoveAt(id);
-            }
-            catch (Exception e)
-            {
-                // TODO Later add logger error
-            }
+            if (id >= 0 && id < children.Count) children.RemoveAt(id);
         }
 
         public void disownChild(Element parent, Element child)
@@ -42,8 +27,11 @@ namespace wastelands.src.ui
 
         public void disownChild(Element parent, int id)
         {
-            parent.addChild(children[id]);
-            removeChild(id);
+            if (id >= 0 && id < children.Count)
+            {
+                parent.addChild(children[id]);
+                removeChild(id);
+            }
         }
 
         public void addChild(Element child)
