@@ -6,6 +6,7 @@ using wastelands.src;
 using wastelands.src.entities;
 using wastelands.src.local;
 using wastelands.src.map;
+using wastelands.src.utils;
 
 namespace wastelands
 {
@@ -25,6 +26,19 @@ namespace wastelands
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+        }
+
+        protected override void LoadContent()
+        {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            foreach (Entity entity in entities)
+            {
+                entity.Load(Content);
+            }
+
+            Log.Clear();
+            Log.Write("Content Loaded.");
         }
 
         protected override void Initialize()
@@ -50,22 +64,17 @@ namespace wastelands
 
             mapGen.Generate(150);
             base.Initialize();
-        }
 
-        protected override void LoadContent()
-        {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            foreach (Entity entity in entities)
-            {
-                entity.Load(Content);
-            }
+            Log.Write("Game Initialized.");
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+                Log.Write("Game Terminated.");
+            }
 
             Vars.mousePosition = Mouse.GetState().Position.ToVector2();
             Vars.relativeMousePosition = Vars.mousePosition - Vars.camera.position;

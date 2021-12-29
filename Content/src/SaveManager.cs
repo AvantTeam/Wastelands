@@ -5,7 +5,7 @@ namespace wastelands.src
 {
     public class SaveManager
     {
-        private string savePath = Vars.path + "/save.json";
+        private string savePath = System.IO.Path.Combine(Vars.path, "save.json");
         public void Load()
         {
             if (!File.Exists(savePath)) return;
