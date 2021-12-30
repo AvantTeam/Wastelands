@@ -5,12 +5,11 @@ namespace wastelands.src
 {
     public class SaveManager
     {
-        private string savePath = System.IO.Path.Combine(Vars.path, "save.json");
         public void Load()
         {
-            if (!File.Exists(savePath)) return;
+            if (!File.Exists(Vars.savePath)) return;
 
-            using (StreamReader r = new StreamReader(savePath))
+            using (StreamReader r = new StreamReader(Vars.savePath))
             {
                 string json = r.ReadToEnd();
                 JSONData items = JsonConvert.DeserializeObject<JSONData>(json);
@@ -20,17 +19,17 @@ namespace wastelands.src
 
         public void Save()
         {
-            if (!File.Exists(savePath))
+            if (!File.Exists(Vars.savePath))
             {
-                if (!Directory.Exists(Vars.aPath)) Directory.CreateDirectory(Vars.aPath);
-                if (!Directory.Exists(Vars.path)) Directory.CreateDirectory(Vars.path);
+                if (!Directory.Exists(Vars.avantPath)) Directory.CreateDirectory(Vars.avantPath);
+                if (!Directory.Exists(Vars.gamePath)) Directory.CreateDirectory(Vars.gamePath);
 
-                File.Create(savePath);
+                File.Create(Vars.savePath);
             }
 
             JsonSerializer serializer = JsonSerializer.Create();
 
-            using (StreamWriter sw = new StreamWriter(savePath))
+            using (StreamWriter sw = new StreamWriter(Vars.savePath))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
                 serializer.Serialize(writer, new JSONData());

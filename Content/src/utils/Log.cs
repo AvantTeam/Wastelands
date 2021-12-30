@@ -5,28 +5,32 @@ namespace wastelands.src.utils
 {
     public static class Log
     {
-        private static string logPath = Path.Combine(Vars.path, "log.txt");
-
         public static void Clear()
         {
-            File.WriteAllText(logPath, string.Empty);
+            if (File.Exists(Vars.logPath))
+            {
+                StreamWriter sw = new StreamWriter(Vars.logPath);
+                sw.Close();
+                sw.Dispose();
+            }
         }
 
         public static void Write(string data)
         {
-            if (!File.Exists(logPath))
+            if (!File.Exists(Vars.logPath))
             {
-                if (!Directory.Exists(Vars.aPath)) Directory.CreateDirectory(Vars.aPath);
-                if (!Directory.Exists(Vars.path)) Directory.CreateDirectory(Vars.path);
+                if (!Directory.Exists(Vars.avantPath)) Directory.CreateDirectory(Vars.avantPath);
+                if (!Directory.Exists(Vars.gamePath)) Directory.CreateDirectory(Vars.gamePath);
 
-                File.Create(logPath);
+                File.Create(Vars.logPath);
             }
 
-            StreamWriter sr = File.AppendText(logPath);
+            StreamWriter sw = File.AppendText(Vars.logPath);
 
-            sr.WriteLine("[" + DateTime.Now.ToString("T") + "] " + data);
+            sw.WriteLine("[" + DateTime.Now.ToString("T") + "] " + data);
 
-            sr.Close();
+            sw.Close();
+            sw.Dispose();
         }
     }
 }

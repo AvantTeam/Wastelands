@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using wastelands.src.graphics;
 using wastelands.src.map;
@@ -11,8 +12,10 @@ namespace wastelands.src
     public static class Vars
     {
         public static Random random = new Random();
-        public static string aPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AvantGames");
-        public static string path = System.IO.Path.Combine(aPath, "Wastelands");
+        public static string avantPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AvantGames");
+        public static string gamePath = Path.Combine(avantPath, "Wastelands");
+        public static string savePath = Path.Combine(gamePath, "save.json");
+        public static string logPath = Path.Combine(gamePath, "log.txt");
         public static Camera camera = new Camera();
         public static Vector2 mousePosition = Vector2.Zero;
         public static Vector2 screenSize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
