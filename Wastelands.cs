@@ -45,6 +45,7 @@ namespace wastelands
         {
             Window.Position = new Point(0, 0);
             Window.IsBorderless = false;
+
             graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth = (int)Vars.screenSize.X;
             graphics.PreferredBackBufferHeight = (int)Vars.screenSize.Y;
@@ -73,6 +74,7 @@ namespace wastelands
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
+                Vars.saveManager.Save();
                 Log.Write("Game Terminated.");
             }
 

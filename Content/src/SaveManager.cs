@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.IO;
+using wastelands.src.utils;
 
 namespace wastelands.src
 {
@@ -7,33 +9,43 @@ namespace wastelands.src
     {
         public void Load()
         {
-            if (!File.Exists(Vars.savePath)) return;
-
-            using (StreamReader r = new StreamReader(Vars.savePath))
+            try
             {
-                string json = r.ReadToEnd();
-                JSONData items = JsonConvert.DeserializeObject<JSONData>(json);
-                Vars.settings.langCode = items.settings.langCode;
+                if (!File.Exists(Vars.savePath)) return;
+
+                using (StreamReader r = new StreamReader(Vars.savePath))
+                {
+                    string json = r.ReadToEnd();
+                    JSONData items = JsonConvert.DeserializeObject<JSONData>(json);
+                    Vars.settings.langCode = items.settings.langCode;
+                }
             }
+            catch (Exception) { }
         }
 
         public void Save()
         {
-            if (!File.Exists(Vars.savePath))
+            try
             {
-                if (!Directory.Exists(Vars.avantPath)) Directory.CreateDirectory(Vars.avantPath);
-                if (!Directory.Exists(Vars.gamePath)) Directory.CreateDirectory(Vars.gamePath);
+                if (!File.Exists(Vars.savePath))
+                {
+                    if (!Directory.Exists(Vars.avantPath)) Directory.CreateDirectory(Vars.avantPath);
+                    if (!Directory.Exists(Vars.gamePath)) Directory.CreateDirectory(Vars.gamePath);
 
-                File.Create(Vars.savePath);
+                    File.Create(Vars.savePath);
+                }
+
+                JsonSerializer serializer = JsonSerializer.Create();
+
+                using (StreamWriter sw = new StreamWriter(Vars.savePath))
+                using (JsonWriter writer = new JsonTextWriter(sw))
+                {
+                    serializer.Serialize(writer, new JSONData());
+                }
+
+                Log.Write("Data Saved.");
             }
-
-            JsonSerializer serializer = JsonSerializer.Create();
-
-            using (StreamWriter sw = new StreamWriter(Vars.savePath))
-            using (JsonWriter writer = new JsonTextWriter(sw))
-            {
-                serializer.Serialize(writer, new JSONData());
-            }
+            catch (Exception) { }
         }
 
         public class JSONData

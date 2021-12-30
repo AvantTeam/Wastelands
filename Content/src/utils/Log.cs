@@ -22,7 +22,9 @@ namespace wastelands.src.utils
                 if (!Directory.Exists(Vars.avantPath)) Directory.CreateDirectory(Vars.avantPath);
                 if (!Directory.Exists(Vars.gamePath)) Directory.CreateDirectory(Vars.gamePath);
 
-                File.Create(Vars.logPath);
+                FileStream fs = File.Create(Vars.logPath);
+                fs.Close();
+                fs.Dispose();
             }
 
             StreamWriter sw = File.AppendText(Vars.logPath);
