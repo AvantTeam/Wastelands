@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace wastelands.src.ui
 {
@@ -11,7 +10,7 @@ namespace wastelands.src.ui
 
         public void removeChild(Element child)
         {
-            if(children.Contains(child)) children.Remove(child);
+            if (children.Contains(child)) children.Remove(child);
         }
 
         public void removeChild(int id)
