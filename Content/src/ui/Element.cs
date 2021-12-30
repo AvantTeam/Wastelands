@@ -48,5 +48,10 @@ namespace wastelands.src.ui
         }
 
         public bool isOrphan() { return parent == null; }
+
+        public void Draw()
+        {
+            children.ForEach(e => e.Draw());
+        }
     }
 }
