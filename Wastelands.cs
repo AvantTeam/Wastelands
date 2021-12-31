@@ -38,7 +38,7 @@ namespace wastelands
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             textures = new Tex(Content);
-            test = textures.Get("ninepatch-test").createRenderable(new Rectangle(0, 0, 400, 400));
+            test = textures.Get("ninepatch-testo").createRenderable(new Rectangle(0, 0, 400, 400));
 
             foreach (Entity entity in entities)
             {
@@ -100,7 +100,7 @@ namespace wastelands
 
         protected override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin();
+            spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             foreach (Entity entity in entities)
