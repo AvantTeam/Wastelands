@@ -4,50 +4,51 @@ namespace wastelands.src.ui
 {
     public abstract class Element
     {
-        public AlignType align = Align.center;
         private Element parent;
-        private List<Element> children = new List<Element>();
+        private readonly List<Element> children = new List<Element>();
 
-        public void removeChild(Element child)
+        public void RemoveChild(Element child)
         {
             if (children.Contains(child)) children.Remove(child);
         }
 
-        public void removeChild(int id)
+        public void RemoveChild(int id)
         {
             if (id >= 0 && id < children.Count) children.RemoveAt(id);
         }
 
-        public void disownChild(Element parent, Element child)
+        public void DisownChild(Element parent, Element child)
         {
-            parent.addChild(child);
-            removeChild(child);
+            parent.AddChild(child);
+            RemoveChild(child);
         }
 
-        public void disownChild(Element parent, int id)
+        public void DisownChild(Element parent, int id)
         {
             if (id >= 0 && id < children.Count)
             {
-                parent.addChild(children[id]);
-                removeChild(id);
+                parent.AddChild(children[id]);
+                RemoveChild(id);
             }
         }
 
-        public void addChild(Element child)
+        public Element AddChild(Element child)
         {
-            if (child.isOrphan())
+            if (child.IsOrphan())
             {
                 children.Add(child);
-                child.setParent(this);
+                child.SetParent(this);
             }
+
+            return this;
         }
 
-        public void setParent(Element parent)
+        public void SetParent(Element parent)
         {
             this.parent = parent;
         }
 
-        public bool isOrphan() { return parent == null; }
+        public bool IsOrphan() { return parent == null; }
 
         public void Draw()
         {
