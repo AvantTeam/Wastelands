@@ -84,7 +84,7 @@ namespace wastelands.src.graphics
         {
             for (var i = 0; i < inPatch.Length; i++)
             {
-                Wastelands.spriteBatch.Draw(tex.tex, sourceRectangle: Displace(inPatch[i], x, y),
+                Wastelands.spriteBatch.Draw(tex.tex, sourceRectangle: inPatch[i],
                 destinationRectangle: Displace(destPatch[i], x, y), color: Color.White);
             }
         }

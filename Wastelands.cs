@@ -38,7 +38,7 @@ namespace wastelands
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             textures = new Tex(Content);
-            test = textures.Get("ninepatch-testo").createRenderable(new Rectangle(0, 0, 400, 400));
+            test = textures.Get("ninepatch-test").createRenderable(new Rectangle(0, 0, 400, 400));
 
             foreach (Entity entity in entities)
             {
@@ -115,7 +115,7 @@ namespace wastelands
 
             mapGen.tilemap.Draw();
 
-            test.Render(0, 0);
+            test.Render(20, 20);
             base.Draw(gameTime);
             spriteBatch.End();
         }
