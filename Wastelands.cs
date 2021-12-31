@@ -7,6 +7,7 @@ using wastelands.src.entities;
 using wastelands.src.local;
 using wastelands.src.map;
 using wastelands.src.utils;
+using wastelands.src.graphics;
 
 namespace wastelands
 {
@@ -21,6 +22,10 @@ namespace wastelands
         public MapTileLoader mapTileLoader = new MapTileLoader();
         public MapGen mapGen = new MapGen();
 
+        public Tex textures;
+
+        public NinePatchRenderable test;
+
         public Wastelands()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -31,6 +36,9 @@ namespace wastelands
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            textures = new Tex(Content);
+            test = textures.Get("ninepatch-test").createRenderable(new Rectangle(0, 0, 400, 400));
 
             foreach (Entity entity in entities)
             {
@@ -107,6 +115,7 @@ namespace wastelands
 
             mapGen.tilemap.Draw();
 
+            test.Render(0, 0);
             base.Draw(gameTime);
             spriteBatch.End();
         }
