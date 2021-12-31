@@ -4,10 +4,10 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using wastelands.src;
 using wastelands.src.entities;
+using wastelands.src.graphics;
 using wastelands.src.local;
 using wastelands.src.map;
 using wastelands.src.utils;
-using wastelands.src.graphics;
 
 namespace wastelands
 {
@@ -38,7 +38,7 @@ namespace wastelands
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             textures = new Tex(Content);
-            test = textures.Get("ninepatch-test").createRenderable(new Rectangle(0, 0, 400, 400));
+            test = textures.Get("ninepatch-test").createRenderable(400, 400);
 
             foreach (Entity entity in entities)
             {

@@ -55,9 +55,9 @@ namespace wastelands.src.graphics
             return patches;
         }
 
-        public NinePatchRenderable createRenderable(Rectangle destinationSize)
+        public NinePatchRenderable createRenderable(int width, int height)
         {
-            return new NinePatchRenderable(this, createPatches(tex.Bounds), createPatches(destinationSize));
+            return new NinePatchRenderable(this, createPatches(tex.Bounds), createPatches(new Rectangle(0, 0, width, height)));
         }
 
     }

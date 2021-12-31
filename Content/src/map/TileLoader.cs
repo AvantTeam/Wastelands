@@ -10,7 +10,6 @@ namespace wastelands.src.map
         public void LoadAll(ContentManager manager)
         {
             string[] files = Directory.GetFiles(manager.RootDirectory + "/tiles");
-            string contents = "";
 
             foreach (string a in files)
             {
