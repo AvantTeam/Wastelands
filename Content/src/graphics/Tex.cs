@@ -4,19 +4,20 @@ using System.Collections.Generic;
 
 namespace wastelands.src.graphics
 {
-    public class Tex
+    public static class Tex
     {
-        private Dictionary<string, NinePatch> textures = new Dictionary<string, NinePatch>();
-        private NinePatch def;
+        private static Dictionary<string, NinePatch> textures = new Dictionary<string, NinePatch>();
+        private static NinePatch def;
 
-        public Tex(ContentManager manager)
+        public static void Load(ContentManager manager)
         {
             def = new NinePatch(manager.Load<Texture2D>("sprites/error"), 1, 1, 1, 1);
 
-            textures.Add("ninepatch-test", new NinePatch(manager.Load<Texture2D>("sprites/UI/ninepatch-test.9"), 5, 5, 5, 5));
+            textures.Add("hud1", new NinePatch(manager.Load<Texture2D>("sprites/UI/hud1.9"), 0, 8, 0, 8));
+            textures.Add("bar", new NinePatch(manager.Load<Texture2D>("sprites/UI/bar.9"), 1, 1, 1, 1));
         }
 
-        public NinePatch Get(string name)
+        public static NinePatch Get(string name)
         {
             if (textures.ContainsKey(name)) return textures[name];
             return def;

@@ -5,9 +5,9 @@ using System.IO;
 
 namespace wastelands.src.map
 {
-    public class MapTileLoader
+    public static class MapTileLoader
     {
-        public void LoadAll(ContentManager manager)
+        public static void LoadAll(ContentManager manager)
         {
             string[] files = Directory.GetFiles(manager.RootDirectory + "/rooms");
             string contents = "";

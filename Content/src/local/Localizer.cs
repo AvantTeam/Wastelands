@@ -6,11 +6,11 @@ using System.IO;
 
 namespace wastelands.src.local
 {
-    public class Localizer
+    public static class Localizer
     {
-        private Dictionary<string, Dictionary<string, string>> values = new Dictionary<string, Dictionary<string, string>>();
+        private static Dictionary<string, Dictionary<string, string>> values = new Dictionary<string, Dictionary<string, string>>();
 
-        public void LoadLocals(ContentManager manager)
+        public static void LoadLocals(ContentManager manager)
         {
             string[] files = Directory.GetFiles(manager.RootDirectory + "/local");
             string[] content;
@@ -41,7 +41,7 @@ namespace wastelands.src.local
             }
         }
 
-        public string Get(string key)
+        public static string Get(string key)
         {
             try
             {
