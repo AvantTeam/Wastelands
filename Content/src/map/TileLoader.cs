@@ -2,12 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
+using wastelands.src.graphics;
 
 namespace wastelands.src.map
 {
     public static class TileLoader
     {
-        public static void LoadAll(ContentManager manager)
+        public static void LoadAll(ContentManager manager, GraphicsDevice device)
         {
             string[] files = Directory.GetFiles(manager.RootDirectory + "/tiles");
 
@@ -15,9 +16,10 @@ namespace wastelands.src.map
             {
                 string[] split = a.Replace("\\", "/").Replace(".xnb", "").Split("/");
                 string name = split[split.Length - 1];
-                Console.WriteLine(name);
-                Vars.tilePool.Add(name, new Tile(name != "F", manager.Load<Texture2D>("tiles/" + name)));
+                Vars.tilePool.Add(name, new Tile(name != "F", manager.Load<Texture2D>("sprites/tiles/" + name)));
             }
+
+            TileSetSplitter.SplitTex(device, manager.Load<Texture2D>("sprites/tiles/brick"));
         }
     }
 }

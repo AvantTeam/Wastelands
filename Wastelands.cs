@@ -35,7 +35,7 @@ namespace wastelands
             // YES i have to load everything in Initialize because in LoadContent it breaks yay
             Tex.Load(Content);
             Sounds.Load(Content);
-            TileLoader.LoadAll(Content);
+            TileLoader.LoadAll(Content, graphics.GraphicsDevice);
             MapTileLoader.LoadAll(Content);
             Localizer.LoadLocals(Content);
 
@@ -57,6 +57,7 @@ namespace wastelands
             mapGen.Generate(150);
             base.Initialize();
 
+            MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(Sounds.wawtealdbad);
 
             Log.Write("Game Initialized.");

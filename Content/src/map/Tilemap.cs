@@ -56,7 +56,7 @@ namespace wastelands.src.map
 
                     if (relPos.X + 32 >= 0 && relPos.Y + 32 >= 0 && relPos.X - 32 <= Vars.screenSize.X && relPos.Y - 32 <= Vars.screenSize.Y)
                     {
-                        Draww.DrawSprite(Wastelands.spriteBatch, tile.texture, relPos);
+                        Draww.DrawTile(Wastelands.spriteBatch, tile.texture, relPos);
                     }
                 }
             }

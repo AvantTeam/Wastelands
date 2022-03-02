@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework.Media;
 
-namespace wastelands.Content.src.audio
+namespace wastelands.src.audio
 {
     public class LayeredTheme
     {

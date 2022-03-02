@@ -20,5 +20,11 @@ namespace wastelands.src.graphics
         {
             DrawSprite(batch, sprite, position, Color.White, 1f);
         }
+
+        public static void DrawTile(SpriteBatch batch, Texture2D sprite, Vector2 position)
+        {
+            if (sprite == null) return;
+            batch.Draw(sprite, new Rectangle((int)(position.X - 16), (int)(position.Y - 16), 32, 32), Color.White);
+        }
     }
 }
