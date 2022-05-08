@@ -15,17 +15,12 @@ namespace wastelands.src.entities
             this.position = position;
         }
 
-        public override void Init()
-        {
-            size = Vector2.One * 32f;
-        }
-
         public override void Load(ContentManager content)
         {
             sprite = content.Load<Texture2D>("sprites/error");
         }
 
-        public override void Update(float time)
+        public override void Update(GameTime time)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {

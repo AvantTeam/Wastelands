@@ -20,6 +20,7 @@ namespace wastelands
 
         public static List<Entity> entities = new List<Entity>();
         public MapGen mapGen = new MapGen();
+        public Tilemap tilemap = new Tilemap();
 
         public NinePatchRenderable test;
 
@@ -54,7 +55,7 @@ namespace wastelands
                 entity.Init();
             }
 
-            mapGen.Generate(150);
+            tilemap.AddChunk(mapGen.Generate(150), Vector2.Zero);
             base.Initialize();
 
             MediaPlayer.IsRepeating = true;
@@ -92,7 +93,7 @@ namespace wastelands
 
             foreach (Entity entity in entities)
             {
-                entity.Update(gameTime.TotalGameTime.Ticks / 60f);
+                entity.Update(gameTime);
             }
 
             Vars.camera.Update();
@@ -107,14 +108,11 @@ namespace wastelands
             foreach (Entity entity in entities)
             {
                 Vector2 relPos = entity.position - Vars.camera.position;
-
-                if (relPos.X + entity.size.X >= 0 && relPos.Y + entity.size.Y >= 0 && relPos.X - entity.size.X <= Vars.screenSize.X && relPos.Y - entity.size.Y <= Vars.screenSize.Y)
-                {
-                    entity.Draw(spriteBatch, relPos);
-                }
+                
+                entity.Draw(spriteBatch, relPos);
             }
 
-            mapGen.tilemap.Draw();
+            tilemap.Draw();
 
             test.Render(0, 0);
             base.Draw(gameTime);

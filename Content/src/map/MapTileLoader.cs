@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using System.Collections.Generic;
 using System.IO;
+using System;
 
 namespace wastelands.src.map
 {
@@ -23,17 +24,18 @@ namespace wastelands.src.map
 
                         string connections = roomContent[2];
                         int x = 0, y = 0;
-                        List<Tile> tiles = new List<Tile>();
+                        Dictionary<Vector2, string> tiles = new Dictionary<Vector2, string>();
                         for (int i = 3; i < roomContent.Length; i++)
                         {
                             foreach (string str in roomContent[i].Split("."))
                             {
                                 if (str == "") continue;
-                                Tile tile = Vars.tilePool[str];
-                                Tile tile2 = new Tile(tile.solid, new Vector2(x, y), tile.texture);
-                                tiles.Add(tile2);
+
+                                tiles.Add(new Vector2(x, y), str == "F" ? "F" : str.Contains("s") ? "s" : "W");
+
                                 x += 1;
                             }
+
                             y += 1;
                             x = 0;
                         }

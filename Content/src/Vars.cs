@@ -21,7 +21,7 @@ namespace wastelands.src
             mousePosition = Vector2.Zero,
             screenSize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height),
             relativeMousePosition = screenSize,
-            mapTileSize = new Vector2(25, 18);
+            mapTileSize = new Vector2(50, 36);
 
         public static Camera camera = new Camera();
 
@@ -30,7 +30,13 @@ namespace wastelands.src
         public static Settings settings = new Settings();
         public static SaveManager saveManager = new SaveManager();
 
-        public static Dictionary<string, Tile> tilePool = new Dictionary<string, Tile>();
-        public static RandomDictionary<string, List<Tile>> mapTilePool = new RandomDictionary<string, List<Tile>>();
+        public static Dictionary<string, Dictionary<string, Tile>> tilePool = new Dictionary<string, Dictionary<string, Tile>>();
+        public static Dictionary<string, List<Tile>> floorPool = new Dictionary<string, List<Tile>>();
+        public static RandomDictionary<string, Dictionary<Vector2, string>> mapTilePool = new RandomDictionary<string, Dictionary<Vector2, string>>();
+        
+        public static bool InBounds(Vector2 pos, Vector2 size)
+        {
+            return pos.X + size.X >= 0 && pos.Y + size.Y >= 0 && pos.X - size.X <= screenSize.X && pos.Y - size.Y <= screenSize.Y;
+        }
     }
 }

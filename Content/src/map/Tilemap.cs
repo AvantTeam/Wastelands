@@ -1,48 +1,68 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Diagnostics;
 using System.Collections.Generic;
 using wastelands.src.graphics;
+using wastelands.src.entities;
+using wastelands.src;
 
 namespace wastelands.src.map
 {
     public class Tilemap
     {
+        public Vector2 position;
         public Dictionary<Vector2, Tile> tiles = new Dictionary<Vector2, Tile>();
 
-        public void AddTile(Tile tile)
+        public void AddTile(Tile tile, Vector2 pos)
         {
-            if (tiles.ContainsKey(tile.position))
+            if (tiles.ContainsKey(pos))
             {
-                tiles[tile.position] = tile;
+                tiles[pos] = tile;
             }
             else
             {
-                tiles.Add(tile.position, tile);
+                tiles.Add(pos, tile);
             }
         }
 
-        public void AddChunk(List<Tile> ts, int x, int y)
+        public void AddChunk(List<List<Tile>> ts, Vector2 pos)
         {
-            foreach (Tile tile in ts)
+            int x = 0, y = 0;
+            foreach (List<Tile> tileList in ts)
             {
-                Tile t = new Tile(tile.solid, new Vector2(tile.position.X + x * Vars.mapTileSize.X, tile.position.Y + y * (Vars.mapTileSize.Y - 1)), tile.texture);
-                AddTile(t);
+                foreach (Tile tile in tileList)
+                {
+                    AddTile(tile, new Vector2(x + pos.X, y + pos.Y));
+                    x++;
+                }
+                x = 0;
+                y++;
             }
         }
 
-        public void AddChunk(List<Tile> ts, Vector2 pos)
+        public void AddChunk(Dictionary<Vector2, string> ts, Vector2 pos)
         {
-            AddChunk(ts, (int)pos.X, (int)pos.Y);
+            foreach (Vector2 key in ts.Keys)
+            {
+                if (ts[key] == "F")
+                {
+                    AddTile(Vars.floorPool["brick"][Vars.random.Next(0, Vars.floorPool["brick"].Count)], new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2)));
+                }
+                else
+                {
+                    AddTile(Vars.tilePool["brick"][ts[key]], new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2)));
+                }
+            }
         }
 
-        public void SetTile(Tile tile)
+        public void SetTile(Tile tile, Vector2 pos)
         {
-            tiles.Remove(tile.position);
-            AddTile(tile);
+            tiles.Remove(pos);
+            AddTile(tile, pos);
         }
 
-        public void RemoveTile(Vector2 position)
+        public void RemoveTile(Vector2 pos)
         {
-            tiles.Remove(position);
+            tiles.Remove(pos);
         }
 
         public void Draw()
@@ -52,9 +72,9 @@ namespace wastelands.src.map
                 Tile tile = tiles[pos];
                 if (tile != null)
                 {
-                    Vector2 relPos = pos * 32 - Vars.camera.position;
+                    Vector2 relPos = pos * 32 - Vars.camera.position;//position;
 
-                    if (relPos.X + 32 >= 0 && relPos.Y + 32 >= 0 && relPos.X - 32 <= Vars.screenSize.X && relPos.Y - 32 <= Vars.screenSize.Y)
+                    if (Vars.InBounds(relPos, Vector2.One * 32))
                     {
                         Draww.DrawTile(Wastelands.spriteBatch, tile.texture, relPos);
                     }

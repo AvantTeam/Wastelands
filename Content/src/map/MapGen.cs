@@ -8,7 +8,6 @@ namespace wastelands.src.map
     {
         public List<Vector2> vecMap = new List<Vector2>();
         public List<string> conMap = new List<string>();
-        public Tilemap tilemap = new Tilemap();
         private Random random = new Random();
         private List<string> dirs = new List<string>(new string[] { "D", "L", "R", "U" });
 
@@ -89,7 +88,15 @@ namespace wastelands.src.map
             return 0;
         }
 
-        public void Generate(int rooms)
+        public void AddChunkToDict(Dictionary<Vector2, string> map, Dictionary<Vector2, string> chunk, Vector2 pos)
+        {
+            foreach(Vector2 key in chunk.Keys)
+            {
+                map.Add(new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * Vars.mapTileSize.Y), chunk[key]);
+            }
+        }
+
+        public Dictionary<Vector2, string> Generate(int rooms)
         {
             vecMap.Add(Vector2.Zero);
             conMap.Add("");
@@ -127,12 +134,16 @@ namespace wastelands.src.map
 
             allMap.Sort(new Vec2Comparer());
 
+            Dictionary<Vector2, string> completeMap = new Dictionary<Vector2, string>();
+
             foreach (VecAndCon vc in allMap)
             {
-                tilemap.AddChunk(Vars.mapTilePool[vc.con], vc.pos);
+                AddChunkToDict(completeMap, Vars.mapTilePool[vc.con], vc.pos);
             }
 
-            Console.WriteLine(tilemap.tiles.Count);
+            completeMap = MapCleaner.Clean(completeMap);
+
+            return completeMap;
         }
     }
 }
