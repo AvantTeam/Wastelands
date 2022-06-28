@@ -1,71 +1,116 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System;
 
 namespace wastelands.src.map
 {
     public static class MapCleaner
     {
-        private static string cons = "DLUR";
-        public static Dictionary<Vector2, string> MoveCenterToCorner(Dictionary<Vector2, string> map)
+        public static bool Exists(List<Vector2> positions, Vector2 pos)
+        {
+            return positions.Contains(pos);
+        }
+
+        // Remove empty pathways from a Generated Room Set
+        public static Dictionary<Vector2, string> CleanWorld(Dictionary<Vector2, string> map)
         {
             Dictionary<Vector2, string> newMap = new Dictionary<Vector2, string>();
+            List<Vector2> positions = new List<Vector2>(map.Keys);
 
-            int x, y;
-            x = y = int.MaxValue;
-
-            foreach (Vector2 key in map.Keys)
+            foreach(Vector2 pos in positions)
             {
-                if (key.X < x) x = (int)key.X;
-                if (key.Y < y) y = (int)key.Y;
-            }
+                string con = "";
 
-            bool subsX = x > 0;
-            bool subsY = y > 0;
+                Vector2 nP;
+                if (map[pos].Contains("D"))
+                {
+                    nP = pos + new Vector2(0, 1);
+                    if (Exists(positions, nP) && map[nP].Contains("U")) con += "D";
+                }
+                if (map[pos].Contains("L"))
+                {
+                    nP = pos + new Vector2(-1, 0);
+                    if (Exists(positions, nP) && map[nP].Contains("R")) con += "L";
+                }
+                if (map[pos].Contains("U"))
+                {
+                    nP = pos + new Vector2(0, -1);
+                    if (Exists(positions, nP) && map[nP].Contains("D")) con += "U";
+                }
+                if (map[pos].Contains("R"))
+                {
+                    nP = pos + new Vector2(1, 0);
+                    if (Exists(positions, nP) && map[nP].Contains("L")) con += "R";
+                }
 
-            x = Math.Abs(x);
-            y = Math.Abs(y);
-
-            foreach (Vector2 key in map.Keys)
-            {
-                newMap.Add(new Vector2(key.X + x * (subsX ? -1 : 1), key.Y + y * (subsY ? -1 : 1)), map[key]);
+                newMap.Add(pos, con);
             }
 
             return newMap;
         }
 
-        public static Dictionary<Vector2, string> Clean(Dictionary<Vector2, string> map)
+        // Set the connections and shadows for a W/F based map
+        public static Dictionary<Vector2, string> SetTileConnections(Dictionary<Vector2, string> map)
         {
-            Dictionary<Vector2, string> cmap = MoveCenterToCorner(map);
+            Dictionary<Vector2, string> output = new Dictionary<Vector2, string>();
+            List<Vector2> positions = new List<Vector2>(map.Keys);
 
-            Dictionary<Vector2, string> newMap = new Dictionary<Vector2, string>();
-
-            Vector2 lPos = Vector2.Zero;
-            foreach(Vector2 pos in cmap.Keys)
+            foreach (Vector2 pos in positions)
             {
-                lPos = pos;
-                string val = cmap[pos] == "s" ? "s" : "";
+                if (map[pos] != "W") {
+                    Vector2 np = pos + new Vector2(0, -1);
 
-                if (cmap[pos] == "F") val = "F";
-                else
-                {
-                    Vector2[] checks = new Vector2[] { new Vector2(pos.X, pos.Y + 1), new Vector2(pos.X - 1, pos.Y), new Vector2(pos.X, pos.Y - 1), new Vector2(pos.X + 1, pos.Y) };
-
-                    for (int i = 0; i < 4; i++)
+                    if(Exists(positions, np) && map[np] == "W")
                     {
-                        Vector2 checkP = checks[i];
-                        if (cmap.ContainsKey(checkP) && cmap[checkP] == (val.Contains("s") ? "s" : "W"))
-                        {
-                            val += cons[i];
-                        }
+                        output.Add(pos, "S");
+                    } else if (map[pos] == "F")
+                    {
+                        output.Add(pos, "F");
                     }
+                } else
+                {
+                    output.Add(pos, "W");
                 }
-
-                newMap.Add(pos, val == "s" ? "sC" : val == "" ? "C" : val);
             }
 
-            Vars.camera.position = lPos * 16;
-            return newMap;
+            Dictionary<Vector2, string> output2 = new Dictionary<Vector2, string>();
+            positions = new List<Vector2>(output.Keys);
+            foreach (Vector2 pos in positions)
+            {
+                Vector2 np;
+                if (output[pos] == "W")
+                {
+                    string con = "";
+
+                    np = pos + new Vector2(0, 1);
+                    if (Exists(positions, np) && output[np] == "W") con += "D";
+                    np = pos + new Vector2(-1, 0);
+                    if (Exists(positions, np) && output[np] == "W") con += "L";
+                    np = pos + new Vector2(0, -1);
+                    if (Exists(positions, np) && output[np] == "W") con += "U";
+                    np = pos + new Vector2(1, 0);
+                    if (Exists(positions, np) && output[np] == "W") con += "R";
+
+                    if (con == "") con = "C";
+
+                    output2.Add(pos, "brick;" + con);
+                }
+                else if (output[pos] == "S")
+                {
+                    string con = "s";
+
+                    np = pos + new Vector2(-1, 0);
+                    if (Exists(positions, np) && output[np] == "W") con += "L";
+                    np = pos + new Vector2(1, 0);
+                    if (Exists(positions, np) && output[np] == "S") con += "R";
+
+                    if (con == "s") con = "sC";
+
+                    output2.Add(pos, "brick;" + con);
+                }
+                else if(output[pos] == "F") output2.Add(pos, "brick;F");
+            }
+
+            return output2;
         }
     }
 }

@@ -21,18 +21,24 @@ namespace wastelands.src
             mousePosition = Vector2.Zero,
             screenSize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height),
             relativeMousePosition = screenSize,
-            mapTileSize = new Vector2(50, 36);
+            mapTileSize = new Vector2(30, 20);
 
         public static Camera camera = new Camera();
 
         public static Random random = new Random();
+        public static SimplexNoise simplexNoise = new SimplexNoise();
+        public static Vector2 simplexOffset = new Vector2(random.Next(0, 10000) / 100, random.Next(0, 10000) / 100);
 
         public static Settings settings = new Settings();
         public static SaveManager saveManager = new SaveManager();
 
         public static Dictionary<string, Dictionary<string, Tile>> tilePool = new Dictionary<string, Dictionary<string, Tile>>();
+
+
         public static Dictionary<string, List<Tile>> floorPool = new Dictionary<string, List<Tile>>();
-        public static RandomDictionary<string, Dictionary<Vector2, string>> mapTilePool = new RandomDictionary<string, Dictionary<Vector2, string>>();
+
+        // Biome, Connections -> Room
+        public static Dictionary<string, RandomDictionary<string, Dictionary<Vector2, string>>> mapTilePool = new Dictionary<string, RandomDictionary<string, Dictionary<Vector2, string>>>();
         
         public static bool InBounds(Vector2 pos, Vector2 size)
         {

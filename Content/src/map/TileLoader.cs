@@ -8,6 +8,7 @@ namespace wastelands.src.map
     {
         public static void LoadAll(ContentManager manager, GraphicsDevice device)
         {
+            TileSetSplitter.AddToVars(manager, device, "default");
             TileSetSplitter.AddToVars(manager, device, "brick");
         }
     }

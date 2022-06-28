@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using wastelands.src.map;
+using wastelands.src.utils;
 
 namespace wastelands.src.graphics
 {
@@ -50,7 +51,7 @@ namespace wastelands.src.graphics
             Color[] texData = new Color[tex.Width * tex.Height];
             tex.GetData(texData);
 
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 12; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
@@ -73,6 +74,7 @@ namespace wastelands.src.graphics
 
         public static void AddToVars(ContentManager manager, GraphicsDevice device, string name)
         {
+            Vars.mapTilePool.Add(name, new RandomDictionary<string, Dictionary<Vector2, string>>());
             Vars.tilePool.Add(name, SplitTex(device, manager.Load<Texture2D>("sprites/tiles/" + name)));
             Vars.floorPool.Add(name, SplitFloor(device, manager.Load<Texture2D>("sprites/tiles/" + name + "_ground")));
         }

@@ -11,7 +11,7 @@ namespace wastelands.src.map
         public static void LoadAll(ContentManager manager)
         {
             string[] files = Directory.GetFiles(manager.RootDirectory + "/rooms");
-            string contents = "";
+            string contents;
 
             foreach (string a in files)
             {
@@ -22,24 +22,37 @@ namespace wastelands.src.map
                         contents = reader.ReadToEnd();
                         string[] roomContent = contents.Split(";");
 
+                        string biome = roomContent[1];
                         string connections = roomContent[2];
-                        int x = 0, y = 0;
+
                         Dictionary<Vector2, string> tiles = new Dictionary<Vector2, string>();
-                        for (int i = 3; i < roomContent.Length; i++)
+
+                        for (int y = 3; y < roomContent.Length; y++)
                         {
-                            foreach (string str in roomContent[i].Split("."))
+                            string[] columns = roomContent[y].Split(".");
+
+                            for (int x = 0; x < columns.Length; x++)
                             {
+                                string str = columns[x];
+
                                 if (str == "") continue;
 
-                                tiles.Add(new Vector2(x, y), str == "F" ? "F" : str.Contains("s") ? "s" : "W");
-
-                                x += 1;
+                                tiles.Add(new Vector2(x, y), str);
                             }
-
-                            y += 1;
-                            x = 0;
                         }
-                        Vars.mapTilePool.Add(connections, tiles);
+
+                        if (biome == "any")
+                        {
+                            foreach (string str in Vars.mapTilePool.Keys)
+                            {
+                                Vars.mapTilePool[str].Add(connections, tiles);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine(contents);
+                            Vars.mapTilePool[biome].Add(connections, tiles);
+                        }
                     }
                 }
             }

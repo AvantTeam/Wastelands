@@ -19,10 +19,11 @@ namespace wastelands
         public static SpriteBatch spriteBatch;
 
         public static List<Entity> entities = new List<Entity>();
-        public MapGen mapGen = new MapGen();
         public Tilemap tilemap = new Tilemap();
 
         public NinePatchRenderable test;
+
+        public Texture2D mouseSprite;
 
         public Wastelands()
         {
@@ -43,6 +44,8 @@ namespace wastelands
             Window.Position = new Point(0, 0);
             Window.IsBorderless = false;
 
+            IsMouseVisible = false;
+
             graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth = (int)Vars.screenSize.X;
             graphics.PreferredBackBufferHeight = (int)Vars.screenSize.Y;
@@ -55,7 +58,7 @@ namespace wastelands
                 entity.Init();
             }
 
-            tilemap.AddChunk(mapGen.Generate(150), Vector2.Zero);
+            tilemap.AddChunk(MapGen.PlaceRooms(MapGen.Generate(150)), Vector2.Zero);
             base.Initialize();
 
             MediaPlayer.IsRepeating = true;
@@ -69,6 +72,8 @@ namespace wastelands
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             test = Tex.Get("hud1").createRenderable(400, 64);
+
+            mouseSprite = Content.Load<Texture2D>("sprites/UI/cursor");
 
             foreach (Entity entity in entities)
             {
@@ -116,6 +121,8 @@ namespace wastelands
 
             test.Render(0, 0);
             base.Draw(gameTime);
+
+            Draww.DrawSprite(spriteBatch, mouseSprite, Mouse.GetState().Position.ToVector2());
             spriteBatch.End();
         }
     }

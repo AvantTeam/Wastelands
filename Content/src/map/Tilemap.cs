@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using System.Diagnostics;
 using System.Collections.Generic;
 using wastelands.src.graphics;
-using wastelands.src.entities;
-using wastelands.src;
+using System;
 
 namespace wastelands.src.map
 {
@@ -43,13 +41,18 @@ namespace wastelands.src.map
         {
             foreach (Vector2 key in ts.Keys)
             {
-                if (ts[key] == "F")
+                string biome = ts[key].Split(";")[0];
+                string tile = ts[key].Split(";")[1];
+
+                if (tile == "F")
                 {
-                    AddTile(Vars.floorPool["brick"][Vars.random.Next(0, Vars.floorPool["brick"].Count)], new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2)));
+                    int tileID = (int)Math.Abs(Math.Round(Vars.simplexNoise.noise(key.X / 16f, key.Y / 16f, 0) * 4f)) * 9 + Vars.random.Next(0, 9);
+                    if (tileID >= Vars.floorPool[biome].Count) tileID = Vars.floorPool[biome].Count - 1;
+                    AddTile(Vars.floorPool[biome][tileID], new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2)));
                 }
                 else
                 {
-                    AddTile(Vars.tilePool["brick"][ts[key]], new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2)));
+                    AddTile(Vars.tilePool[biome][tile], new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2)));
                 }
             }
         }
@@ -72,7 +75,7 @@ namespace wastelands.src.map
                 Tile tile = tiles[pos];
                 if (tile != null)
                 {
-                    Vector2 relPos = pos * 32 - Vars.camera.position;//position;
+                    Vector2 relPos = pos * 32 - Vars.camera.position;
 
                     if (Vars.InBounds(relPos, Vector2.One * 32))
                     {

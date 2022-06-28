@@ -6,10 +6,7 @@ namespace wastelands.src.map
 {
     public class MapGen
     {
-        public List<Vector2> vecMap = new List<Vector2>();
-        public List<string> conMap = new List<string>();
-        private Random random = new Random();
-        private List<string> dirs = new List<string>(new string[] { "D", "L", "R", "U" });
+        private static List<string> dirs = new List<string>(new string[] { "D", "L", "R", "U" });
 
         public class VecAndCon
         {
@@ -48,14 +45,10 @@ namespace wastelands.src.map
             }
         }
 
-        public string SortDir(string sort)
+        public static string SortDir(string sort)
         {
             string o = "";
 
-            if (sort.Contains("R"))
-            {
-                o += "R";
-            }
             if (sort.Contains("D"))
             {
                 o += "D";
@@ -68,11 +61,15 @@ namespace wastelands.src.map
             {
                 o += "U";
             }
+            if (sort.Contains("R"))
+            {
+                o += "R";
+            }
 
             return o;
         }
 
-        public int ChangeBy(int randID, string dir, int x, int y)
+        public static int ChangeBy(List<Vector2> vecMap, List<string> conMap, int randID, string dir, int x, int y)
         {
             Vector2 newPos = new Vector2(vecMap[randID].X + x, vecMap[randID].Y + y);
 
@@ -88,40 +85,37 @@ namespace wastelands.src.map
             return 0;
         }
 
-        public void AddChunkToDict(Dictionary<Vector2, string> map, Dictionary<Vector2, string> chunk, Vector2 pos)
+        //Generate a map in connection data, not rooms
+        public static Dictionary<Vector2, string> Generate(int rooms)
         {
-            foreach(Vector2 key in chunk.Keys)
-            {
-                map.Add(new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * Vars.mapTileSize.Y), chunk[key]);
-            }
-        }
 
-        public Dictionary<Vector2, string> Generate(int rooms)
-        {
+            List<Vector2> vecMap = new List<Vector2>();
+            List<string> conMap = new List<string>();
+            
             vecMap.Add(Vector2.Zero);
             conMap.Add("");
 
             int i = 1;
             while (i < rooms)
             {
-                int randID = random.Next(0, vecMap.Count);
+                int randID = Vars.random.Next(0, vecMap.Count);
 
-                int nextPos = random.Next(0, 4);
+                int nextPos = Vars.random.Next(0, 4);
                 if (nextPos == 0)
                 {
-                    i += ChangeBy(randID, "L", 1, 0);
+                    i += ChangeBy(vecMap, conMap, randID, "L", 1, 0);
                 }
                 if (nextPos == 1)
                 {
-                    i += ChangeBy(randID, "U", 0, 1);
+                    i += ChangeBy(vecMap, conMap, randID, "U", 0, 1);
                 }
                 if (nextPos == 2)
                 {
-                    i += ChangeBy(randID, "R", -1, 0);
+                    i += ChangeBy(vecMap, conMap, randID, "R", -1, 0);
                 }
                 if (nextPos == 3)
                 {
-                    i += ChangeBy(randID, "D", 0, -1);
+                    i += ChangeBy(vecMap, conMap, randID, "D", 0, -1);
                 }
             }
 
@@ -138,12 +132,36 @@ namespace wastelands.src.map
 
             foreach (VecAndCon vc in allMap)
             {
-                AddChunkToDict(completeMap, Vars.mapTilePool[vc.con], vc.pos);
+                completeMap.Add(vc.pos, vc.con);
             }
 
-            completeMap = MapCleaner.Clean(completeMap);
+            completeMap = MapCleaner.CleanWorld(completeMap);
 
             return completeMap;
+        }
+
+        public static void AddChunkToDict(Dictionary<Vector2, string> map, Dictionary<Vector2, string> chunk, Vector2 pos)
+        {
+            foreach (Vector2 key in chunk.Keys)
+            {
+                Console.WriteLine(chunk[key]);
+                map.Add(new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * Vars.mapTileSize.Y), chunk[key]);
+            }
+        }
+
+        // TODO add biome generation, default: brick
+        public static Dictionary<Vector2, string> PlaceRooms(Dictionary<Vector2, string> map)
+        {
+            Dictionary<Vector2, string> output = new Dictionary<Vector2, string>();
+
+            foreach (Vector2 pos in map.Keys)
+            {
+                AddChunkToDict(output, Vars.mapTilePool["brick"][map[pos]], pos);
+            }
+
+            output = MapCleaner.SetTileConnections(output);
+
+            return output;
         }
     }
 }
