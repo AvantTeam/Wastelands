@@ -73,7 +73,7 @@ namespace wastelands
 
             test = Tex.Get("hud1").createRenderable(400, 64);
 
-            mouseSprite = Content.Load<Texture2D>("sprites/UI/cursor");
+            mouseSprite = Content.Load<Texture2D>("sprites/UI/hand-cursor");
 
             foreach (Entity entity in entities)
             {

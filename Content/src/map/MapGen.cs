@@ -144,7 +144,6 @@ namespace wastelands.src.map
         {
             foreach (Vector2 key in chunk.Keys)
             {
-                Console.WriteLine(chunk[key]);
                 map.Add(new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * Vars.mapTileSize.Y), chunk[key]);
             }
         }

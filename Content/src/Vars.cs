@@ -27,14 +27,11 @@ namespace wastelands.src
 
         public static Random random = new Random();
         public static SimplexNoise simplexNoise = new SimplexNoise();
-        public static Vector2 simplexOffset = new Vector2(random.Next(0, 10000) / 100, random.Next(0, 10000) / 100);
 
         public static Settings settings = new Settings();
         public static SaveManager saveManager = new SaveManager();
 
         public static Dictionary<string, Dictionary<string, Tile>> tilePool = new Dictionary<string, Dictionary<string, Tile>>();
-
-
         public static Dictionary<string, List<Tile>> floorPool = new Dictionary<string, List<Tile>>();
 
         // Biome, Connections -> Room

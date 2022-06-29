@@ -50,7 +50,6 @@ namespace wastelands.src.map
                         }
                         else
                         {
-                            Console.WriteLine(contents);
                             Vars.mapTilePool[biome].Add(connections, tiles);
                         }
                     }

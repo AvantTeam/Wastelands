@@ -18,7 +18,7 @@ namespace wastelands.src.graphics
             "D", "DU", "U", "C", "sC"
         };
 
-        public static Dictionary<string, Tile> SplitTex(GraphicsDevice device, Texture2D tex)
+        public static Dictionary<string, Tile> SplitTex(string name, GraphicsDevice device, Texture2D tex)
         {
             Dictionary<string, Tile> output = new Dictionary<string, Tile>();
             Color[] texData = new Color[tex.Width * tex.Height];
@@ -38,14 +38,14 @@ namespace wastelands.src.graphics
 
                     newTex.SetData(newCol.ToArray(), 0, 16 * 16);
 
-                    output.Add(names[i*5+j], new Tile(true, newTex));
+                    output.Add(names[i*5+j], new Tile(name + ";" + names[i * 5 + j], true, newTex));
                 }
             }
 
             return output;
         }
 
-        public static List<Tile> SplitFloor(GraphicsDevice device, Texture2D tex)
+        public static List<Tile> SplitFloor(string name, GraphicsDevice device, Texture2D tex)
         {
             List<Tile> output = new List<Tile>();
             Color[] texData = new Color[tex.Width * tex.Height];
@@ -65,7 +65,7 @@ namespace wastelands.src.graphics
 
                     newTex.SetData(newCol.ToArray(), 0, 16 * 16);
 
-                    output.Add(new Tile(true, newTex));
+                    output.Add(new Tile(name + ";Floor" + i + j * 12, true, newTex));
                 }
             }
 
@@ -75,8 +75,8 @@ namespace wastelands.src.graphics
         public static void AddToVars(ContentManager manager, GraphicsDevice device, string name)
         {
             Vars.mapTilePool.Add(name, new RandomDictionary<string, Dictionary<Vector2, string>>());
-            Vars.tilePool.Add(name, SplitTex(device, manager.Load<Texture2D>("sprites/tiles/" + name)));
-            Vars.floorPool.Add(name, SplitFloor(device, manager.Load<Texture2D>("sprites/tiles/" + name + "_ground")));
+            Vars.tilePool.Add(name, SplitTex(name, device, manager.Load<Texture2D>("sprites/tiles/" + name)));
+            Vars.floorPool.Add(name, SplitFloor(name, device, manager.Load<Texture2D>("sprites/tiles/" + name + "_ground")));
         }
     }
 }
