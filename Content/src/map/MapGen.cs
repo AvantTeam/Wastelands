@@ -6,7 +6,7 @@ namespace wastelands.src.map
 {
     public class MapGen
     {
-        private static List<string> dirs = new List<string>(new string[] { "D", "L", "R", "U" });
+        private static string[] dirs = new string[] { "D", "L", "R", "U" };
 
         public class VecAndCon
         {
@@ -78,7 +78,7 @@ namespace wastelands.src.map
                 vecMap.Add(newPos);
                 conMap.Add(dir);
 
-                conMap[randID] = SortDir(conMap[randID] + dirs[3 - dirs.IndexOf(dir)]);
+                conMap[randID] = SortDir(conMap[randID] + dirs[3 - Array.IndexOf(dirs, dir)]);
                 return 1;
             }
 
