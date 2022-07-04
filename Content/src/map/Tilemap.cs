@@ -41,8 +41,14 @@ namespace wastelands.src.map
         {
             foreach (Vector2 key in ts.Keys)
             {
-                string biome = ts[key].Split(";")[0];
-                string tile = ts[key].Split(";")[1];
+                string biome = "default";
+                string tile = ts[key];
+
+                if (ts[key].Contains(";"))
+                {
+                    biome = ts[key].Split(";")[0];
+                    tile = ts[key].Split(";")[1];
+                }
 
                 if (tile == "F")
                 {

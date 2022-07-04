@@ -10,7 +10,7 @@ namespace wastelands.src.entities
 
         public Entity()
         {
-            Wastelands.entities.Add(this);
+            //Wastelands.entities.Add(this);
         }
 
         public virtual void Init() { }
