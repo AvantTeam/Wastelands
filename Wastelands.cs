@@ -7,6 +7,7 @@ using wastelands.src.local;
 using wastelands.src.map;
 using wastelands.src.utils;
 using wastelands.src.audio;
+using wastelands.src.game;
 
 namespace wastelands
 {
@@ -26,6 +27,7 @@ namespace wastelands
 
         protected override void LoadContent()
         {
+            Log.Clear();
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             GraphicsDevice.Clear(Color.Black);
@@ -38,7 +40,11 @@ namespace wastelands
 
             mouseSprite = Content.Load<Texture2D>("sprites/UI/cursor");
 
-            Log.Clear();
+            foreach(GameMode mode in GameModes.gameModes.Values)
+            {
+                mode.LoadContent();
+            }
+
             Log.Write("Content Loaded.");
         }
 
@@ -59,11 +65,15 @@ namespace wastelands
 
             base.Initialize();
 
+            GameManager.gameMode.Initialize();
+
             Log.Write("Game Initialized.");
         }
         
         protected override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
@@ -74,8 +84,9 @@ namespace wastelands
             Vars.mousePosition = Mouse.GetState().Position.ToVector2();
             Vars.relativeMousePosition = Vars.mousePosition - Vars.camera.position;
 
+            GameManager.gameMode.Update();
+
             Vars.camera.Update();
-            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -84,6 +95,8 @@ namespace wastelands
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             base.Draw(gameTime);
+
+            GameManager.gameMode.Draw();
 
             Draww.DrawSprite(spriteBatch, mouseSprite, Mouse.GetState().Position.ToVector2());
             spriteBatch.End();
