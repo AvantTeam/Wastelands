@@ -21,6 +21,11 @@ namespace wastelands.src.graphics
             DrawSprite(batch, sprite, position, Color.White, 1f);
         }
 
+        public static void DrawSpriteRaw(SpriteBatch batch, Texture2D sprite, Vector2 position, float zoom, Color color)
+        {
+            batch.Draw(sprite, new Rectangle((int)position.X, (int)position.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom)), color);
+        }
+
         public static void DrawTile(SpriteBatch batch, Texture2D sprite, Vector2 position)
         {
             if (sprite == null) return;

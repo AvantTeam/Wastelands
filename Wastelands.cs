@@ -25,6 +25,13 @@ namespace wastelands
             IsMouseVisible = true;
         }
 
+        public bool IsMouseInsideWindow()
+        {
+            MouseState ms = Mouse.GetState();
+            Point pos = new Point(ms.X, ms.Y);
+            return GraphicsDevice.Viewport.Bounds.Contains(pos);
+        }
+
         protected override void LoadContent()
         {
             Log.Clear();
@@ -42,7 +49,7 @@ namespace wastelands
 
             foreach(GameMode mode in GameModes.gameModes.Values)
             {
-                mode.LoadContent();
+                mode.LoadContent(Content);
             }
 
             Log.Write("Content Loaded.");
@@ -84,7 +91,7 @@ namespace wastelands
             Vars.mousePosition = Mouse.GetState().Position.ToVector2();
             Vars.relativeMousePosition = Vars.mousePosition - Vars.camera.position;
 
-            GameManager.gameMode.Update();
+            GameManager.gameMode.Update(gameTime);
 
             Vars.camera.Update();
         }
@@ -96,9 +103,9 @@ namespace wastelands
 
             base.Draw(gameTime);
 
-            GameManager.gameMode.Draw();
+            GameManager.gameMode.Draw(gameTime, GraphicsDevice, spriteBatch);
 
-            Draww.DrawSprite(spriteBatch, mouseSprite, Mouse.GetState().Position.ToVector2());
+            if(IsMouseInsideWindow()) Draww.DrawSpriteRaw(spriteBatch, mouseSprite, Mouse.GetState().Position.ToVector2(), 1, Color.White);
             spriteBatch.End();
         }
     }
