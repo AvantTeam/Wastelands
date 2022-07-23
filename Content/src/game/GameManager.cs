@@ -9,8 +9,10 @@ namespace wastelands.src.game
         public static GameMode gameMode = GameModes.Get("main-menu");
         public static bool paused = false;
 
-        public static void ChangeGameMode(GameMode newGameMode)
+        public static void ChangeGameMode(string newGameModeKey)
         {
+            GameMode newGameMode = GameModes.Get(newGameModeKey);
+
             gameMode.Unload();
             newGameMode.Initialize();
 

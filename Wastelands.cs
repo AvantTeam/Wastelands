@@ -58,11 +58,11 @@ namespace wastelands
         protected override void Initialize()
         {
             Window.Position = new Point(0, 0);
-            Window.IsBorderless = false;
+            Window.IsBorderless = true;
 
             IsMouseVisible = false;
 
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             graphics.PreferredBackBufferWidth = (int)Vars.screenSize.X;
             graphics.PreferredBackBufferHeight = (int)Vars.screenSize.Y;
             graphics.ApplyChanges();
