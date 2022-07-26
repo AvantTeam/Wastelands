@@ -4,7 +4,6 @@ Wastelands is a 2D roguelike exploration game made with [MonoGame](https://githu
 To see any updates or previews on the game, head over to our [Discord server](https://discord.gg/ZUajZkKR), go to the `#roles` channel and react to the `Wastelands autorole`.
 
 ## Links
-The [Trello board](https://trello.com/b/1h2QwbbW/wastelands) of this game!\
 The [Avant Discord server](https://discord.gg/ZUajZkKR) for all discussions regarding [Avant Team](https://github.com/AvantTeam) projects!
 ## Credits
 Main Developer: [@ThePythonGuy3](https://github.com/ThePythonGuy3)\

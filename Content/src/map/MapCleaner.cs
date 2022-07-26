@@ -1,10 +1,31 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using wastelands.src.utils;
 
 namespace wastelands.src.map
 {
     public static class MapCleaner
     {
+        // Thanks @GlennFolker
+        public static int[] connections = new int[]{
+            39, 36, 39, 36, 27, 16, 27, 24, 39, 36, 39, 36, 27, 16, 27, 24,
+            38, 37, 38, 37, 17, 41, 17, 43, 38, 37, 38, 37, 26, 21, 26, 25,
+            39, 36, 39, 36, 27, 16, 27, 24, 39, 36, 39, 36, 27, 16, 27, 24,
+            38, 37, 38, 37, 17, 41, 17, 43, 38, 37, 38, 37, 26, 21, 26, 25,
+             3,  4,  3,  4, 15, 40, 15, 20,  3,  4,  3,  4, 15, 40, 15, 20,
+             5, 28,  5, 28, 29, 10, 29, 23,  5, 28,  5, 28, 31, 11, 31, 32,
+             3,  4,  3,  4, 15, 40, 15, 20,  3,  4,  3,  4, 15, 40, 15, 20,
+             2, 30,  2, 30,  9, 46,  9, 22,  2, 30,  2, 30, 14, 44, 14,  6,
+            39, 36, 39, 36, 27, 16, 27, 24, 39, 36, 39, 36, 27, 16, 27, 24,
+            38, 37, 38, 37, 17, 41, 17, 43, 38, 37, 38, 37, 26, 21, 26, 25,
+            39, 36, 39, 36, 27, 16, 27, 24, 39, 36, 39, 36, 27, 16, 27, 24,
+            38, 37, 38, 37, 17, 41, 17, 43, 38, 37, 38, 37, 26, 21, 26, 25,
+             3,  0,  3,  0, 15, 42, 15, 12,  3,  0,  3,  0, 15, 42, 15, 12,
+             5,  8,  5,  8, 29, 35, 29, 33,  5,  8,  5,  8, 31, 34, 31,  7,
+             3,  0,  3,  0, 15, 42, 15, 12,  3,  0,  3,  0, 15, 42, 15, 12,
+             2,  1,  2,  1,  9, 45,  9, 19,  2,  1,  2,  1, 14, 18, 14, 13
+        };
+
         public static bool Exists(List<Vector2> positions, Vector2 pos)
         {
             return positions.Contains(pos);
@@ -79,20 +100,27 @@ namespace wastelands.src.map
                 Vector2 np;
                 if (output[pos] == "W")
                 {
-                    string con = "";
+                    int index = 0;
 
-                    np = pos + new Vector2(0, 1);
-                    if (Exists(positions, np) && output[np] == "W") con += "D";
-                    np = pos + new Vector2(-1, 0);
-                    if (Exists(positions, np) && output[np] == "W") con += "L";
-                    np = pos + new Vector2(0, -1);
-                    if (Exists(positions, np) && output[np] == "W") con += "U";
                     np = pos + new Vector2(1, 0);
-                    if (Exists(positions, np) && output[np] == "W") con += "R";
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 1;
+                    np = pos + new Vector2(1, -1);
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 2;
+                    np = pos + new Vector2(0, -1);
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 3;
+                    np = pos + new Vector2(-1, -1);
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 4;
+                    np = pos + new Vector2(-1, 0);
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 5;
+                    np = pos + new Vector2(-1, 1);
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 6;
+                    np = pos + new Vector2(0, 1);
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 7;
+                    np = pos + new Vector2(1, 1);
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 8;
 
-                    if (con == "") con = "C";
-
-                    output2.Add(pos, "brick;" + con);
+                    Log.Write(index);
+                    output2.Add(pos, "brick;" + connections[index - 1]);
                 }
                 else if (output[pos] == "S")
                 {
@@ -107,7 +135,7 @@ namespace wastelands.src.map
 
                     output2.Add(pos, "brick;" + con);
                 }
-                else if(output[pos] == "F") output2.Add(pos, "brick;F");
+                else if(output[pos] == "F") output2.Add(pos, "brick;-1");
             }
 
             return output2;

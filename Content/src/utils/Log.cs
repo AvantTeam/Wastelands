@@ -15,7 +15,7 @@ namespace wastelands.src.utils
             }
         }
 
-        public static void Write(string data)
+        public static void Write(params object[] data)
         {
             if (!File.Exists(Vars.logPath))
             {
@@ -29,7 +29,15 @@ namespace wastelands.src.utils
 
             StreamWriter sw = File.AppendText(Vars.logPath);
 
-            sw.WriteLine("[" + DateTime.Now.ToString("T") + "] " + data);
+            string dataCompleted = "";
+            foreach(object obj in data)
+            {
+                dataCompleted += obj.ToString() + " ";
+            }
+
+            dataCompleted = dataCompleted.Substring(0, dataCompleted.Length - 1);
+
+            sw.WriteLine("[" + DateTime.Now.ToString("T") + "] " + dataCompleted);
 
             sw.Close();
             sw.Dispose();

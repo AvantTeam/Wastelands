@@ -18,15 +18,15 @@ namespace wastelands.src.graphics
             "D", "DU", "U", "C", "sC"
         };
 
-        public static Dictionary<string, Tile> SplitTex(string name, GraphicsDevice device, Texture2D tex)
+        public static List<Tile> SplitTex(string name, GraphicsDevice device, Texture2D tex)
         {
-            Dictionary<string, Tile> output = new Dictionary<string, Tile>();
+            List<Tile> output = new List<Tile>();
             Color[] texData = new Color[tex.Width * tex.Height];
             tex.GetData(texData);
 
             for(int i = 0; i < 4; i++)
             {
-                for (int j = 0; j < 5; j++)
+                for (int j = 0; j < 12; j++)
                 {
                     List<Color> newCol = new List<Color>();
                     Texture2D newTex = new Texture2D(device, 16, 16);
@@ -38,7 +38,7 @@ namespace wastelands.src.graphics
 
                     newTex.SetData(newCol.ToArray(), 0, 16 * 16);
 
-                    output.Add(names[i*5+j], new Tile(name + ";" + names[i * 5 + j], true, newTex));
+                    output.Add(new Tile(name + ";" + (j + i * 12).ToString(), true, newTex));
                 }
             }
 

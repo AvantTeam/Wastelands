@@ -42,23 +42,33 @@ namespace wastelands.src.map
             foreach (Vector2 key in ts.Keys)
             {
                 string biome = "default";
-                string tile = ts[key];
+                bool shadow = false;
+                string shad;
+                string tile;
+                int tileId = 0;
 
-                if (ts[key].Contains(";"))
-                {
-                    biome = ts[key].Split(";")[0];
-                    tile = ts[key].Split(";")[1];
-                }
+                biome = ts[key].Split(";")[0];
+                tile = ts[key].Split(";")[1];
 
-                if (tile == "F")
+                if (tile.StartsWith("s"))
                 {
-                    int tileID = (int)Math.Abs(Math.Round(Vars.simplexNoise.noise(key.X / 16f, key.Y / 16f, 0) * 4f)) * 9 + Vars.random.Next(0, 9);
-                    if (tileID >= Vars.floorPool[biome].Count) tileID = Vars.floorPool[biome].Count - 1;
-                    AddTile(Vars.floorPool[biome][tileID], new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2)));
-                }
+                    shadow = true;
+                    shad = tile;
+                } else tileId = int.Parse(ts[key]);
+
+                if (shadow) { }
                 else
                 {
-                    AddTile(Vars.tilePool[biome][tile], new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2)));
+                    if (tileId == -1)
+                    {
+                        int tileID = (int)Math.Abs(Math.Round(Vars.simplexNoise.noise(key.X / 16f, key.Y / 16f, 0) * 4f)) * 9 + Vars.random.Next(0, 9);
+                        if (tileID >= Vars.floorPool[biome].Count) tileID = Vars.floorPool[biome].Count - 1;
+                        AddTile(Vars.floorPool[biome][tileID], new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2)));
+                    }
+                    else
+                    {
+                        AddTile(Vars.tilePool[biome][tileId], new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2)));
+                    }
                 }
             }
         }
