@@ -6,6 +6,7 @@ using System.IO;
 using wastelands.src.graphics;
 using wastelands.src.map;
 using wastelands.src.utils;
+using Microsoft.Xna.Framework.Input;
 
 namespace wastelands.src
 {
@@ -22,6 +23,8 @@ namespace wastelands.src
             screenSize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height),
             relativeMousePosition = screenSize,
             mapTileSize = new Vector2(30, 20);
+
+        public static KeyboardState kbCurrentState, kbPreviousState;
 
         public static Camera camera = new Camera();
 

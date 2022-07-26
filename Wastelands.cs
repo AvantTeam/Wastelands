@@ -8,6 +8,7 @@ using wastelands.src.map;
 using wastelands.src.utils;
 using wastelands.src.audio;
 using wastelands.src.game;
+using System.IO;
 
 namespace wastelands
 {
@@ -17,6 +18,7 @@ namespace wastelands
         public static SpriteBatch spriteBatch;
 
         public Texture2D mouseSprite;
+        public GameTime _lastUpdatedGameTime;
 
         public Wastelands()
         {
@@ -30,6 +32,21 @@ namespace wastelands
             MouseState ms = Mouse.GetState();
             Point pos = new Point(ms.X, ms.Y);
             return GraphicsDevice.Viewport.Bounds.Contains(pos);
+        }
+
+        public Texture2D TakeScreenshot()
+        {
+            int w, h;
+            w = GraphicsDevice.PresentationParameters.BackBufferWidth;
+            h = GraphicsDevice.PresentationParameters.BackBufferHeight;
+            RenderTarget2D screenshot;
+            screenshot = new RenderTarget2D(GraphicsDevice, w, h, false, SurfaceFormat.Color, DepthFormat.None);
+            GraphicsDevice.SetRenderTarget(screenshot);
+            Draw(_lastUpdatedGameTime != null ? _lastUpdatedGameTime : new GameTime());
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Present();
+
+            return screenshot;
         }
 
         protected override void LoadContent()
@@ -81,25 +98,41 @@ namespace wastelands
         {
             base.Update(gameTime);
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            Vars.kbCurrentState = Keyboard.GetState();
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Vars.kbCurrentState.IsKeyDown(Keys.Escape))
             {
                 Exit();
                 Vars.saveManager.Save();
                 Log.Write("Game Terminated.");
             }
 
+            if (Vars.kbPreviousState.IsKeyUp(Keys.P) && Vars.kbCurrentState.IsKeyDown(Keys.P))
+            {
+                using (Stream stream = File.Create(Path.Combine(Vars.gamePath, "screenshot.png")))
+                {
+                    using (Texture2D screenshot = TakeScreenshot())
+                    {
+                        screenshot.SaveAsPng(stream, screenshot.Width, screenshot.Height);
+                    }
+                }
+            }
+
             Vars.mousePosition = Mouse.GetState().Position.ToVector2();
             Vars.relativeMousePosition = Vars.mousePosition - Vars.camera.position;
+
 
             GameManager.gameMode.Update(gameTime);
 
             Vars.camera.Update();
+
+            Vars.kbPreviousState = Vars.kbCurrentState;
         }
 
         protected override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             base.Draw(gameTime);
 

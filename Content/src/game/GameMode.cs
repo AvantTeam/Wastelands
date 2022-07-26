@@ -17,7 +17,8 @@ namespace wastelands.src.game
     public static class GameModes
     {
         public static Dictionary<string, GameMode> gameModes = new Dictionary<string, GameMode> {
-            { "main-menu", new MainMenuGameMode() }
+            { "main-menu", new MainMenuGameMode() },
+            { "test", new TestGameMode() }
         };
 
         public static GameMode Get(string name)

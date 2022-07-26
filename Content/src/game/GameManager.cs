@@ -6,7 +6,7 @@ namespace wastelands.src.game
 {
     public static class GameManager
     {
-        public static GameMode gameMode = GameModes.Get("main-menu");
+        public static GameMode gameMode = GameModes.Get("test");
         public static bool paused = false;
 
         public static void ChangeGameMode(string newGameModeKey)

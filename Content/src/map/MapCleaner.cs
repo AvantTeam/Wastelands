@@ -99,9 +99,9 @@ namespace wastelands.src.map
                     string con = "s";
 
                     np = pos + new Vector2(-1, 0);
-                    if (Exists(positions, np) && output[np] == "W") con += "L";
+                    if (Exists(positions, np) && (output[np] == "W" || output[np] == "S")) con += "L";
                     np = pos + new Vector2(1, 0);
-                    if (Exists(positions, np) && output[np] == "S") con += "R";
+                    if (Exists(positions, np) && (output[np] == "W" || output[np] == "S")) con += "R";
 
                     if (con == "s") con = "sC";
 
