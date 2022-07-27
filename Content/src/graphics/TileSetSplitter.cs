@@ -16,23 +16,23 @@ namespace wastelands.src.graphics
             Color[] texData = new Color[tex.Width * tex.Height];
             tex.GetData(texData);
 
-            for(int i = 0; i < 4; i++)
+            for(int y = 0; y < 4; y++)
             {
-                for (int j = 0; j < 12; j++)
+                for (int x = 0; x < 12; x++)
                 {
-                    if (i == 3 && j == 11) continue;
+                    if (y == 3 && x == 11) continue;
 
                     List<Color> newCol = new List<Color>();
                     Texture2D newTex = new Texture2D(device, 16, 16);
 
-                    for (int q = 0; q < 16; q++)
+                    for (int line = 0; line < 16; line++)
                     {
-                        newCol.AddRange(texData.Skip(i * 16 * 12 * 16 + j * 16 + q * 16 * 12).Take(16).ToArray());
+                        newCol.AddRange(texData.Skip(y * 16 * 12 * 16 + x * 16 + line * 16 * 12).Take(16).ToArray());
                     }
 
                     newTex.SetData(newCol.ToArray(), 0, 16 * 16);
 
-                    output.Add(new Tile(name + ";" + (j + i * 12).ToString(), true, newTex));
+                    output.Add(new Tile(name + ";" + (x + y * 12).ToString(), true, newTex));
                 }
             }
 
@@ -45,19 +45,19 @@ namespace wastelands.src.graphics
             Color[] texData = new Color[tex.Width * tex.Height];
             tex.GetData(texData);
 
-            for (int i = 0; i < 4; i++)
+            for (int x = 0; x < 4; x++)
             {
                 List<Color> newCol = new List<Color>();
                 Texture2D newTex = new Texture2D(device, 16, 16);
 
-                for (int q = 0; q < 16; q++)
+                for (int line = 0; line < 16; line++)
                 {
-                    newCol.AddRange(texData.Skip(i * 16 + q * 16 * 4).Take(16).ToArray());
+                    newCol.AddRange(texData.Skip(x * 16 + line * 16 * 4).Take(16).ToArray());
                 }
 
                 newTex.SetData(newCol.ToArray(), 0, 16 * 16);
 
-                output.Add(new Tile(name + ";s" + i.ToString(), false, newTex));
+                output.Add(new Tile(name + ";s" + x.ToString(), false, newTex));
             }
 
             return output;
@@ -69,21 +69,32 @@ namespace wastelands.src.graphics
             Color[] texData = new Color[tex.Width * tex.Height];
             tex.GetData(texData);
 
-            for (int i = 0; i < 12; i++)
+            for (int stainLevel = 0; stainLevel < 4; stainLevel++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int x = 0; x < 3; x++)
                 {
-                    List<Color> newCol = new List<Color>();
-                    Texture2D newTex = new Texture2D(device, 16, 16);
-
-                    for (int q = 0; q < 16; q++)
+                    for (int y = 0; y < 3; y++)
                     {
-                        newCol.AddRange(texData.Skip(i * 16 + j * 16 * 12 * 16 + q * 16 * 12).Take(16).ToArray());
+                        List<Color> newCol = new List<Color>();
+                        Texture2D newTex = new Texture2D(device, 16, 16);
+
+                        for (int line = 0; line < 16; line++)
+                        {
+                            newCol.AddRange(texData.Skip(x * 16 + y * 16 * 3 * 16 + line * 16 * 3).Take(16).ToArray());
+                        }
+
+                        if (stainLevel > 0)
+                        {
+                            for(int q = 0; q < newCol.Count; q++)
+                            {
+                                newCol[q] = GraphicUtils.MultiplyColor(newCol[q], 1f - stainLevel * 0.1f, 1f);
+                            }
+                        }
+
+                        newTex.SetData(newCol.ToArray(), 0, 16 * 16);
+
+                        output.Add(new Tile(name + ";Floor" + x + y * 12, false, newTex));
                     }
-
-                    newTex.SetData(newCol.ToArray(), 0, 16 * 16);
-
-                    output.Add(new Tile(name + ";Floor" + i + j * 12, false, newTex));
                 }
             }
 

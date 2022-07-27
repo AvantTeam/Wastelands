@@ -55,7 +55,13 @@ namespace wastelands.src.map
                 } else tileId = int.Parse(tile);
 
                 Vector2 pos2 = new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2));
-                int floorID = (int)Math.Abs(Math.Round(Vars.simplexNoise.noise(key.X / 16f, key.Y / 16f, 0) * 4f)) * 9 + Vars.random.Next(0, 9);
+                float randID = Vars.random.Next(0, 21);
+                // Cubic variation ID, 0 is the most common, 8 is the rarest, also 0 has double the rate.
+                randID /= 20;
+                randID *= randID *= randID;
+                randID *= 16;
+                if (randID >= 9) randID = 0;
+                int floorID = (int)Math.Abs(Math.Round(Vars.simplexNoise.noise(key.X / 16f, key.Y / 16f, 0) * 4f)) * 9 + (int)randID;
                 if (floorID >= Vars.floorPool[biome].Count) floorID = Vars.floorPool[biome].Count - 1;
 
                 if (shadow) {
@@ -90,16 +96,6 @@ namespace wastelands.src.map
 
         public void Draw()
         {
-            foreach (Vector2 pos in undertiles.Keys)
-            {
-                Vector2 relPos = pos * 32 - Vars.camera.position;
-
-                if (Vars.InBounds(relPos, Vector2.One * 32))
-                {
-                    Draww.DrawTile(Wastelands.spriteBatch, undertiles[pos].texture, relPos);
-                }
-            }
-
             foreach (Vector2 pos in tiles.Keys)
             {
                 Tile tile = tiles[pos];
@@ -109,6 +105,7 @@ namespace wastelands.src.map
 
                     if (Vars.InBounds(relPos, Vector2.One * 32))
                     {
+                        if(undertiles.ContainsKey(pos)) Draww.DrawTile(Wastelands.spriteBatch, undertiles[pos].texture, relPos);
                         Draww.DrawTile(Wastelands.spriteBatch, tile.texture, relPos);
                     }
                 }
