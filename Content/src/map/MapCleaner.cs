@@ -101,39 +101,41 @@ namespace wastelands.src.map
                 if (output[pos] == "W")
                 {
                     int index = 0;
-
+                    
                     np = pos + new Vector2(1, 0);
-                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 1;
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 0;
                     np = pos + new Vector2(1, -1);
-                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 2;
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 1;
                     np = pos + new Vector2(0, -1);
-                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 3;
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 2;
                     np = pos + new Vector2(-1, -1);
-                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 4;
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 3;
                     np = pos + new Vector2(-1, 0);
-                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 5;
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 4;
                     np = pos + new Vector2(-1, 1);
-                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 6;
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 5;
                     np = pos + new Vector2(0, 1);
-                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 7;
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 6;
                     np = pos + new Vector2(1, 1);
-                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 8;
+                    if (Exists(positions, np) && output[np] == "W") index |= 1 << 7;
 
                     Log.Write(index);
-                    output2.Add(pos, "brick;" + connections[index - 1]);
+                    output2.Add(pos, "brick;" + connections[index]);
                 }
                 else if (output[pos] == "S")
                 {
-                    string con = "s";
+                    //Pseudo bitmask
+                    int con = 0;
 
                     np = pos + new Vector2(-1, 0);
-                    if (Exists(positions, np) && (output[np] == "W" || output[np] == "S")) con += "L";
+                    if (Exists(positions, np) && (output[np] == "W" || output[np] == "S")) con += 3;
                     np = pos + new Vector2(1, 0);
-                    if (Exists(positions, np) && (output[np] == "W" || output[np] == "S")) con += "R";
+                    if (Exists(positions, np) && (output[np] == "W" || output[np] == "S")) con += 1;
 
-                    if (con == "s") con = "sC";
+                    if (con == 4) con = 2;
+                    if (con == 0) con = 4;
 
-                    output2.Add(pos, "brick;" + con);
+                    output2.Add(pos, "brick;s" + (con - 1).ToString());
                 }
                 else if(output[pos] == "F") output2.Add(pos, "brick;-1");
             }

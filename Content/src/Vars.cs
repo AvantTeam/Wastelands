@@ -35,6 +35,7 @@ namespace wastelands.src
         public static SaveManager saveManager = new SaveManager();
 
         public static Dictionary<string, List<Tile>> tilePool = new Dictionary<string, List<Tile>>();
+        public static Dictionary<string, List<Tile>> shadowPool = new Dictionary<string, List<Tile>>();
         public static Dictionary<string, List<Tile>> floorPool = new Dictionary<string, List<Tile>>();
 
         // Biome, Connections -> Room
