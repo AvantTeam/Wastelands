@@ -15,26 +15,16 @@ namespace wastelands
     public class Wastelands : Game
     {
         public static GraphicsDeviceManager graphics;
-        public static SpriteBatch spriteBatch;
         public static SpriteBatch uiBatch;
 
         public Texture2D mouseSprite;
         public GameTime _lastUpdatedGameTime;
-
-        Effect postProcessShader;
 
         public Wastelands()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-        }
-
-        public bool IsMouseInsideWindow()
-        {
-            MouseState ms = Mouse.GetState();
-            Point pos = new Point(ms.X, ms.Y);
-            return GraphicsDevice.Viewport.Bounds.Contains(pos);
         }
 
         public Texture2D TakeScreenshot()
@@ -55,7 +45,6 @@ namespace wastelands
         protected override void LoadContent()
         {
             Log.Clear();
-            spriteBatch = new SpriteBatch(GraphicsDevice);
             uiBatch = new SpriteBatch(GraphicsDevice);
 
             GraphicsDevice.Clear(Color.Black);
@@ -65,12 +54,13 @@ namespace wastelands
             TileLoader.LoadAll(Content, graphics.GraphicsDevice);
             MapTileLoader.LoadAll(Content);
             Localizer.LoadLocals(Content);
+            Effects.LoadEffects(Content);
 
             mouseSprite = Content.Load<Texture2D>("sprites/UI/cursor");
 
             foreach(GameMode mode in GameModes.gameModes.Values)
             {
-                mode.LoadContent(Content);
+                mode.LoadContent(Content, GraphicsDevice);
             }
 
             Log.Write("Content Loaded.");
@@ -79,19 +69,17 @@ namespace wastelands
         protected override void Initialize()
         {
             Window.Position = new Point(0, 0);
-            Window.IsBorderless = false;
+            Window.IsBorderless = true;
 
             IsMouseVisible = false;
 
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             graphics.PreferredBackBufferWidth = (int)Vars.screenSize.X;
             graphics.PreferredBackBufferHeight = (int)Vars.screenSize.Y;
             graphics.ApplyChanges();
 
             Vars.camera.position = new Vector2(-(Vars.screenSize.X / 2), -(Vars.screenSize.Y / 2));
             Vars.saveManager.Load();
-
-            postProcessShader = Content.Load<Effect>("shaders/aura");
 
             base.Initialize();
 
@@ -137,19 +125,15 @@ namespace wastelands
 
         protected override void Draw(GameTime gameTime)
         {
-            postProcessShader.Parameters["Resolution"].SetValue(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
-
-            spriteBatch.Begin(samplerState: SamplerState.PointClamp, effect: postProcessShader);
             uiBatch.Begin(samplerState: SamplerState.PointClamp);
 
             GraphicsDevice.Clear(Color.Black);
 
             base.Draw(gameTime);
 
-            GameManager.gameMode.Draw(gameTime, GraphicsDevice, spriteBatch);
+            GameManager.gameMode.Draw(gameTime, GraphicsDevice);
 
-            if(IsMouseInsideWindow()) Draww.DrawSpriteRaw(uiBatch, mouseSprite, Mouse.GetState().Position.ToVector2(), 1, Color.White);
-            spriteBatch.End();
+            if(Vars.IsMouseInsideWindow()) Draww.DrawSpriteRaw(uiBatch, mouseSprite, Mouse.GetState().Position.ToVector2(), 1, Color.White);
             uiBatch.End();
         }
     }

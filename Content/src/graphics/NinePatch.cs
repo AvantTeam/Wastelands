@@ -80,11 +80,11 @@ namespace wastelands.src.graphics
             return new Rectangle(rect.X + x, rect.Y + y, rect.Width, rect.Height);
         }
 
-        public void Render(int x, int y)
+        public void Render(int x, int y, SpriteBatch spriteBatch)
         {
             for (var i = 0; i < inPatch.Length; i++)
             {
-                Wastelands.spriteBatch.Draw(tex.tex, sourceRectangle: inPatch[i],
+                spriteBatch.Draw(tex.tex, sourceRectangle: inPatch[i],
                 destinationRectangle: Displace(destPatch[i], x, y), color: Color.White);
             }
         }

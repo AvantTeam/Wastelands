@@ -7,6 +7,7 @@
 #endif
 
 extern float2 Resolution;
+extern float4 ColorAddition;
 sampler TextureSampler : register(s0);
 
 struct PixelInput
@@ -26,9 +27,8 @@ float4 MainPS(PixelInput input) : SV_Target
 	for (int i = 0; i < 3; i++)
 	{
 		newCol[i] = input.Color[i] * mult;
+		newCol[i] += ColorAddition[i] * (1.0 - mult);
 	}
-	newCol[0] += 0.2 * (1.0 - mult);
-	newCol[1] += 0.1 * (1.0 - mult);
 
 	return diffuse * newCol;
 }

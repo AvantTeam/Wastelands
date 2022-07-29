@@ -12,14 +12,16 @@ namespace wastelands.src.game
     {
         private Desktop desktop;
         private Texture2D bg;
+        private SpriteBatch spriteBatch;
 
         public override void Initialize()
         {
             desktop = new Desktop();
         }
 
-        public override void LoadContent(ContentManager content)
+        public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
+            spriteBatch = new SpriteBatch(device);
             bg = content.Load<Texture2D>("sprites/UI/bg");
         }
 
@@ -28,11 +30,11 @@ namespace wastelands.src.game
             
         }
 
-        public override void Draw(GameTime gameTime, GraphicsDevice device, SpriteBatch batch)
+        public override void Draw(GameTime gameTime, GraphicsDevice device)
         {
             float scaling = Math.Max((float)device.Viewport.Width / (float)bg.Width, (float)device.Viewport.Height / (float)bg.Height);
             Vector2 position = new Vector2((device.Viewport.Width - bg.Width * scaling) / 2f, device.Viewport.Height - bg.Height * scaling);
-            Draww.DrawSpriteRaw(batch, bg, position, scaling, Color.White);
+            Draww.DrawSpriteRaw(spriteBatch, bg, position, scaling, Color.White);
         }
     }
 }

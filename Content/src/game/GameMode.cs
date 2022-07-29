@@ -7,11 +7,11 @@ namespace wastelands.src.game
 {
     public class GameMode
     {
-        public virtual void LoadContent(ContentManager content) { } // Called when opening the game
+        public virtual void LoadContent(ContentManager content, GraphicsDevice device) { } // Called when opening the game
         public virtual void Initialize() { } // Called when starting the GameMode
         public virtual void Unload() { } // Called when the GameMode is changed
         public virtual void Update(GameTime gameTime) { }
-        public virtual void Draw(GameTime gameTime, GraphicsDevice device, SpriteBatch batch) { }
+        public virtual void Draw(GameTime gameTime, GraphicsDevice device) { }
     }
 
     public static class GameModes

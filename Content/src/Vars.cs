@@ -45,5 +45,13 @@ namespace wastelands.src
         {
             return pos.X + size.X >= 0 && pos.Y + size.Y >= 0 && pos.X - size.X <= screenSize.X && pos.Y - size.Y <= screenSize.Y;
         }
+
+
+        public static bool IsMouseInsideWindow()
+        {
+            MouseState ms = Mouse.GetState();
+            Point pos = new Point(ms.X, ms.Y);
+            return Wastelands.graphics.GraphicsDevice.Viewport.Bounds.Contains(pos);
+        }
     }
 }

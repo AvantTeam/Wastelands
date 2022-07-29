@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using wastelands.src.graphics;
 using System;
@@ -94,7 +95,7 @@ namespace wastelands.src.map
             tiles.Remove(pos);
         }
 
-        public void Draw()
+        public void Draw(SpriteBatch spriteBatch)
         {
             foreach (Vector2 pos in tiles.Keys)
             {
@@ -105,8 +106,8 @@ namespace wastelands.src.map
 
                     if (Vars.InBounds(relPos, Vector2.One * 32))
                     {
-                        if(undertiles.ContainsKey(pos)) Draww.DrawTile(Wastelands.spriteBatch, undertiles[pos].texture, relPos);
-                        Draww.DrawTile(Wastelands.spriteBatch, tile.texture, relPos);
+                        if(undertiles.ContainsKey(pos)) Draww.DrawTile(spriteBatch, undertiles[pos].texture, relPos);
+                        Draww.DrawTile(spriteBatch, tile.texture, relPos);
                     }
                 }
             }
