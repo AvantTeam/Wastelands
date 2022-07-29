@@ -6,7 +6,7 @@ namespace wastelands.src.collisions
     // Adapted from https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
     public class QuadTree
     {
-        private const int maxObjectsPerNode = 10;
+        private const int maxObjectsPerNode = 15;
         private const int maxNodeDepth = 5;
 
         private int depth = 0;
