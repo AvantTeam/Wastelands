@@ -149,7 +149,7 @@ namespace wastelands.src.map
         }
 
         // TODO add biome generation, default: brick
-        public static Dictionary<Vector2, string> PlaceRooms(Dictionary<Vector2, string> map)
+        public static TilemapData PlaceRooms(Dictionary<Vector2, string> map)
         {
             Dictionary<Vector2, string> output = new Dictionary<Vector2, string>();
 
@@ -158,9 +158,9 @@ namespace wastelands.src.map
                 AddChunkToDict(output, Vars.mapTilePool["brick"][map[pos]], pos);
             }
 
-            output = MapCleaner.SetTileConnections(output);
+            TilemapData dataOutput = MapCleaner.SetTileConnections(output);
 
-            return output;
+            return dataOutput;
         }
     }
 }

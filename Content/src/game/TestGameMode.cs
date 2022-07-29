@@ -11,7 +11,8 @@ namespace wastelands.src.game
 
         public override void Initialize()
         {
-            tilemap.AddChunk(MapGen.PlaceRooms(MapGen.Generate(150)), Vector2.Zero);
+            TilemapData tilemapData = MapGen.PlaceRooms(MapGen.Generate(5));
+            tilemap.AddChunk(tilemapData.tiles, Vector2.Zero);
         }
 
         public override void Update(GameTime gameTime)

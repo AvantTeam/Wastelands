@@ -70,7 +70,7 @@ namespace wastelands.src.map
         }
 
         // Set the connections and shadows for a W/F based map
-        public static Dictionary<Vector2, string> SetTileConnections(Dictionary<Vector2, string> map)
+        public static TilemapData SetTileConnections(Dictionary<Vector2, string> map)
         {
             Dictionary<Vector2, string> output = new Dictionary<Vector2, string>();
             List<Vector2> positions = new List<Vector2>(map.Keys);
@@ -140,7 +140,16 @@ namespace wastelands.src.map
                 else if(output[pos] == "F") output2.Add(pos, "brick;-1");
             }
 
-            return output2;
+            TilemapData dataOutput = new TilemapData();
+            dataOutput.tiles = output2;
+            dataOutput.shadows = output2;
+            return dataOutput;
         }
+    }
+
+    public struct TilemapData
+    {
+        public Dictionary<Vector2, string> tiles;
+        public Dictionary<Vector2, string> shadows;
     }
 }

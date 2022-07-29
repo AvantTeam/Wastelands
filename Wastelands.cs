@@ -16,9 +16,12 @@ namespace wastelands
     {
         public static GraphicsDeviceManager graphics;
         public static SpriteBatch spriteBatch;
+        public static SpriteBatch uiBatch;
 
         public Texture2D mouseSprite;
         public GameTime _lastUpdatedGameTime;
+
+        Effect postProcessShader;
 
         public Wastelands()
         {
@@ -53,6 +56,7 @@ namespace wastelands
         {
             Log.Clear();
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            uiBatch = new SpriteBatch(GraphicsDevice);
 
             GraphicsDevice.Clear(Color.Black);
 
@@ -75,17 +79,19 @@ namespace wastelands
         protected override void Initialize()
         {
             Window.Position = new Point(0, 0);
-            Window.IsBorderless = true;
+            Window.IsBorderless = false;
 
             IsMouseVisible = false;
 
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth = (int)Vars.screenSize.X;
             graphics.PreferredBackBufferHeight = (int)Vars.screenSize.Y;
             graphics.ApplyChanges();
 
             Vars.camera.position = new Vector2(-(Vars.screenSize.X / 2), -(Vars.screenSize.Y / 2));
             Vars.saveManager.Load();
+
+            postProcessShader = Content.Load<Effect>("shaders/aura");
 
             base.Initialize();
 
@@ -131,15 +137,20 @@ namespace wastelands
 
         protected override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            postProcessShader.Parameters["Resolution"].SetValue(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
+
+            spriteBatch.Begin(samplerState: SamplerState.PointClamp, effect: postProcessShader);
+            uiBatch.Begin(samplerState: SamplerState.PointClamp);
+
             GraphicsDevice.Clear(Color.Black);
 
             base.Draw(gameTime);
 
             GameManager.gameMode.Draw(gameTime, GraphicsDevice, spriteBatch);
 
-            if(IsMouseInsideWindow()) Draww.DrawSpriteRaw(spriteBatch, mouseSprite, Mouse.GetState().Position.ToVector2(), 1, Color.White);
+            if(IsMouseInsideWindow()) Draww.DrawSpriteRaw(uiBatch, mouseSprite, Mouse.GetState().Position.ToVector2(), 1, Color.White);
             spriteBatch.End();
+            uiBatch.End();
         }
     }
 }

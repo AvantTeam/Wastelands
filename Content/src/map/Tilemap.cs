@@ -56,10 +56,10 @@ namespace wastelands.src.map
 
                 Vector2 pos2 = new Vector2(key.X + pos.X * Vars.mapTileSize.X, key.Y + pos.Y * (Vars.mapTileSize.Y - 2));
                 float randID = Vars.random.Next(0, 21);
-                // Cubic variation ID, 0 is the most common, 8 is the rarest, also 0 has double the rate.
+                // Cubic variation ID, 0 is the most common, 8 is the rarest.
                 randID /= 20;
                 randID *= randID *= randID;
-                randID *= 16;
+                randID *= 30;
                 if (randID >= 9) randID = 0;
                 int floorID = (int)Math.Abs(Math.Round(Vars.simplexNoise.noise(key.X / 16f, key.Y / 16f, 0) * 4f)) * 9 + (int)randID;
                 if (floorID >= Vars.floorPool[biome].Count) floorID = Vars.floorPool[biome].Count - 1;
