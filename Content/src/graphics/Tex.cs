@@ -15,6 +15,7 @@ namespace wastelands.src.graphics
 
             textures.Add("hud1", new NinePatch(manager.Load<Texture2D>("sprites/UI/hud1.9"), 0, 8, 0, 8));
             textures.Add("bar", new NinePatch(manager.Load<Texture2D>("sprites/UI/bar.9"), 1, 1, 1, 1));
+            textures.Add("rect", new NinePatch(manager.Load<Texture2D>("sprites/rect"), 1, 1, 1, 1));
         }
 
         public static NinePatch Get(string name)

@@ -119,7 +119,6 @@ namespace wastelands.src.map
                     np = pos + new Vector2(1, 1);
                     if (Exists(positions, np) && output[np] == "W") index |= 1 << 7;
 
-                    Log.Write(index);
                     output2.Add(pos, "brick;" + connections[index]);
                 }
                 else if (output[pos] == "S")

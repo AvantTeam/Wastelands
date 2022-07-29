@@ -6,7 +6,7 @@ namespace wastelands.src.graphics
     public class Camera
     {
         public Vector2 position;
-        public float speed = 15f;
+        public float speed = 5f;
         public float zoom = 1f;
 
         public void Update()

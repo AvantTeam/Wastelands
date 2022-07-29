@@ -2,18 +2,32 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using wastelands.src.graphics;
+using wastelands.src.collisions;
+using wastelands.src.utils;
 using System;
 
 namespace wastelands.src.map
 {
     public class Tilemap
     {
-        public Vector2 position;
         public Dictionary<Vector2, Tile> tiles = new Dictionary<Vector2, Tile>();
         public Dictionary<Vector2, Tile> undertiles = new Dictionary<Vector2, Tile>();
+        private Rectangle bounds = new Rectangle(0, 0, 0, 0);
 
         public void AddTile(Tile tile, Vector2 pos)
         {
+            if (pos.X * 32 < bounds.X) bounds.X = (int)pos.X * 32;
+            if (pos.Y * 32 < bounds.Y) bounds.Y = (int)pos.Y * 32;
+
+            float checkWidth = pos.X * 32 + 32, checkHeight = pos.Y * 32 + 32;
+
+            // Negative, so essentially adding.
+            if (bounds.X < 0) checkWidth -= bounds.X;
+            if (bounds.Y < 0) checkHeight -= bounds.Y;
+
+            if (checkWidth > bounds.Width) bounds.Width = (int)checkWidth;
+            if (checkHeight > bounds.Height) bounds.Height = (int)checkHeight;
+
             if (tiles.ContainsKey(pos))
             {
                 tiles[pos] = tile;
@@ -111,6 +125,22 @@ namespace wastelands.src.map
                     }
                 }
             }
+        }
+
+        public void AddToQuadTree(QuadTree tree)
+        {
+            foreach(Vector2 pos in tiles.Keys)
+            {
+                if (tiles[pos].solid)
+                {
+                    tree.InsertObject(new Collider((int)pos.X * 32, (int)pos.Y * 32, 32, 32));
+                }
+            }
+        }
+
+        public Rectangle GetBounds()
+        {
+            return bounds;
         }
     }
 }

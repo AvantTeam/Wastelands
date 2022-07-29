@@ -113,9 +113,21 @@ namespace wastelands.src.collisions
         private List<Collider> GetPossibleCollidersIterate(List<Collider> returnObjects, Rectangle rect)
         {
             int index = GetIndex(rect);
-            if (index != -1 && nodes[0] != null)
-            {
-                nodes[index].GetPossibleCollidersIterate(returnObjects, rect);
+            if (nodes[0] != null) {
+                if (index != -1)
+                {
+                    nodes[index].GetPossibleCollidersIterate(returnObjects, rect);
+                } else
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (nodes[i] != null)
+                        {
+                            nodes[i].GetCollidersIterate(returnObjects);
+                        }
+                    }
+
+                }
             }
 
             returnObjects.AddRange(objects);
@@ -127,8 +139,57 @@ namespace wastelands.src.collisions
         public List<Collider> GetPossibleColliders(Rectangle rect)
         {
             List<Collider> output = new List<Collider>();
+            output.Add(new Collider(rect));
 
             return GetPossibleCollidersIterate(output, rect);
+        }
+
+        // Iteration for GetColliders
+        private List<Collider> GetCollidersIterate(List<Collider> returnObjects)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (nodes[i] != null)
+                {
+                    nodes[i].GetCollidersIterate(returnObjects);
+                }
+            }
+
+            returnObjects.AddRange(objects);
+
+            return returnObjects;
+        }
+
+        // Return all objects in the node tree
+        public List<Collider> GetColliders()
+        {
+            List<Collider> output = new List<Collider>();
+
+            return GetCollidersIterate(output);
+        }
+
+        // Iteration for GetNodeBounds
+        private List<Rectangle> GetNodeBoundsIterate(List<Rectangle> returnObjects)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (nodes[i] != null)
+                {
+                    nodes[i].GetNodeBoundsIterate(returnObjects);
+                }
+            }
+
+            returnObjects.Add(bounds);
+
+            return returnObjects;
+        }
+
+        // Return all objects in the node tree
+        public List<Rectangle> GetNodeBounds()
+        {
+            List<Rectangle> output = new List<Rectangle>();
+
+            return GetNodeBoundsIterate(output);
         }
     }
 }

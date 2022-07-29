@@ -10,5 +10,10 @@ namespace wastelands.src.collisions
         {
             bounds = new Rectangle(x, y, w, h);
         }
+
+        public Collider(Rectangle bounds)
+        {
+            this.bounds = bounds;
+        }
     }
 }
