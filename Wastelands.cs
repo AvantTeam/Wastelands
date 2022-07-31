@@ -115,7 +115,6 @@ namespace wastelands
             Vars.mousePosition = Mouse.GetState().Position.ToVector2();
             Vars.relativeMousePosition = Vars.mousePosition - Vars.camera.position;
 
-
             GameManager.gameMode.Update(gameTime);
 
             Vars.camera.Update();
